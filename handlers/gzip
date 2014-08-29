@@ -1,5 +1,104 @@
-#!/bin/sh
+#!/usr/bin/perl
 
-# TODO: an intelligent gzip handler
+# Copyright 2014 Andrew Ayer
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-gunzip | gzip -n
+use strict;
+use warnings;
+
+use constant {
+	FTEXT    => 1 << 0,
+	FHCRC    => 1 << 1,
+	FEXTRA   => 1 << 2,
+	FNAME    => 1 << 3,
+	FCOMMENT => 1 << 4,
+};
+
+# See RFC 1952
+
+# 0   1   2   3   4   5   6   7   8   9   10
+# +---+---+---+---+---+---+---+---+---+---+
+# |ID1|ID2|CM |FLG|     MTIME     |XFL|OS |
+# +---+---+---+---+---+---+---+---+---+---+
+
+# Read the current header
+my $hdr;
+my $bytes_read = read(*STDIN, $hdr, 10);
+die "Not a gzip file" unless $bytes_read == 10;
+my ($id1, $id2, $cm, $flg, $mtime, $xfl, $os) = unpack('CCCCl<CC', $hdr);
+die "Not a gzip file" unless $id1 == 31 and $id2 == 139;
+
+my $new_flg = $flg;
+$new_flg &= ~FNAME;	# Don't include filename
+$new_flg &= ~FHCRC;	# Don't include header CRC (not all implementations support it)
+$mtime = 0;		# Zero out mtime (this is what `gzip -n` does)
+# TODO: question: normalize some of the other fields, such as OS?
+
+# Write a new header
+print pack('CCCCl<CC', $id1, $id2, $cm, $new_flg, $mtime, $xfl, $os);
+
+if ($flg & FEXTRA) {	# Copy through
+	# 0   1   2
+	# +---+---+=================================+
+	# | XLEN  |...XLEN bytes of "extra field"...|
+	# +---+---+=================================+
+	my $buf;
+	read(*STDIN, $buf, 2) == 2 or die "Malformed gzip file";
+	my ($xlen) = unpack('v', $buf);
+	read(*STDIN, $buf, $xlen) == $xlen or die "Malformed gzip file";
+	print pack('vA*', $xlen, $buf);
+}
+if ($flg & FNAME) {	# Read but do not copy through
+	# 0
+	# +=========================================+
+	# |...original file name, zero-terminated...|
+	# +=========================================+
+	while (1) {
+		my $buf;
+		read(*STDIN, $buf, 1) == 1 or die "Malformed gzip file";
+		last if ord($buf) == 0;
+	}
+}
+if ($flg & FCOMMENT) {	# Copy through
+	# 0
+	# +===================================+
+	# |...file comment, zero-terminated...|
+	# +===================================+
+	while (1) {
+		my $buf;
+		read(*STDIN, $buf, 1) == 1 or die "Malformed gzip file";
+		print $buf;
+		last if ord($buf) == 0;
+	}
+}
+if ($flg & FHCRC) {	# Read but do not copy through
+	# 0   1   2
+	# +---+---+
+	# | CRC16 |
+	# +---+---+
+	my $buf;
+	read(*STDIN, $buf, 2) == 2 or die "Not a gzip file";
+}
+
+# Copy through the rest of the file.
+# TODO: support concatenated gzip files.  This will require reading and understanding
+# each DEFLATE block (see RFC 1951), since gzip doesn't include lengths anywhere.
+while (1) {
+	my $buf;
+	my $bytes_read = read(*STDIN, $buf, 4096);
+	defined($bytes_read) or die "read failed: $!";
+	print $buf;
+	last if $bytes_read == 0;
+}
