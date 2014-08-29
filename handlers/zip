@@ -1,0 +1,12 @@
+#!/usr/bin/python
+
+from zipfile import ZipFile
+import sys
+
+with ZipFile(sys.stdout, 'w') as outzip:
+  with ZipFile(sys.stdin, 'r') as inzip:
+    for info in sorted(inzip.infolist(), key=lambda info: info.filename):
+      # 1980-01-01 is the earliest date that the zip format supports
+      info.date_time = (1980, 1, 1, 0, 0, 0)
+      content = inzip.read(info.filename)
+      outzip.writestr(info, content)
