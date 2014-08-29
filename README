@@ -1,0 +1,4 @@
+strip-nondeterminism is a tool to strip bits of non-deterministic
+information, such as timestamps, from files.  It can be used as
+a post-processing step to make a build reproducible, when the build
+process itself cannot be made deterministic.

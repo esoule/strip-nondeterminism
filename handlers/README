@@ -1,0 +1,3 @@
+A handler reads a file of a particular format from stdin, strips the
+non-determinism from it, and writes the result to stdout.  A handler
+can be written in any language.
