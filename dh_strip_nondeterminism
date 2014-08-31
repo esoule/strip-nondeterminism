@@ -221,10 +221,12 @@ sub normalize {
 package handlers::jar;
 
 sub _jar_filename_cmp {
-	# JAR files expect META-INF/MANIFEST.MF to be the first entry in the Zip archive.
-	return  0 if $a eq $b;
-	return -1 if $a eq 'META-INF/MANIFEST.MF';
-	return  1 if $b eq 'META-INF/MANIFEST.MF';
+	# META-INF/ and META-INF/MANIFEST.MF are expected to be the first entries in the Zip archive.
+	return 0 if $a eq $b;
+	for (qw{META-INF/ META-INF/MANIFEST.MF}) {
+		return -1 if $a eq $_;
+		return  1 if $b eq $_;
+	}
 	return $a cmp $b;
 }
 
