@@ -66,6 +66,8 @@ sub testfile {
 
 	# gzip
 	if (m/\.gz$/) {
+		# No need for get_file_type b/c the gzip normalizer
+		# silently ignores non-gzip files
 		push @nondeterministic_files, [$fn, \&handlers::gzip::normalize];
 	}
 }
