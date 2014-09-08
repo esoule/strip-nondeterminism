@@ -1,0 +1,11 @@
+COPYING
+MANIFEST			This list of files
+Makefile.PL
+README
+bin/dh_strip_nondeterminism
+bin/strip-nondeterminism
+lib/StripNondeterminism.pm
+lib/StripNondeterminism/handlers/ar.pm
+lib/StripNondeterminism/handlers/gzip.pm
+lib/StripNondeterminism/handlers/jar.pm
+lib/StripNondeterminism/handlers/zip.pm

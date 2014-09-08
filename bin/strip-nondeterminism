@@ -1,0 +1,110 @@
+#!/usr/bin/perl
+
+#
+# Copyright 2014 Andrew Ayer
+#
+# This file is part of strip-nondeterminism.
+#
+# strip-nondeterminism is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# strip-nondeterminism is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with strip-nondeterminism.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+use strict;
+use warnings;
+
+use StripNondeterminism;
+use Getopt::Long;
+Getopt::Long::Configure(qw(no_ignore_case permute bundling));
+
+my $cmd = $0;
+$cmd =~ s/.*\///;
+my $usage = "Usage: $cmd [-t|--type FILETYPE] FILENAME\n";
+
+my @opspec = (
+	'type|t=s', 'help|h', 'version|V',
+);
+my $glop = {};
+GetOptions($glop, @opspec) || die $usage;
+
+if ($glop->{help}) {
+	print $usage;
+	exit 0;
+}
+
+if ($glop->{version}) {
+	print "$cmd version $StripNondeterminism::VERSION\n";
+	exit 0;
+}
+
+die $usage if @ARGV == 0;
+
+for my $filename (@ARGV) {
+	my $normalizer;
+	if ($glop->{type}) {
+		$normalizer = StripNondeterminism::get_normalizer_by_name($glop->{type});
+		die $glop->{type} . ": Unknown file type\n" unless $normalizer;
+	} else {
+		$normalizer = StripNondeterminism::get_normalizer_for_file($filename);
+		next unless $normalizer;
+	}
+
+	$normalizer->($filename);
+}
+
+__END__
+
+=head1 NAME
+
+strip-nondeterminism - strip non-deterministic information from files
+
+=head1 SYNOPSIS
+
+ strip-nondeterminism [-t filetype] filename ...
+
+=head1 DESCRIPTION
+
+B<strip-nondeterminism> is a tool to strip bits of non-deterministic
+information, such as timestamps, from files.  It can be used as
+a post-processing step to make a build reproducible, when the build
+process itself cannot be made deterministic.
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<-t> I<filetype>, B<--type> I<filetype>
+
+Use the normalizer for the given file type (ar, gzip, jar, zip).  If this
+option is not specified, the file type is detected automatically based on
+the file name extension.
+
+=item B<-h>, B<--help>
+
+Display this help message.
+
+=item B<-V>, B<--version>
+
+Print only the version string and then quit.
+
+=back
+
+=head1 AUTHOR
+
+Andrew Ayer
+
+=head1 COPYRIGHT
+
+strip-nondeterminism is free software.  You can redistribute it and/or
+modify it under the terms of the GNU General Public License, version 3.
+
+=cut

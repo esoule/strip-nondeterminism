@@ -1,10 +1,10 @@
 Write handlers for:
-	gzip
+	[DONE] gzip
 	javadocs
-	ar
+	[DONE] ar
 	...
 
-Write main strip-nondeterminism command
+[DONE] Write main strip-nondeterminism command
 	It would just parse command line arguments and then execute the correct handler
 
 Write dh_strip_nondeterminism

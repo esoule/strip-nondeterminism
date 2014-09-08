@@ -1,0 +1,10 @@
+# Makemaker generated files and dirs.
+/Makefile
+/blib
+/MakeMaker-*
+/pm_to_blib
+/MYMETA.yml
+
+# Temp and old files.
+*~
+*.old
