@@ -24,6 +24,7 @@ use warnings;
 use StripNondeterminism::handlers::ar;
 use StripNondeterminism::handlers::gzip;
 use StripNondeterminism::handlers::jar;
+use StripNondeterminism::handlers::javadoc;
 use StripNondeterminism::handlers::zip;
 
 our($VERSION);
@@ -57,6 +58,10 @@ sub get_normalizer_for_file {
 	if (m/\.jar$/ && _get_file_type($_) =~ m/Zip archive data/) {
 		return \&StripNondeterminism::handlers::jar::normalize;
 	}
+	# javadoc
+	if (m/\.html$/ && StripNondeterminism::handlers::javadoc::is_javadoc_file($_)) {
+		return \&StripNondeterminism::handlers::javadoc::normalize;
+	}
 	# zip
 	if (m/\.zip$/ && _get_file_type($_) =~ m/Zip archive data/) {
 		return \&StripNondeterminism::handlers::zip::normalize;
@@ -69,6 +74,7 @@ sub get_normalizer_by_name {
 	return \&StripNondeterminism::handlers::ar::normalize if $_ eq 'ar';
 	return \&StripNondeterminism::handlers::gzip::normalize if $_ eq 'gzip';
 	return \&StripNondeterminism::handlers::jar::normalize if $_ eq 'jar';
+	return \&StripNondeterminism::handlers::javadoc::normalize if $_ eq 'javadoc';
 	return \&StripNondeterminism::handlers::zip::normalize if $_ eq 'zip';
 	return undef;
 }
