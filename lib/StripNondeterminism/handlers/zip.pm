@@ -63,13 +63,14 @@ sub normalize_member {
 }
 
 sub normalize {
-	my ($zip_filename, $filename_cmp) = @_;
-	$filename_cmp ||= sub { $a cmp $b };
+	my ($zip_filename, %options) = @_;
+	my $filename_cmp = $options{filename_cmp} || sub { $a cmp $b };
 	my $zip = Archive::Zip->new($zip_filename);
 	my @filenames = sort $filename_cmp $zip->memberNames();
 	for my $filename (@filenames) {
 		my $member = $zip->removeMember($filename);
 		$zip->addMember($member);
+		$options{member_normalizer}->($member) if exists $options{member_normalizer};
 		$member->setLastModFileDateTimeFromUnix(SAFE_EPOCH);
 	}
 	$zip->overwrite();

@@ -4,7 +4,7 @@ Write handlers for:
 	[DONE] ar
 	[DONE] zip
 	[DONE] jar
-	javadoc embedded inside jar file
+	[DONE] javadoc embedded inside jar file
 	...
 
 [DONE] Write main strip-nondeterminism command
