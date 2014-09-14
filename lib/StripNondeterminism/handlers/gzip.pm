@@ -21,7 +21,7 @@ package StripNondeterminism::handlers::gzip;
 use strict;
 use warnings;
 
-use File::Temp qw/tempfile/;
+use File::Temp;
 use File::Basename;
 
 use constant {
@@ -36,7 +36,6 @@ sub normalize {
 	my ($filename) = @_;
 
 	open(my $fh, '<', $filename) or die "Unable to open $filename for reading: $!";
-	my ($out_fh, $out_filename) = tempfile(DIR => dirname($filename), UNLINK => 1);
 
 	# See RFC 1952
 
@@ -58,8 +57,10 @@ sub normalize {
 	$mtime = 0;		# Zero out mtime (this is what `gzip -n` does)
 	# TODO: question: normalize some of the other fields, such as OS?
 
+	my $tempfile = File::Temp->new(DIR => dirname($filename));
+
 	# Write a new header
-	print $out_fh pack('CCCCl<CC', $id1, $id2, $cm, $new_flg, $mtime, $xfl, $os);
+	print $tempfile pack('CCCCl<CC', $id1, $id2, $cm, $new_flg, $mtime, $xfl, $os);
 
 	if ($flg & FEXTRA) {	# Copy through
 		# 0   1   2
@@ -70,7 +71,7 @@ sub normalize {
 		read($fh, $buf, 2) == 2 or die "$filename: Malformed gzip file";
 		my ($xlen) = unpack('v', $buf);
 		read($fh, $buf, $xlen) == $xlen or die "$filename: Malformed gzip file";
-		print $out_fh pack('vA*', $xlen, $buf);
+		print $tempfile pack('vA*', $xlen, $buf);
 	}
 	if ($flg & FNAME) {	# Read but do not copy through
 		# 0
@@ -91,7 +92,7 @@ sub normalize {
 		while (1) {
 			my $buf;
 			read($fh, $buf, 1) == 1 or die "$filename: Malformed gzip file";
-			print $out_fh $buf;
+			print $tempfile $buf;
 			last if ord($buf) == 0;
 		}
 	}
@@ -111,12 +112,13 @@ sub normalize {
 		my $buf;
 		my $bytes_read = read($fh, $buf, 4096);
 		defined($bytes_read) or die "$filename: read failed: $!";
-		print $out_fh $buf;
+		print $tempfile $buf;
 		last if $bytes_read == 0;
 	}
 
-	chmod((stat($fh))[2] & 07777, $out_filename);
-	rename($out_filename, $filename) or die "$filename: unable to overwrite: rename: $!";
+	chmod((stat($fh))[2] & 07777, $tempfile->filename);
+	rename($tempfile->filename, $filename) or die "$filename: unable to overwrite: rename: $!";
+	$tempfile->unlink_on_destroy(0);
 
 	return 1;
 }
