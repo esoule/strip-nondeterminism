@@ -37,7 +37,7 @@ sub _jar_filename_cmp ($$) {
 
 sub normalize {
 	my ($jar_filename) = @_;
-	StripNondeterminism::handlers::zip::normalize($jar_filename, \&_jar_filename_cmp);
+	return StripNondeterminism::handlers::zip::normalize($jar_filename, \&_jar_filename_cmp);
 }
 
 1;

@@ -40,7 +40,7 @@ sub normalize {
 	    or die("failed to open $file for read+write: $!");
 
 	read $fh, $buf, $GLOBAL_HEADER_LENGTH;
-	return if $buf ne $GLOBAL_HEADER;
+	return 0 if $buf ne $GLOBAL_HEADER;
 
 	while (1) {
 		my $file_header_start = tell $fh;
@@ -81,6 +81,8 @@ sub normalize {
 		# move to next member
 		seek $fh, $file_header_start + $FILE_HEADER_LENGTH + $file_size, SEEK_SET;
 	}
+
+	return 1;
 }
 
 1;

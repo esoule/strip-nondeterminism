@@ -40,6 +40,7 @@ sub normalize {
 		$member->setLastModFileDateTimeFromUnix(SAFE_EPOCH);
 	}
 	$zip->overwrite();
+	return 1;
 }
 
 1;

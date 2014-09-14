@@ -57,10 +57,12 @@ sub normalize {
 			# Rename temporary file over the file
 			chmod((stat($fh))[2] & 07777, $out_filename);
 			rename($out_filename, $filename) or die "$filename: unable to overwrite: rename: $!";
-			last;
+			return 1;
 		}
 		print $out_fh $line;
 	}
+
+	return 0;
 }
 
 1;

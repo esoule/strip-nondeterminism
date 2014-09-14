@@ -48,9 +48,9 @@ sub normalize {
 	# Read the current header
 	my $hdr;
 	my $bytes_read = read($fh, $hdr, 10);
-	return unless $bytes_read == 10;
+	return 0 unless $bytes_read == 10;
 	my ($id1, $id2, $cm, $flg, $mtime, $xfl, $os) = unpack('CCCCl<CC', $hdr);
-	return unless $id1 == 31 and $id2 == 139;
+	return 0 unless $id1 == 31 and $id2 == 139;
 
 	my $new_flg = $flg;
 	$new_flg &= ~FNAME;	# Don't include filename
@@ -117,6 +117,8 @@ sub normalize {
 
 	chmod((stat($fh))[2] & 07777, $out_filename);
 	rename($out_filename, $filename) or die "$filename: unable to overwrite: rename: $!";
+
+	return 1;
 }
 
 1;
