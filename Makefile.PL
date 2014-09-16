@@ -7,7 +7,7 @@ my $MMVER = eval $ExtUtils::MakeMaker::VERSION;
 WriteMakefile(
 	NAME		=> 'strip-nondeterminism',
 	AUTHOR		=> 'Andrew Ayer <agwa@andrewayer.name>',
-	VERSION_FROM	=> 'lib/StripNondeterminism.pm',
+	VERSION_FROM	=> 'lib/File/StripNondeterminism.pm',
 	ABSTRACT	=> 'tool for stripping non-determinism from files',
 	EXE_FILES	=> [qw(bin/dh_strip_nondeterminism bin/strip-nondeterminism)],
 	PREREQ_PM => {

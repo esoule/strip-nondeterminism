@@ -9,7 +9,7 @@ dh_strip_nondeterminism - strip uninteresting, non-deterministic information fro
 use strict;
 use File::Find;
 use Debian::Debhelper::Dh_Lib;
-use StripNondeterminism;
+use File::StripNondeterminism;
 
 =head1 SYNOPSIS
 
@@ -54,7 +54,7 @@ sub testfile {
 		return if ($fn=~m/\Q$f\E/);
 	}
 
-	my $normalizer = StripNondeterminism::get_normalizer_for_file($_);
+	my $normalizer = File::StripNondeterminism::get_normalizer_for_file($_);
 	if ($normalizer) {
 		push @nondeterministic_files, [$fn, $normalizer];
 	}

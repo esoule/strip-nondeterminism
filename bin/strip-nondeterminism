@@ -22,7 +22,7 @@
 use strict;
 use warnings;
 
-use StripNondeterminism;
+use File::StripNondeterminism;
 use Getopt::Long;
 Getopt::Long::Configure(qw(no_ignore_case permute bundling));
 
@@ -42,7 +42,7 @@ if ($glop->{help}) {
 }
 
 if ($glop->{version}) {
-	print "$cmd version $StripNondeterminism::VERSION\n";
+	print "$cmd version $File::StripNondeterminism::VERSION\n";
 	exit 0;
 }
 
@@ -51,10 +51,10 @@ die $usage if @ARGV == 0;
 for my $filename (@ARGV) {
 	my $normalizer;
 	if ($glop->{type}) {
-		$normalizer = StripNondeterminism::get_normalizer_by_name($glop->{type});
+		$normalizer = File::StripNondeterminism::get_normalizer_by_name($glop->{type});
 		die $glop->{type} . ": Unknown file type\n" unless $normalizer;
 	} else {
-		$normalizer = StripNondeterminism::get_normalizer_for_file($filename);
+		$normalizer = File::StripNondeterminism::get_normalizer_for_file($filename);
 		next unless $normalizer;
 	}
 

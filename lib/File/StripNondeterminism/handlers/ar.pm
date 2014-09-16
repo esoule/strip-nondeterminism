@@ -18,7 +18,7 @@
 # Copyright (C) 2007    Stefano Zacchiroli  <zack@debian.org>
 # Copyright (C) 2007    Filippo Giunchedi   <filippo@debian.org>
 
-package StripNondeterminism::handlers::ar;
+package File::StripNondeterminism::handlers::ar;
 
 use strict;
 use warnings;

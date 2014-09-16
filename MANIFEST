@@ -4,8 +4,8 @@ Makefile.PL
 README
 bin/dh_strip_nondeterminism
 bin/strip-nondeterminism
-lib/StripNondeterminism.pm
-lib/StripNondeterminism/handlers/ar.pm
-lib/StripNondeterminism/handlers/gzip.pm
-lib/StripNondeterminism/handlers/jar.pm
-lib/StripNondeterminism/handlers/zip.pm
+lib/File/StripNondeterminism.pm
+lib/File/StripNondeterminism/handlers/ar.pm
+lib/File/StripNondeterminism/handlers/gzip.pm
+lib/File/StripNondeterminism/handlers/jar.pm
+lib/File/StripNondeterminism/handlers/zip.pm
