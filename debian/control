@@ -37,7 +37,7 @@ Description: tool for stripping non-determinism from files
 Package: dh-strip-nondeterminism
 Architecture: all
 Depends: libfile-stripnondeterminism-perl (= ${binary:Version}), ${misc:Depends}, ${perl:Depends}, debhelper
-Description:  debhelper add-on to strip non-determinism from files
+Description: debhelper add-on to strip non-determinism from files
  File::StripNondeterminism is a Perl module for stripping bits of
  non-deterministic information, such as timestamps and file system
  order, from files such as gzipped files, ZIP archives, and Jar files.
