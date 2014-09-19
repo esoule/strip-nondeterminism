@@ -1,0 +1,49 @@
+Source: strip-nondeterminism
+Section: perl
+Priority: optional
+Build-Depends: debhelper (>= 9)
+Build-Depends-Indep: perl
+Maintainer: Andrew Ayer <agwa@andrewayer.name>
+Standards-Version: 3.9.5
+Vcs-Git: https://anonscm.debian.org/git/reproducible/strip-nondeterminism.git
+Vcs-Browser: https://anonscm.debian.org/cgit/reproducible/strip-nondeterminism.git
+
+Package: libfile-stripnondeterminism-perl
+Architecture: all
+Depends: ${misc:Depends}, ${perl:Depends}, libarchive-zip-perl
+Description: Perl module for stripping non-determinism from files
+ File::StripNondeterminism is a Perl module for stripping bits of
+ non-deterministic information, such as timestamps and file system
+ order, from files such as gzipped files, ZIP archives, and Jar files.
+ It can be used as a post-processing step to make a build reproducible,
+ when the build process itself cannot be made deterministic.  It is used
+ as part of the Reproducible Builds project.
+ .
+ This package contains the perl module.
+
+Package: strip-nondeterminism
+Architecture: all
+Depends: libfile-stripnondeterminism-perl (= ${binary:Version}), ${misc:Depends}, ${perl:Depends}
+Description: tool for stripping non-determinism from files
+ File::StripNondeterminism is a Perl module for stripping bits of
+ non-deterministic information, such as timestamps and file system
+ order, from files such as gzipped files, ZIP archives, and Jar files.
+ It can be used as a post-processing step to make a build reproducible,
+ when the build process itself cannot be made deterministic.  It is used
+ as part of the Reproducible Builds project.
+ .
+ This package contains the strip-nondeterminism command.
+
+Package: dh-strip-nondeterminism
+Architecture: all
+Depends: libfile-stripnondeterminism-perl (= ${binary:Version}), ${misc:Depends}, ${perl:Depends}, debhelper
+Description:  debhelper add-on to strip non-determinism from files
+ File::StripNondeterminism is a Perl module for stripping bits of
+ non-deterministic information, such as timestamps and file system
+ order, from files such as gzipped files, ZIP archives, and Jar files.
+ It can be used as a post-processing step to make a build reproducible,
+ when the build process itself cannot be made deterministic.  It is used
+ as part of the Reproducible Builds project.
+ .
+ This package contains the dh_strip_nondeterminism command that strips
+ nondeterminism as part of a package build process.

@@ -1,0 +1,6 @@
+strip-nondeterminism (0.002-1) unstable; urgency=low
+
+  * Initial release. (Closes: #760803)
+
+ -- Andrew Ayer <agwa@andrewayer.name>  Thu, 18 Sep 2014 21:19:02 -0700
+
