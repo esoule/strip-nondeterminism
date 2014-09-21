@@ -55,7 +55,7 @@ sub get_normalizer_for_file {
 		return \&File::StripNondeterminism::handlers::gzip::normalize;
 	}
 	# jar
-	if (m/\.jar$/ && _get_file_type($_) =~ m/Zip archive data/) {
+	if (m/\.jar$/ && _get_file_type($_) =~ m/(Java|Zip) archive data/) {
 		return \&File::StripNondeterminism::handlers::jar::normalize;
 	}
 	# javadoc
