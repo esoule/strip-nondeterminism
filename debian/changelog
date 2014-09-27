@@ -1,3 +1,12 @@
+strip-nondeterminism (0.003-1) unstable; urgency=low
+
+  * New upstream release.
+    - Fix detection of jar files as such.
+    - Remove FIXME comment from ar handler.
+  * Remove "unusual spacing" from debian/control.
+
+ -- Andrew Ayer <agwa@andrewayer.name>  Sat, 27 Sep 2014 08:59:24 -0700
+
 strip-nondeterminism (0.002-1) unstable; urgency=low
 
   * Initial release. (Closes: #760803)
