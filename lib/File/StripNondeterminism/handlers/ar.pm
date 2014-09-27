@@ -58,7 +58,7 @@ sub normalize {
 		#48     57     File size in bytes        Decimal
 		#58     59     File magic                \140\012
 
-		# FIXME: is this correct?
+		# not quite sure if this is correct but it seems to work
 		last if $count == 1 and eof($fh) and $buf eq "\n";
 
 		die "Incorrect header length"

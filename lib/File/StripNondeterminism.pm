@@ -29,7 +29,7 @@ use File::StripNondeterminism::handlers::zip;
 
 our($VERSION);
 
-$VERSION = '0.002'; # 0.002
+$VERSION = '0.003'; # 0.003
 
 sub _get_file_type {
 	my $file=shift;
@@ -55,7 +55,7 @@ sub get_normalizer_for_file {
 		return \&File::StripNondeterminism::handlers::gzip::normalize;
 	}
 	# jar
-	if (m/\.jar$/ && _get_file_type($_) =~ m/Zip archive data/) {
+	if (m/\.jar$/ && _get_file_type($_) =~ m/(Java|Zip) archive data/) {
 		return \&File::StripNondeterminism::handlers::jar::normalize;
 	}
 	# javadoc
