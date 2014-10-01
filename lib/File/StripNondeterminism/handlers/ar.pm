@@ -58,9 +58,6 @@ sub normalize {
 		#48     57     File size in bytes        Decimal
 		#58     59     File magic                \140\012
 
-		# not quite sure if this is correct but it seems to work
-		last if $count == 1 and eof($fh) and $buf eq "\n";
-
 		die "Incorrect header length"
 		if length $buf != $FILE_HEADER_LENGTH;
 		die "Incorrect file magic"
@@ -80,6 +77,14 @@ sub normalize {
 
 		# move to next member
 		seek $fh, $file_header_start + $FILE_HEADER_LENGTH + $file_size, SEEK_SET;
+
+		# if file has an odd length, it is padded with a single \n character
+		if ($file_size % 2 == 1) {
+			$count = read $fh, $buf, 1;
+			die "reading $file failed: $!" if !defined $count;
+			die "Incorrect file padding" if $buf ne "\n";
+		}
+
 	}
 
 	return 1;
