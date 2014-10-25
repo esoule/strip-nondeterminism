@@ -71,7 +71,7 @@ sub normalize {
 		my $member = $zip->removeMember($filename);
 		$zip->addMember($member);
 		$options{member_normalizer}->($member) if exists $options{member_normalizer};
-		$member->setLastModFileDateTimeFromUnix(SAFE_EPOCH);
+		$member->setLastModFileDateTimeFromUnix($File::StripNondeterminism::canonical_time // SAFE_EPOCH);
 	}
 	$zip->overwrite();
 	return 1;

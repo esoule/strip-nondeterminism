@@ -27,7 +27,7 @@ use File::StripNondeterminism::handlers::jar;
 use File::StripNondeterminism::handlers::javadoc;
 use File::StripNondeterminism::handlers::zip;
 
-our($VERSION);
+our($VERSION, $canonical_time);
 
 $VERSION = '0.003'; # 0.003
 

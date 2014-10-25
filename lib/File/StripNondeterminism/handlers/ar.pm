@@ -67,7 +67,7 @@ sub normalize {
 		seek $fh, $file_header_start + 16, SEEK_SET;
 
 		# mtime
-		syswrite $fh, sprintf("%-12d", 0);
+		syswrite $fh, sprintf("%-12d", $File::StripNondeterminism::canonical_time // 0);
 		# owner
 		syswrite $fh, sprintf("%-6d", 0);
 		# group
