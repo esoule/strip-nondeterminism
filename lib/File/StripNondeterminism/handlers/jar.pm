@@ -36,6 +36,33 @@ sub _jar_filename_cmp ($$) {
 	return $a cmp $b;
 }
 
+sub _jar_normalize_manifest {
+	my ($filename) = @_;
+
+	open(my $fh, '<', $filename) or die "Unable to open $filename for reading: $!";
+	my $tempfile = File::Temp->new(DIR => dirname($filename));
+
+	my $modified = 0;
+
+	while (defined(my $line = <$fh>)) {
+		# Bnd-LastModified contains a timestamp.
+		# Built-By contains the system username.
+		if ($line =~ /^(Bnd-LastModified|Built-By):/) {
+			$modified = 1;
+			next;
+		}
+		print $tempfile $line;
+	}
+
+	if ($modified) {
+		# Rename temporary file over the file
+		chmod((stat($fh))[2] & 07777, $tempfile->filename);
+		rename($tempfile->filename, $filename) or die "$filename: unable to overwrite: rename: $!";
+		$tempfile->unlink_on_destroy(0);
+	}
+	return $modified;
+}
+
 sub _jar_normalize_member {
 	my ($member) = @_; # $member is a ref to an Archive::Zip::Member
 	return if $member->isDirectory();
@@ -45,6 +72,9 @@ sub _jar_normalize_member {
 		# javadoc header should be within first 1kb of file
 		File::StripNondeterminism::handlers::zip::normalize_member($member,
 				\&File::StripNondeterminism::handlers::javadoc::normalize);
+	} elsif ($member->fileName() eq 'META-INF/MANIFEST.MF') {
+		File::StripNondeterminism::handlers::zip::normalize_member($member,
+				\&_jar_normalize_manifest);
 	}
 }
 
