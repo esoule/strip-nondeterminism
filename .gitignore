@@ -9,3 +9,4 @@
 # Temp and old files.
 *~
 *.old
+*.swp
