@@ -80,6 +80,20 @@ sub normalize_extra_fields {
 			for (my $i = 1; $i < $len; $i += 4) {
 				$result .= pack("V", $File::StripNondeterminism::canonical_time // SAFE_EPOCH);
 			}
+		} elsif ($id == 0x7875) { # Info-ZIP New Unix Extra Field
+			$result .= substr($field, $pos, 4);
+			#  Version       1 byte      version of this extra field, currently 1
+			#  UIDSize       1 byte      Size of UID field
+			#  UID           Variable    UID for this entry
+			#  GIDSize       1 byte      Size of GID field
+			#  GID           Variable    GID for this entry
+			if (ord(substr($field, $pos + 4, 1)) == 1) {
+				my $uid_len = ord(substr($field, $pos + 5, 1));
+				my $gid_len = ord(substr($field, $pos + 6 + $uid_len, 1));
+				$result .= pack("CCx${uid_len}Cx${gid_len}", 1, $uid_len, $gid_len);
+			} else {
+				$result .= substr($field, $pos + 4, $len);
+			}
 		} else {
 			# use the current extra field unmodified.
 			$result .= substr($field, $pos, $len+4);
@@ -100,6 +114,7 @@ sub normalize {
 		$zip->addMember($member);
 		$options{member_normalizer}->($member) if exists $options{member_normalizer};
 		$member->setLastModFileDateTimeFromUnix($File::StripNondeterminism::canonical_time // SAFE_EPOCH);
+		$member->unixFileAttributes(0644) if $member->fileAttributeFormat() == FA_UNIX;
 		$member->cdExtraField(normalize_extra_fields($member->cdExtraField()));
 	}
 	$zip->overwrite();
