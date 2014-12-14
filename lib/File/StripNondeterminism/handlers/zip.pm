@@ -62,6 +62,34 @@ sub normalize_member {
 	unlink($filename);
 }
 
+sub normalize_extra_fields {
+	# See http://sources.debian.net/src/zip/3.0-6/proginfo/extrafld.txt for extra field documentation
+	my ($field) = @_;
+
+	my $result = "";
+	my $pos = 0;
+	my ($id, $len);
+
+	# field format: 2 bytes id, 2 bytes data len, n bytes data
+	while (($id, $len) = unpack("vv", substr($field, $pos))) {
+		if ($id == 0x5455) {
+			# extended timestamp found.
+			# first byte of data contains flags.
+			$result .= substr($field, $pos, 5);
+			# len determines how many timestamps this field contains
+			for (my $i = 1; $i < $len; $i += 4) {
+				$result .= pack("V", $File::StripNondeterminism::canonical_time // SAFE_EPOCH);
+			}
+		} else {
+			# use the current extra field unmodified.
+			$result .= substr($field, $pos, $len+4);
+		}
+		$pos += $len + 4;
+	}
+
+	return $result;
+}
+
 sub normalize {
 	my ($zip_filename, %options) = @_;
 	my $filename_cmp = $options{filename_cmp} || sub { $a cmp $b };
@@ -72,6 +100,7 @@ sub normalize {
 		$zip->addMember($member);
 		$options{member_normalizer}->($member) if exists $options{member_normalizer};
 		$member->setLastModFileDateTimeFromUnix($File::StripNondeterminism::canonical_time // SAFE_EPOCH);
+		$member->cdExtraField(normalize_extra_fields($member->cdExtraField()));
 	}
 	$zip->overwrite();
 	return 1;
