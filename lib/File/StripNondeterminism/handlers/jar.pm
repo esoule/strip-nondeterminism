@@ -22,6 +22,7 @@ use strict;
 use warnings;
 
 use Archive::Zip;
+use File::Basename;
 use File::StripNondeterminism::handlers::zip;
 use File::StripNondeterminism::handlers::javadoc;
 
