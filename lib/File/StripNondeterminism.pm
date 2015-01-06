@@ -53,7 +53,7 @@ sub get_normalizer_for_file {
 		return \&File::StripNondeterminism::handlers::ar::normalize;
 	}
 	# gzip
-	if (m/\.gz$/ && _get_file_type($_) =~ m/gzip compressed data/) {
+	if (m/\.(gz|dz)$/ && _get_file_type($_) =~ m/gzip compressed data/) {
 		return \&File::StripNondeterminism::handlers::gzip::normalize;
 	}
 	# jar
@@ -73,7 +73,7 @@ sub get_normalizer_for_file {
 		return \&File::StripNondeterminism::handlers::pomproperties::normalize;
 	}
 	# zip
-	if (m/\.zip$/ && _get_file_type($_) =~ m/Zip archive data/) {
+	if (m/\.(zip|pk3)$/ && _get_file_type($_) =~ m/Zip archive data/) {
 		return \&File::StripNondeterminism::handlers::zip::normalize;
 	}
 	return undef;
