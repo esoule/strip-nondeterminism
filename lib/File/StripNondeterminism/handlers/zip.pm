@@ -62,9 +62,15 @@ sub normalize_member {
 	unlink($filename);
 }
 
+use constant {
+	CENTRAL_HEADER => 0,
+	LOCAL_HEADER => 1
+};
 sub normalize_extra_fields {
 	# See http://sources.debian.net/src/zip/3.0-6/proginfo/extrafld.txt for extra field documentation
-	my ($field) = @_;
+	# $header_type is CENTRAL_HEADER or LOCAL_HEADER.
+	# WARNING: some fields have a different format depending on the header type
+	my ($field, $header_type) = @_;
 
 	my $result = "";
 	my $pos = 0;
@@ -77,6 +83,7 @@ sub normalize_extra_fields {
 			# first byte of data contains flags.
 			$result .= substr($field, $pos, 5);
 			# len determines how many timestamps this field contains
+			# this works for both the central header and local header version
 			for (my $i = 1; $i < $len; $i += 4) {
 				$result .= pack("V", $File::StripNondeterminism::canonical_time // SAFE_EPOCH);
 			}
@@ -87,6 +94,7 @@ sub normalize_extra_fields {
 			#  UID           Variable    UID for this entry
 			#  GIDSize       1 byte      Size of GID field
 			#  GID           Variable    GID for this entry
+			# (Same format for both central header and local header)
 			if (ord(substr($field, $pos + 4, 1)) == 1) {
 				my $uid_len = ord(substr($field, $pos + 5, 1));
 				my $gid_len = ord(substr($field, $pos + 6 + $uid_len, 1));
@@ -115,7 +123,8 @@ sub normalize {
 		$options{member_normalizer}->($member) if exists $options{member_normalizer};
 		$member->setLastModFileDateTimeFromUnix($File::StripNondeterminism::canonical_time // SAFE_EPOCH);
 		$member->unixFileAttributes(0644) if $member->fileAttributeFormat() == FA_UNIX;
-		$member->cdExtraField(normalize_extra_fields($member->cdExtraField()));
+		$member->cdExtraField(normalize_extra_fields($member->cdExtraField(), CENTRAL_HEADER));
+		$member->localExtraField(normalize_extra_fields($member->localExtraField(), LOCAL_HEADER));
 	}
 	$zip->overwrite();
 	return 1;
