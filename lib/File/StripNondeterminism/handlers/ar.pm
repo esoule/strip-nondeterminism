@@ -76,14 +76,8 @@ sub normalize {
 		syswrite $fh, sprintf("%-8o", 0644);
 
 		# move to next member
-		seek $fh, $file_header_start + $FILE_HEADER_LENGTH + $file_size, SEEK_SET;
-
-		# if file has an odd length, it is padded with a single \n character
-		if ($file_size % 2 == 1) {
-			$count = read $fh, $buf, 1;
-			die "reading $file failed: $!" if !defined $count;
-			die "Incorrect file padding" if $buf ne "\n";
-		}
+		my $padding = $file_size % 2;
+		seek $fh, $file_header_start + $FILE_HEADER_LENGTH + $file_size + $padding, SEEK_SET;
 
 	}
 
