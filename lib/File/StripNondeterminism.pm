@@ -26,6 +26,7 @@ use File::StripNondeterminism::handlers::gzip;
 use File::StripNondeterminism::handlers::jar;
 use File::StripNondeterminism::handlers::javadoc;
 use File::StripNondeterminism::handlers::pe;
+use File::StripNondeterminism::handlers::pearregistry;
 use File::StripNondeterminism::handlers::pomproperties;
 use File::StripNondeterminism::handlers::zip;
 
@@ -64,6 +65,10 @@ sub get_normalizer_for_file {
 	if (m/\.html$/ && File::StripNondeterminism::handlers::javadoc::is_javadoc_file($_)) {
 		return \&File::StripNondeterminism::handlers::javadoc::normalize;
 	}
+	# pear registry
+	if (m/\.reg$/ && File::StripNondeterminism::handlers::pearregistry::is_registry_file($_)) {
+		return \&File::StripNondeterminism::handlers::pearregistry::normalize;
+	}
 	# PE executables
 	if (m/\.(exe|dll|cpl|ocx|sys|scr|drv|efi|fon)/ && _get_file_type($_) =~ m/PE32.? executable/) {
 		return \&File::StripNondeterminism::handlers::pe::normalize;
@@ -86,6 +91,7 @@ sub get_normalizer_by_name {
 	return \&File::StripNondeterminism::handlers::jar::normalize if $_ eq 'jar';
 	return \&File::StripNondeterminism::handlers::javadoc::normalize if $_ eq 'javadoc';
 	return \&File::StripNondeterminism::handlers::pe::normalize if $_ eq 'pe';
+	return \&File::StripNondeterminism::handlers::pearregistry::normalize if $_ eq 'pearregistry';
 	return \&File::StripNondeterminism::handlers::pomproperties::normalize if $_ eq 'pomproperties';
 	return \&File::StripNondeterminism::handlers::zip::normalize if $_ eq 'zip';
 	return undef;
