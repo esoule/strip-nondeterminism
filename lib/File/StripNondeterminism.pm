@@ -73,7 +73,7 @@ sub get_normalizer_for_file {
 		return \&File::StripNondeterminism::handlers::pomproperties::normalize;
 	}
 	# zip
-	if (m/\.(zip|pk3|whl)$/ && _get_file_type($_) =~ m/Zip archive data/) {
+	if (m/\.(zip|pk3|whl|xpi)$/ && _get_file_type($_) =~ m/Zip archive data/) {
 		return \&File::StripNondeterminism::handlers::zip::normalize;
 	}
 	return undef;
