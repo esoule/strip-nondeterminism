@@ -51,7 +51,7 @@ sub normalize {
 		} elsif ($line =~ /\<META NAME="date" CONTENT="[^"]*"\>/i) {
 			if (defined $File::StripNondeterminism::canonical_time) {
 				my $date = strftime('%Y-%m-%d', localtime($File::StripNondeterminism::canonical_time));
-				$line =~ s/\<META NAME="date" CONTENT="[^"]*"\>/<META NAME="date" CONTENT="$date">/gi;
+				$line =~ s/\<(META NAME="date" CONTENT)="[^"]*"\>/<$1="$date">/gi;
 			} else {
 				$line =~ s/\<META NAME="date" CONTENT="[^"]*"\>//gi;
 			}
