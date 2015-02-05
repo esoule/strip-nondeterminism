@@ -36,7 +36,7 @@ sub normalize {
 	my $canonical_time = $File::StripNondeterminism::canonical_time // 0;
 
 	# Format is specified in docbook-to-man:Instant/main.c
-	my $timestamp = strftime('%a %d %b %Y, %R', localtime($canonical_time));
+	my $timestamp = strftime('%a %d %b %Y, %R', gmtime($canonical_time));
 
 	while (defined(my $line = <$fh>)) {
 		if ($line =~ s/(?<=^\.\\" created by instant \/ docbook-to-man, ).*/$timestamp/g) {
