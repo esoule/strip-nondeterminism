@@ -58,9 +58,6 @@ sub normalize {
 		#48     57     File size in bytes        Decimal
 		#58     59     File magic                \140\012
 
-		# not quite sure if this is correct but it seems to work
-		last if $count == 1 and eof($fh) and $buf eq "\n";
-
 		die "Incorrect header length"
 		if length $buf != $FILE_HEADER_LENGTH;
 		die "Incorrect file magic"
@@ -70,7 +67,7 @@ sub normalize {
 		seek $fh, $file_header_start + 16, SEEK_SET;
 
 		# mtime
-		syswrite $fh, sprintf("%-12d", 0);
+		syswrite $fh, sprintf("%-12d", $File::StripNondeterminism::canonical_time // 0);
 		# owner
 		syswrite $fh, sprintf("%-6d", 0);
 		# group
@@ -79,7 +76,9 @@ sub normalize {
 		syswrite $fh, sprintf("%-8o", 0644);
 
 		# move to next member
-		seek $fh, $file_header_start + $FILE_HEADER_LENGTH + $file_size, SEEK_SET;
+		my $padding = $file_size % 2;
+		seek $fh, $file_header_start + $FILE_HEADER_LENGTH + $file_size + $padding, SEEK_SET;
+
 	}
 
 	return 1;

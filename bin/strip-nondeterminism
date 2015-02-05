@@ -28,10 +28,10 @@ Getopt::Long::Configure(qw(no_ignore_case permute bundling));
 
 my $cmd = $0;
 $cmd =~ s/.*\///;
-my $usage = "Usage: $cmd [-t|--type FILETYPE] FILENAME\n";
+my $usage = "Usage: $cmd [-t|--type FILETYPE] [-T|--timestamp SECONDS] FILENAME\n";
 
 my @opspec = (
-	'type|t=s', 'help|h', 'version|V',
+	'type|t=s', 'help|h', 'version|V', 'timestamp|T=i'
 );
 my $glop = {};
 GetOptions($glop, @opspec) || die $usage;
@@ -45,6 +45,8 @@ if ($glop->{version}) {
 	print "$cmd version $File::StripNondeterminism::VERSION\n";
 	exit 0;
 }
+
+$File::StripNondeterminism::canonical_time = $glop->{timestamp};
 
 die $usage if @ARGV == 0;
 
@@ -87,6 +89,11 @@ process itself cannot be made deterministic.
 Use the normalizer for the given file type (ar, gzip, jar, zip).  If this
 option is not specified, the file type is detected automatically based on
 the file name extension.
+
+=item B<-T> I<seconds>, B<--timestamp> I<seconds>
+
+Instead of stripping timestamps from files, set them to the given number
+of seconds since January 1, 1970.
 
 =item B<-h>, B<--help>
 
