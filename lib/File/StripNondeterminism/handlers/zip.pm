@@ -33,12 +33,14 @@ use constant SAFE_EPOCH => 315576060;
 # Extract and return the first $nbytes of $member (an Archive::Zip::Member)
 sub peek_member {
 	my ($member, $nbytes) = @_;
+	my $original_size = $member->compressedSize();
 	my $old_compression_method = $member->desiredCompressionMethod(COMPRESSION_STORED);
 	$member->rewindData() == AZ_OK or die "failed to rewind ZIP member";
 	my ($buffer, $status) = $member->readChunk($nbytes);
 	die "failed to read ZIP member" if $status != AZ_OK && $status != AZ_STREAM_END;
 	$member->endRead();
 	$member->desiredCompressionMethod($old_compression_method);
+	$member->{'compressedSize'} = $original_size; # Work around https://github.com/redhotpenguin/perl-Archive-Zip/issues/11
 	return $$buffer;
 }
 
@@ -49,7 +51,9 @@ sub normalize_member {
 	# Extract the member to a temporary file.
 	my $tempdir = File::Temp->newdir();
 	my $filename = "$tempdir/member";
+	my $original_size = $member->compressedSize();
 	$member->extractToFileNamed($filename);
+	$member->{'compressedSize'} = $original_size; # Work around https://github.com/redhotpenguin/perl-Archive-Zip/issues/11
 
 	# Normalize the temporary file.
 	if ($normalizer->($filename)) {
