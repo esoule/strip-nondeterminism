@@ -20,13 +20,13 @@
 #
 
 use File::Temp 'tempdir';
-use Test::More tests => 2;
+use Test::More tests => 3;
 use File::StripNondeterminism;
 
-$dir = tempdir( CLEANUP => 1 );
-$path = "$dir/a.html";
-open(my $fh, '>', $path) or die("error opening $path");
-print $fh <<'ORIGINAL';
+my $dir = tempdir( CLEANUP => 1 );
+my $path1 = "$dir/a.html";
+my $path2 = "$dir/b.html";
+my $original = <<'ORIGINAL';
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
 <!-- NewPage -->
 <html lang="en">
@@ -37,16 +37,23 @@ print $fh <<'ORIGINAL';
 <script type="text/javascript">;
 ORIGINAL
 
-close $fh;
+for my $path ($path1, $path2) {
+	open(my $fh, '>', $path) or die("error opening $path");
+	binmode $fh;
+	print $fh $original;
+	close $fh;
+}
 
-$normalizer = File::StripNondeterminism::get_normalizer_for_file($path);
+# Test 1: make sure normalizer was found
+my $normalizer = File::StripNondeterminism::get_normalizer_for_file($path1);
 isnt(undef, $normalizer);
-$normalizer->($path);
 
-open FILE,$path or die("error opening $path");
-binmode FILE;
-local $/ = undef;
-is(<FILE>, <<'EXPECTED');
+# Test 2: normalize without a canonical time
+$normalizer->($path1);
+
+open(my $fh, '<', $path1) or die("error opening $path1");
+binmode $fh;
+is(do { local $/; <$fh> }, <<'EXPECTED');
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
 <!-- NewPage -->
 <html lang="en">
@@ -54,4 +61,21 @@ is(<FILE>, <<'EXPECTED');
 <title>Generated Documentation (Untitled)</title>
 <script type="text/javascript">;
 EXPECTED
+close $fh;
 
+# Test 3: normalize with a canonical time
+$File::StripNondeterminism::canonical_time = 1423159771;
+$normalizer->($path2);
+
+open($fh, '<', $path2) or die("error opening $path2");
+binmode $fh;
+is(do { local $/; <$fh> }, <<'EXPECTED');
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
+<!-- NewPage -->
+<html lang="en">
+<head>
+<title>Generated Documentation (Untitled)</title>
+<meta name="date" content="2015-02-05">
+<script type="text/javascript">;
+EXPECTED
+close $fh;
