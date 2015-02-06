@@ -126,7 +126,9 @@ sub normalize {
 		$zip->addMember($member);
 		$options{member_normalizer}->($member) if exists $options{member_normalizer};
 		$member->setLastModFileDateTimeFromUnix($File::StripNondeterminism::canonical_time // SAFE_EPOCH);
-		$member->unixFileAttributes(0644) if $member->fileAttributeFormat() == FA_UNIX;
+		if ($member->fileAttributeFormat() == FA_UNIX) {
+			$member->unixFileAttributes(($member->unixFileAttributes() & 0100) ? 0755 : 0644);
+		}
 		$member->cdExtraField(normalize_extra_fields($member->cdExtraField(), CENTRAL_HEADER));
 		$member->localExtraField(normalize_extra_fields($member->localExtraField(), LOCAL_HEADER));
 	}
