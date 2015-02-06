@@ -22,7 +22,6 @@ use strict;
 use warnings;
 
 use File::StripNondeterminism::handlers::ar;
-use File::StripNondeterminism::handlers::docbooktoman;
 use File::StripNondeterminism::handlers::gzip;
 use File::StripNondeterminism::handlers::jar;
 use File::StripNondeterminism::handlers::javadoc;
@@ -33,7 +32,7 @@ use File::StripNondeterminism::handlers::zip;
 
 our($VERSION, $canonical_time);
 
-$VERSION = '0.004'; # 0.004
+$VERSION = '0.005'; # 0.005
 
 sub _get_file_type {
 	my $file=shift;
@@ -53,10 +52,6 @@ sub get_normalizer_for_file {
 	# ar
 	if (m/\.a$/ && _get_file_type($_) =~ m/ar archive/) {
 		return \&File::StripNondeterminism::handlers::ar::normalize;
-	}
-	# docbook-to-man
-	if (m/\.\d$/ && _get_file_type($_) =~ m/troff/) {
-		return \&File::StripNondeterminism::handlers::docbooktoman::normalize;
 	}
 	# gzip
 	if (m/\.(gz|dz)$/ && _get_file_type($_) =~ m/gzip compressed data/) {
@@ -92,7 +87,6 @@ sub get_normalizer_for_file {
 sub get_normalizer_by_name {
 	$_ = shift;
 	return \&File::StripNondeterminism::handlers::ar::normalize if $_ eq 'ar';
-	return \&File::StripNondeterminism::handlers::docbooktoman::normalize if $_ eq 'docbooktoman';
 	return \&File::StripNondeterminism::handlers::gzip::normalize if $_ eq 'gzip';
 	return \&File::StripNondeterminism::handlers::jar::normalize if $_ eq 'jar';
 	return \&File::StripNondeterminism::handlers::javadoc::normalize if $_ eq 'javadoc';
