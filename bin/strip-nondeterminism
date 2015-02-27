@@ -23,6 +23,7 @@ use strict;
 use warnings;
 
 use File::StripNondeterminism;
+use POSIX qw(tzset);
 use Getopt::Long;
 Getopt::Long::Configure(qw(no_ignore_case permute bundling));
 
@@ -45,6 +46,9 @@ if ($glop->{version}) {
 	print "$cmd version $File::StripNondeterminism::VERSION\n";
 	exit 0;
 }
+
+$ENV{'TZ'} = 'UTC';
+tzset();
 
 $File::StripNondeterminism::canonical_time = $glop->{timestamp};
 
