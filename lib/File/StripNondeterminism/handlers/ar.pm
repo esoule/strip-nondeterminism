@@ -63,6 +63,7 @@ sub normalize {
 		die "Incorrect file magic"
 		if substr($buf, 58, length($FILE_MAGIC)) ne $FILE_MAGIC;
 
+		my $file_mode = oct(substr($buf, 40, 8));
 		my $file_size = substr($buf, 48, 10);
 		seek $fh, $file_header_start + 16, SEEK_SET;
 
@@ -73,7 +74,7 @@ sub normalize {
 		# group
 		syswrite $fh, sprintf("%-6d", 0);
 		# file mode
-		syswrite $fh, sprintf("%-8o", 0644);
+		syswrite $fh, sprintf("%-8o", ($file_mode & 0100) ? 0755 : 0644);
 
 		# move to next member
 		my $padding = $file_size % 2;
