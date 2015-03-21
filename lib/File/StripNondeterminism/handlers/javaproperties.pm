@@ -45,7 +45,7 @@ sub normalize {
 	# It should appear within first 10 lines.
 	while (defined(my $line = <$fh>) && $. <= 10) {
 		# Yes, there really is no comma here
-		if ($line =~ /^#\w{3} \w{3} \d{2} \d{2}:\d{2}:\d{2} \w{3} \d{4}\s*$/) {
+		if ($line =~ /^#\w{3} \w{3} \d{2} \d{2}:\d{2}:\d{2} \w{3,4}([+-]\d{2}:\d{2})? \d{4}\s*$/) {
 			$line = '';
 			print $tempfile $line;
 
