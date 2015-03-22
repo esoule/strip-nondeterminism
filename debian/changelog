@@ -1,3 +1,16 @@
+strip-nondeterminism (0.006-1) unstable; urgency=low
+
+  * New upstream release.
+    - Strip timestamp from Java version.properties files
+    - two more javaproperties signatures
+    - set timezone to UTC before normalizing to get reproducible timestamps
+    - ar handler: preserve execute bit when normalizing permissions
+    - Add test case for ar handler
+    - Improve detection of timestamps in pom.properties files
+    - Add a PNG handler (Closes: #777679)
+
+ -- Andrew Ayer <agwa@andrewayer.name>  Sun, 22 Mar 2015 11:15:49 -0700
+
 strip-nondeterminism (0.005-2) unstable; urgency=low
 
   * Team upload.
