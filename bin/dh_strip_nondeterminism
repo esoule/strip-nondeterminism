@@ -11,6 +11,7 @@ use File::Find;
 use Debian::Debhelper::Dh_Lib;
 use File::StripNondeterminism;
 use Date::Parse;
+use POSIX qw(tzset);
 
 =head1 SYNOPSIS
 
@@ -60,6 +61,9 @@ sub testfile {
 		push @nondeterministic_files, [$fn, $normalizer];
 	}
 }
+
+$ENV{'TZ'} = 'UTC';
+tzset();
 
 foreach my $package (@{$dh{DOPACKAGES}}) {
 	my $tmp=tmpdir($package);
