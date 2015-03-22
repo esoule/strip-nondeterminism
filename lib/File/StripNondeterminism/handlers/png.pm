@@ -1,0 +1,86 @@
+#
+# Copyright 2015 Chris Lamb <lamby@debian.org>
+# Copyright 2015 Andrew Ayer <agwa@andrewayer.name>
+#
+# This file is part of strip-nondeterminism.
+#
+# strip-nondeterminism is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# strip-nondeterminism is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with strip-nondeterminism.  If not, see <http://www.gnu.org/licenses/>.
+#
+package File::StripNondeterminism::handlers::png;
+
+use strict;
+use warnings;
+
+use File::Basename qw/dirname/;
+use POSIX qw/strftime/;
+use Archive::Zip;
+
+sub crc {
+	my ($data) = @_;
+	return Archive::Zip::computeCRC32($data);
+}
+
+sub chunk {
+	my ($type, $data) = @_;
+	return pack('Na4a*N', length($data), $type, $data, crc($type . $data));
+}
+
+sub time_chunk {
+	my ($seconds) = @_;
+	my ($sec, $min, $hour, $mday, $mon, $year) = gmtime($seconds);
+	return chunk('tIME', pack('nCCCCC', 1900+$year, $mon+1, $mday, $hour, $min, $sec));
+}
+
+sub text_chunk {
+	my ($keyword, $data) = @_;
+	return chunk('tEXt', pack('Z*a*', $keyword, $data));
+}
+
+sub normalize {
+	my ($filename) = @_;
+
+	my $canonical_time = $File::StripNondeterminism::canonical_time;
+
+	my $tempfile = File::Temp->new(DIR => dirname($filename));
+
+	open(my $fh, '+<', $filename) or die "$filename: open: $!";
+	read($fh, my $magic, 8); $magic eq "\x89PNG\r\n\x1a\n"
+		or die "$filename: does not appear to be a PNG";
+	print $tempfile $magic;
+
+	while (read($fh, my $header, 8) == 8) {
+		my ($len, $type) = unpack('Na4', $header);
+
+		# Always read(2) (including the CRC) even if we're going to skip
+		read $fh, my $data, $len + 4;
+
+		if ($type eq "tIME") {
+			print $tempfile time_chunk($canonical_time) if defined($canonical_time);
+		} elsif ($type =~ /[tiz]EXt/ && $data =~ /^(date:[^\0]+|Creation Time)\0/) {
+			print $tempfile text_chunk($1, strftime("%Y-%m-%dT%H:%M:%S-00:00",
+							gmtime($canonical_time))) if defined($canonical_time);
+		} else {
+			print $tempfile $header . $data;
+		}
+	}
+
+	chmod((stat($fh))[2] & 07777, $tempfile->filename);
+	rename($tempfile->filename, $filename)
+		or die "$filename: unable to overwrite: rename: $!";
+	$tempfile->unlink_on_destroy(0);
+
+	close $fh;
+}
+
+1;

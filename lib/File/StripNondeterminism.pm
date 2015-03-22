@@ -27,6 +27,7 @@ use File::StripNondeterminism::handlers::jar;
 use File::StripNondeterminism::handlers::javadoc;
 use File::StripNondeterminism::handlers::pe;
 use File::StripNondeterminism::handlers::pearregistry;
+use File::StripNondeterminism::handlers::png;
 use File::StripNondeterminism::handlers::javaproperties;
 use File::StripNondeterminism::handlers::zip;
 
@@ -73,6 +74,10 @@ sub get_normalizer_for_file {
 	if (m/\.(exe|dll|cpl|ocx|sys|scr|drv|efi|fon)/ && _get_file_type($_) =~ m/PE32.? executable/) {
 		return \&File::StripNondeterminism::handlers::pe::normalize;
 	}
+	# PNG
+	if (m/\.png$/ && _get_file_type($_) =~ m/PNG image data/) {
+		return \&File::StripNondeterminism::handlers::png::normalize;
+	}
 	# pom.properties, version.properties
 	if (m/(pom|version)\.properties$/ && File::StripNondeterminism::handlers::javaproperties::is_java_properties_file($_)) {
 		return \&File::StripNondeterminism::handlers::javaproperties::normalize;
@@ -92,6 +97,7 @@ sub get_normalizer_by_name {
 	return \&File::StripNondeterminism::handlers::javadoc::normalize if $_ eq 'javadoc';
 	return \&File::StripNondeterminism::handlers::pe::normalize if $_ eq 'pe';
 	return \&File::StripNondeterminism::handlers::pearregistry::normalize if $_ eq 'pearregistry';
+	return \&File::StripNondeterminism::handlers::png::normalize if $_ eq 'png';
 	return \&File::StripNondeterminism::handlers::javaproperties::normalize if $_ eq 'javaproperties';
 	return \&File::StripNondeterminism::handlers::zip::normalize if $_ eq 'zip';
 	return undef;
