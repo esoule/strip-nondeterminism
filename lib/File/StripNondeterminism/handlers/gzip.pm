@@ -54,8 +54,10 @@ sub normalize {
 	my $new_flg = $flg;
 	$new_flg &= ~FNAME;	# Don't include filename
 	$new_flg &= ~FHCRC;	# Don't include header CRC (not all implementations support it)
-	# If there's no canonical time set, zero out the mtime (this is what `gzip -n` does):
-	$mtime = $File::StripNondeterminism::canonical_time // 0;
+	unless ($mtime == 0) {	# Don't set a deterministic timestamp if there wasn't already a timestamp
+		# If there's no canonical time set, zero out the mtime (this is what `gzip -n` does):
+		$mtime = $File::StripNondeterminism::canonical_time // 0;
+	}
 	# TODO: question: normalize some of the other fields, such as OS?
 
 	my $tempfile = File::Temp->new(DIR => dirname($filename));
