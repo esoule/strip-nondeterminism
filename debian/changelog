@@ -1,3 +1,11 @@
+strip-nondeterminism (0.008-1) unstable; urgency=medium
+
+  * New upstream release.
+    - gzip: don't set a canonical timestamp if file didn't already have
+      a timestamp (Closes: #785742)
+
+ -- Andrew Ayer <agwa@andrewayer.name>  Tue, 02 Jun 2015 10:26:17 -0700
+
 strip-nondeterminism (0.007-1) unstable; urgency=medium
 
   [ Reiner Herrmann ]
