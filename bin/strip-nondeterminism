@@ -31,18 +31,20 @@ my $cmd = $0;
 $cmd =~ s/.*\///;
 my $usage = "Usage: $cmd [-t|--type FILETYPE] [-T|--timestamp SECONDS] FILENAME\n";
 
-my @opspec = (
-	'type|t=s', 'help|h', 'version|V', 'timestamp|T=i'
-);
-my $glop = {};
-GetOptions($glop, @opspec) || die $usage;
+my ($filetype, $timestamp, $want_help, $want_version);
+my $getopt = Getopt::Long::Parser->new;
+$getopt->configure(qw(no_ignore_case permute bundling));
+$getopt->getoptions('type|t=s', \$filetype,
+		    'timestamp|T=i', \$timestamp,
+		    'help|h', \$want_help,
+		    'version|V', \$want_version) or die $usage;
 
-if ($glop->{help}) {
+if ($want_help) {
 	print $usage;
 	exit 0;
 }
 
-if ($glop->{version}) {
+if ($want_version) {
 	print "$cmd version $File::StripNondeterminism::VERSION\n";
 	exit 0;
 }
@@ -50,15 +52,15 @@ if ($glop->{version}) {
 $ENV{'TZ'} = 'UTC';
 tzset();
 
-$File::StripNondeterminism::canonical_time = $glop->{timestamp};
+$File::StripNondeterminism::canonical_time = $timestamp;
 
 die $usage if @ARGV == 0;
 
 for my $filename (@ARGV) {
 	my $normalizer;
-	if ($glop->{type}) {
-		$normalizer = File::StripNondeterminism::get_normalizer_by_name($glop->{type});
-		die $glop->{type} . ": Unknown file type\n" unless $normalizer;
+	if (defined $filetype) {
+		$normalizer = File::StripNondeterminism::get_normalizer_by_name($filetype);
+		die "$filetype: Unknown file type\n" unless $normalizer;
 	} else {
 		$normalizer = File::StripNondeterminism::get_normalizer_for_file($filename);
 		next unless $normalizer;
