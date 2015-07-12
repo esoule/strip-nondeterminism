@@ -1,5 +1,6 @@
 #
 # Copyright 2014 Andrew Ayer
+# Copyright 2015 Chris Lamb <lamby@debian.org>
 #
 # This file is part of strip-nondeterminism.
 #
@@ -56,6 +57,12 @@ sub normalize {
 				$line =~ s/\<META NAME="date" CONTENT="[^"]*"\>//gi;
 			}
 			print $tempfile $line unless $line =~ /^\s*$/; # elide lines that are now whitespace-only
+			$modified = 1;
+		} elsif ($line =~ /<html lang="[^"]+">/) {
+			# Strip locale as it's inherited from environment.
+			# Browsers will do a far better job at detecting
+			# encodings, than a header ever could anyway.
+			print $tempfile "<html>\n";
 			$modified = 1;
 		} else {
 			print $tempfile $line;
