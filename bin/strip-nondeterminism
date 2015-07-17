@@ -64,7 +64,7 @@ for my $filename (@ARGV) {
 		next unless $normalizer;
 	}
 
-	$normalizer->($filename);
+	eval { $normalizer->($filename); 1 } or die "strip-nondeterminism: $filename: $@";
 }
 
 __END__
