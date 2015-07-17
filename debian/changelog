@@ -1,3 +1,13 @@
+strip-nondeterminism (0.009-1) unstable; urgency=medium
+
+  * New upstream release.
+    - Strip javadoc locale - browsers will do detection better.
+    - Include name of file that caused error in error messages
+    - zip: catch errors when reading archive, ignore zip64 files
+      (Closes: #791574)
+
+ -- Andrew Ayer <agwa@andrewayer.name>  Fri, 17 Jul 2015 09:45:14 -0700
+
 strip-nondeterminism (0.008-1) unstable; urgency=medium
 
   * New upstream release.
