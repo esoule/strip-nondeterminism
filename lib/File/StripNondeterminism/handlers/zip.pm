@@ -116,10 +116,34 @@ sub normalize_extra_fields {
 	return $result;
 }
 
+sub try {
+	my ($sub, $errors) = @_;
+	@$errors = ();
+	my $old_error_handler = Archive::Zip::setErrorHandler(sub { push @$errors, @_ });
+	my $res = $sub->();
+	Archive::Zip::setErrorHandler($old_error_handler);
+	return $res;
+}
+
 sub normalize {
 	my ($zip_filename, %options) = @_;
 	my $filename_cmp = $options{filename_cmp} || sub { $a cmp $b };
-	my $zip = Archive::Zip->new($zip_filename);
+	my $zip = Archive::Zip->new();
+	my @errors;
+	if (try(sub { $zip->read($zip_filename) }, \@errors) != AZ_OK) {
+		if (grep /zip64 not supported/, @errors) {
+			# Ignore zip64 files, which aren't supported by Archive::Zip.
+			# Ignoring unsupported files, instead of erroring out, is
+			# consistent with the rest of strip-nondeterminism's behavior,
+			# but warn about it in case someone is confused why a .zip
+			# file is left with nondeterminism in it.  (Hopefully this won't
+			# happen much since zip64 files are very rare.)
+			warn "strip-nondeterminism: $zip_filename: ignoring zip64 file\n";
+			return 0;
+		} else {
+			die "Reading ZIP archive failed: " . join("\n", @errors);
+		}
+	}
 	my @filenames = sort $filename_cmp $zip->memberNames();
 	for my $filename (@filenames) {
 		my $member = $zip->removeMember($filename);
