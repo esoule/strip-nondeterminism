@@ -46,9 +46,15 @@ version=2.4
 ORIGINAL
 close($fh);
 
-$normalizer = File::StripNondeterminism::get_normalizer_for_file($path);
-isnt(undef, $normalizer);
-$normalizer->($path);
+sub normalise {
+    my $path = shift(@_);
+
+    $normalizer = File::StripNondeterminism::get_normalizer_for_file($path);
+    isnt(undef, $normalizer);
+    $normalizer->($path);
+}
+
+normalise($path);
 
 open($fh, '<', $path) or die("error opening $path");
 is(do { local $/; <$fh> }, <<'EXPECTED');
@@ -71,9 +77,7 @@ build.number=125
 ORIGINAL
 close($fh);
 
-$normalizer = File::StripNondeterminism::get_normalizer_for_file($path);
-isnt(undef, $normalizer);
-$normalizer->($path);
+normalise($path);
 
 open($fh, '<', $path) or die("error opening $path");
 is(do { local $/; <$fh> }, <<'EXPECTED');
