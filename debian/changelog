@@ -1,3 +1,12 @@
+strip-nondeterminism (0.010-1) unstable; urgency=medium
+
+  * New upstream release.
+    - Use same regex to detect javaproperties files in jars as in files
+  * Add missing dependency on libtimedate-perl.  Thanks to Stéphane
+    Glondu (Closes: #796366)
+
+ -- Andrew Ayer <agwa@andrewayer.name>  Fri, 21 Aug 2015 13:25:50 -0700
+
 strip-nondeterminism (0.009-1) unstable; urgency=medium
 
   * New upstream release.
