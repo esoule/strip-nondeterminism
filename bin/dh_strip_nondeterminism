@@ -72,8 +72,7 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 	find(\&testfile,$tmp);
 	next unless @nondeterministic_files;
 
-	isnative($package); # Sets $dh{DATE} as a side-effect (TODO: do this more nicely)
-	$File::StripNondeterminism::canonical_time = str2time($dh{DATE});
+	$File::StripNondeterminism::canonical_time = get_source_date_epoch();
 
 	foreach (@nondeterministic_files) {
 		my ($path, $normalize) = @$_;
