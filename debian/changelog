@@ -1,3 +1,12 @@
+strip-nondeterminism (0.012-1) unstable; urgency=medium
+
+  * New upstream release.
+    - zip: preserve file permissions. (Closes: #798384)
+    - dh_strip_nondeterminism: work around lack of get_source_date_epoch
+      in old debhelper. (Closes: #799732)
+
+ -- Andrew Ayer <agwa@andrewayer.name>  Tue, 22 Sep 2015 07:01:25 -0700
+
 strip-nondeterminism (0.011-1) unstable; urgency=medium
 
   * New upstream release.
