@@ -72,7 +72,12 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 	find(\&testfile,$tmp);
 	next unless @nondeterministic_files;
 
-	$File::StripNondeterminism::canonical_time = get_source_date_epoch();
+	$File::StripNondeterminism::canonical_time = eval { get_source_date_epoch() };
+	if (not defined $File::StripNondeterminism::canonical_time) {
+		# Hack for old versions of debhelper
+		isnative($package); # Sets $dh{DATE} as a side-effect
+		$File::StripNondeterminism::canonical_time = str2time($dh{DATE});
+	}
 
 	foreach (@nondeterministic_files) {
 		my ($path, $normalize) = @$_;

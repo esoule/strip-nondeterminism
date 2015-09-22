@@ -156,7 +156,9 @@ sub normalize {
 		$member->cdExtraField(normalize_extra_fields($member->cdExtraField(), CENTRAL_HEADER));
 		$member->localExtraField(normalize_extra_fields($member->localExtraField(), LOCAL_HEADER));
 	}
+	my $old_perms = (stat($zip_filename))[2] & 07777;
 	$zip->overwrite();
+	chmod($old_perms, $zip_filename);
 	return 1;
 }
 
