@@ -72,8 +72,23 @@ sub normalize {
 							gmtime($canonical_time))) if defined($canonical_time);
 		} else {
 			print $tempfile $header . $data;
+
+			last if $type eq 'IEND'; # Stop processing immediately, in case
+						 # there's garbage after the PNG datastream.
+						 # (see https://bugs.debian.org/802057)
 		}
 	}
+
+	# Copy through trailing garbage.  Conformant PNG files don't have trailing
+	# garbage (see http://www.w3.org/TR/PNG/#15FileConformance item c), however
+	# in the interest of strip-nondeterminism being as transparent as possible,
+	# we preserve the garbage.
+	my $bytes_read;
+	my $buf;
+	while ($bytes_read = read($fh, $buf, 4096)) {
+		print $tempfile $buf;
+	}
+	defined($bytes_read) or die "$filename: read failed: $!";
 
 	chmod((stat($fh))[2] & 07777, $tempfile->filename);
 	rename($tempfile->filename, $filename)
