@@ -25,7 +25,6 @@ use File::StripNondeterminism::handlers::ar;
 use File::StripNondeterminism::handlers::gzip;
 use File::StripNondeterminism::handlers::jar;
 use File::StripNondeterminism::handlers::javadoc;
-use File::StripNondeterminism::handlers::pe;
 use File::StripNondeterminism::handlers::pearregistry;
 use File::StripNondeterminism::handlers::png;
 use File::StripNondeterminism::handlers::javaproperties;
@@ -33,7 +32,7 @@ use File::StripNondeterminism::handlers::zip;
 
 our($VERSION, $canonical_time);
 
-$VERSION = '0.013'; # 0.013
+$VERSION = '0.014'; # 0.014
 
 sub _get_file_type {
 	my $file=shift;
@@ -70,10 +69,6 @@ sub get_normalizer_for_file {
 	if (m/\.reg$/ && File::StripNondeterminism::handlers::pearregistry::is_registry_file($_)) {
 		return \&File::StripNondeterminism::handlers::pearregistry::normalize;
 	}
-	# PE executables
-	if (m/\.(exe|dll|cpl|ocx|sys|scr|drv|efi|fon)/ && _get_file_type($_) =~ m/PE32.? executable/) {
-		return \&File::StripNondeterminism::handlers::pe::normalize;
-	}
 	# PNG
 	if (m/\.png$/ && _get_file_type($_) =~ m/PNG image data/) {
 		return \&File::StripNondeterminism::handlers::png::normalize;
@@ -95,7 +90,6 @@ sub get_normalizer_by_name {
 	return \&File::StripNondeterminism::handlers::gzip::normalize if $_ eq 'gzip';
 	return \&File::StripNondeterminism::handlers::jar::normalize if $_ eq 'jar';
 	return \&File::StripNondeterminism::handlers::javadoc::normalize if $_ eq 'javadoc';
-	return \&File::StripNondeterminism::handlers::pe::normalize if $_ eq 'pe';
 	return \&File::StripNondeterminism::handlers::pearregistry::normalize if $_ eq 'pearregistry';
 	return \&File::StripNondeterminism::handlers::png::normalize if $_ eq 'png';
 	return \&File::StripNondeterminism::handlers::javaproperties::normalize if $_ eq 'javaproperties';
