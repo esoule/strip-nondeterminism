@@ -1,11 +1,11 @@
-strip-nondeterminism (0.014-1) UNRELEASED; urgency=medium
+strip-nondeterminism (0.014-1) unstable; urgency=medium
 
   * New upstream release:
     - Disable stripping Mono binaries as it is too aggressive re.  StrongName,
       preventing package installs in a systemwide location (Closes: #804600)
   * Add myself to Uploaders.
 
- -- Chris Lamb <lamby@debian.org>  Tue, 10 Nov 2015 00:07:18 +0000
+ -- Chris Lamb <lamby@debian.org>  Tue, 10 Nov 2015 00:08:28 +0000
 
 strip-nondeterminism (0.013-1) unstable; urgency=medium
 
