@@ -32,7 +32,7 @@ use File::StripNondeterminism::handlers::zip;
 
 our($VERSION, $canonical_time);
 
-$VERSION = '0.014'; # 0.014
+$VERSION = '0.015'; # 0.015
 
 sub _get_file_type {
 	my $file=shift;
