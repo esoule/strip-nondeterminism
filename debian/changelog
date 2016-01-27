@@ -1,3 +1,10 @@
+strip-nondeterminism (0.015-1) unstable; urgency=medium
+
+  * New upstream release:
+    - jar: ignore signed JAR files (Closes: #807876, #807669)
+
+ -- Andrew Ayer <agwa@andrewayer.name>  Wed, 27 Jan 2016 12:20:26 -0800
+
 strip-nondeterminism (0.014-1) unstable; urgency=medium
 
   * New upstream release:
