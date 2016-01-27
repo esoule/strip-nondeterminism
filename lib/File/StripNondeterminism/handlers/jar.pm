@@ -86,9 +86,29 @@ sub _jar_normalize_member {
 	}
 }
 
+sub _jar_archive_filter {
+	my ($zip) = @_;
+
+	# Don't normalize signed JARs, since our modifications will break the signature.
+	# Alternatively, we could strip the signature.  However, if a JAR file is signed,
+	# it is highly likely that the JAR file was part of the source and not produced
+	# as part of the build, and therefore contains no non-determinism.  Thus, ignoring
+	# the file makes more sense.
+	#
+	# According to the jarsigner(1) man page, a signed JAR has a .SF file in the
+	# META-INF directory.
+	if (scalar($zip->membersMatching('^META-INF/.*\.SF$')) > 0) {
+		warn "strip-nondeterminism: " . $zip->fileName() . ": ignoring signed JAR file\n";
+		return 0;
+	}
+
+	return 1;
+}
+
 sub normalize {
 	my ($jar_filename) = @_;
 	return File::StripNondeterminism::handlers::zip::normalize($jar_filename,
+							archive_filter => \&_jar_archive_filter,
 							filename_cmp => \&_jar_filename_cmp,
 							member_normalizer => \&_jar_normalize_member);
 }

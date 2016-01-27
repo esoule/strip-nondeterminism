@@ -144,6 +144,9 @@ sub normalize {
 			die "Reading ZIP archive failed: " . join("\n", @errors);
 		}
 	}
+	if (exists($options{archive_filter}) && not($options{archive_filter}->($zip))) {
+		return 0;
+	}
 	my @filenames = sort $filename_cmp $zip->memberNames();
 	for my $filename (@filenames) {
 		my $member = $zip->removeMember($filename);
