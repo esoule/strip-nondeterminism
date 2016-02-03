@@ -1,5 +1,5 @@
 Source: strip-nondeterminism
-Section: perl
+Section: devel
 Priority: optional
 Build-Depends: debhelper (>= 9)
 Build-Depends-Indep: perl, libarchive-zip-perl
@@ -10,6 +10,7 @@ Vcs-Git: https://anonscm.debian.org/git/reproducible/strip-nondeterminism.git
 Vcs-Browser: https://anonscm.debian.org/git/reproducible/strip-nondeterminism.git
 
 Package: libfile-stripnondeterminism-perl
+Section: perl
 Architecture: all
 Depends: ${misc:Depends}, ${perl:Depends}, libarchive-zip-perl
 Description: Perl module for stripping non-determinism from files
