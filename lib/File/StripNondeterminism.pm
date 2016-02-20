@@ -22,6 +22,7 @@ use strict;
 use warnings;
 
 use File::StripNondeterminism::handlers::ar;
+use File::StripNondeterminism::handlers::gettext;
 use File::StripNondeterminism::handlers::gzip;
 use File::StripNondeterminism::handlers::jar;
 use File::StripNondeterminism::handlers::javadoc;
@@ -52,6 +53,10 @@ sub get_normalizer_for_file {
 	# ar
 	if (m/\.a$/ && _get_file_type($_) =~ m/ar archive/) {
 		return \&File::StripNondeterminism::handlers::ar::normalize;
+	}
+	# gettext
+	if (m/\.g?mo$/ && _get_file_type($_) =~ m/GNU message catalog/) {
+		return \&File::StripNondeterminism::handlers::gettext::normalize;
 	}
 	# gzip
 	if (m/\.(gz|dz)$/ && _get_file_type($_) =~ m/gzip compressed data/) {
@@ -87,6 +92,7 @@ sub get_normalizer_for_file {
 sub get_normalizer_by_name {
 	$_ = shift;
 	return \&File::StripNondeterminism::handlers::ar::normalize if $_ eq 'ar';
+	return \&File::StripNondeterminism::handlers::gettext::normalize if $_ eq 'gettext';
 	return \&File::StripNondeterminism::handlers::gzip::normalize if $_ eq 'gzip';
 	return \&File::StripNondeterminism::handlers::jar::normalize if $_ eq 'jar';
 	return \&File::StripNondeterminism::handlers::javadoc::normalize if $_ eq 'javadoc';
