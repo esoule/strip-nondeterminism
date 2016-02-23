@@ -57,8 +57,8 @@ sub normalize {
 	}
 
 	my ($revision, $nstrings, $orig_to, $trans_to) = unpack($fmt x 4, substr($buf, 1*4, 4*4));
-	my $major = int($revision / 255);
-	my $minor = int($revision % 255);
+	my $major = int($revision / 256);
+	my $minor = int($revision % 256);
 	return 0 if $major > 1;
 
 	my $changed = 0;
