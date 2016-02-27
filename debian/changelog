@@ -1,16 +1,17 @@
 strip-nondeterminism (0.016-1) unstable; urgency=medium
 
+  [ Reiner Herrmann ]
+  * Team upload.
+  * New upstream release.
+  * Normalize POT-Creation-Date in Gettext GMO files
+
   [ Holger Levsen ]
   * bump standards version to 3.9.7, no changes needed.
   * debian/control: use /git/ instead /cgit/ in Vcs-Browser
-  * debian/control: move packages to correct sections. (Closes: #802842, #802843)
+  * debian/control: move packages to correct sections (Closes: #802842, #802843)
 
   [ Ben Finney ]
   * Update descriptions to better reflect broader reach. (Closes: #802841)
-
-  [ Reiner Herrmann ]
-  * New upstream release.
-  * Normalize POT-Creation-Date in Gettext GMO files
 
  -- Reiner Herrmann <reiner@reiner-h.de>  Sat, 27 Feb 2016 20:03:13 +0100
 
