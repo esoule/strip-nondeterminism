@@ -1,4 +1,10 @@
 #!/usr/bin/make -f
 
+# Remove the auto-generated Makefile to prevent dh_auto_clean from failing
+# if the Makefile contain paths referring to an old version of Perl.
+override_dh_auto_clean:
+	rm -f Makefile
+	dh_auto_clean
+
 %:
 	dh $@
