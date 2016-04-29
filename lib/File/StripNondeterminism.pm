@@ -83,7 +83,7 @@ sub get_normalizer_for_file {
 		return \&File::StripNondeterminism::handlers::javaproperties::normalize;
 	}
 	# zip
-	if (m/\.(zip|pk3|whl|xpi)$/ && _get_file_type($_) =~ m/Zip archive data/) {
+	if (m/\.(zip|pk3|epub|whl|xpi)$/ && _get_file_type($_) =~ m/Zip archive data/) {
 		return \&File::StripNondeterminism::handlers::zip::normalize;
 	}
 	return undef;
