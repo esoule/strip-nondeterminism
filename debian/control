@@ -5,7 +5,7 @@ Build-Depends: debhelper (>= 9)
 Build-Depends-Indep: perl, libarchive-zip-perl
 Maintainer: Reproducible builds folks <reproducible-builds@lists.alioth.debian.org>
 Uploaders: Andrew Ayer <agwa@andrewayer.name>, Holger Levsen <holger@debian.org>, Chris Lamb <lamby@debian.org>
-Standards-Version: 3.9.7
+Standards-Version: 3.9.8
 Vcs-Git: https://anonscm.debian.org/git/reproducible/strip-nondeterminism.git
 Vcs-Browser: https://anonscm.debian.org/git/reproducible/strip-nondeterminism.git
 
