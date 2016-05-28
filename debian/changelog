@@ -1,3 +1,17 @@
+strip-nondeterminism (0.017-1) unstable; urgency=medium
+
+  * New upstream version:
+    - Add support for epub files. (Holger Levsen)
+    - Treat *.htb as Zip files. (Sascha Steinbiss)
+
+  [ Holger Levsen ]
+  * Bump standards version to 3.9.8, no changes needed.
+
+  [ Andrew Ayer ]
+  * debian/rules: explicitly remove Makefile before dh_auto_clean
+
+ -- Holger Levsen <holger@debian.org>  Sat, 28 May 2016 16:10:27 +0200
+
 strip-nondeterminism (0.016-1) unstable; urgency=medium
 
   [ Reiner Herrmann ]
