@@ -10,6 +10,7 @@ Maintainer: Reproducible builds folks <reproducible-builds@lists.alioth.debian.o
 Uploaders:
  Andrew Ayer <agwa@andrewayer.name>,
  Holger Levsen <holger@debian.org>,
+ Mattia Rizzolo <mattia@debian.org>,
  Chris Lamb <lamby@debian.org>,
 Standards-Version: 3.9.8
 Vcs-Git: https://anonscm.debian.org/git/reproducible/strip-nondeterminism.git
