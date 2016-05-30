@@ -1,10 +1,16 @@
 Source: strip-nondeterminism
 Section: devel
 Priority: optional
-Build-Depends: debhelper (>= 9)
-Build-Depends-Indep: perl, libarchive-zip-perl
+Build-Depends:
+ debhelper (>= 9),
+Build-Depends-Indep:
+ libarchive-zip-perl,
+ perl,
 Maintainer: Reproducible builds folks <reproducible-builds@lists.alioth.debian.org>
-Uploaders: Andrew Ayer <agwa@andrewayer.name>, Holger Levsen <holger@debian.org>, Chris Lamb <lamby@debian.org>
+Uploaders:
+ Andrew Ayer <agwa@andrewayer.name>,
+ Holger Levsen <holger@debian.org>,
+ Chris Lamb <lamby@debian.org>,
 Standards-Version: 3.9.8
 Vcs-Git: https://anonscm.debian.org/git/reproducible/strip-nondeterminism.git
 Vcs-Browser: https://anonscm.debian.org/git/reproducible/strip-nondeterminism.git
@@ -12,7 +18,10 @@ Vcs-Browser: https://anonscm.debian.org/git/reproducible/strip-nondeterminism.gi
 Package: libfile-stripnondeterminism-perl
 Section: perl
 Architecture: all
-Depends: ${misc:Depends}, ${perl:Depends}, libarchive-zip-perl
+Depends:
+ libarchive-zip-perl,
+ ${misc:Depends},
+ ${perl:Depends},
 Description: file non-deterministic information stripper — Perl module
  StripNondeterminism is a library for stripping non-deterministic
  information, such as timestamps and file system order, from files. It
@@ -26,7 +35,10 @@ Description: file non-deterministic information stripper — Perl module
 
 Package: strip-nondeterminism
 Architecture: all
-Depends: libfile-stripnondeterminism-perl (= ${binary:Version}), ${misc:Depends}, ${perl:Depends}
+Depends:
+ libfile-stripnondeterminism-perl (= ${binary:Version}),
+ ${misc:Depends},
+ ${perl:Depends},
 Description: file non-deterministic information stripper — stand-alone tool
  StripNondeterminism is a library for stripping non-deterministic
  information, such as timestamps and file system order, from files. It
@@ -40,7 +52,12 @@ Description: file non-deterministic information stripper — stand-alone tool
 
 Package: dh-strip-nondeterminism
 Architecture: all
-Depends: libfile-stripnondeterminism-perl (= ${binary:Version}), ${misc:Depends}, ${perl:Depends}, debhelper, libtimedate-perl
+Depends:
+ debhelper,
+ libfile-stripnondeterminism-perl (= ${binary:Version}),
+ libtimedate-perl,
+ ${misc:Depends},
+ ${perl:Depends},
 Description: file non-deterministic information stripper — Debhelper add-on
  StripNondeterminism is a library for stripping non-deterministic
  information, such as timestamps and file system order, from files. It
