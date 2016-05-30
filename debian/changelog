@@ -1,3 +1,14 @@
+strip-nondeterminism (0.018-1) unstable; urgency=medium
+
+  * New upstream release:
+    - Fix support for epub files.  (Holger Levsen)
+
+  [ Mattia Rizzolo ]
+  * Add myself to uploaders.
+  * Run wrap-and-sort -ast.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 May 2016 19:05:46 +0000
+
 strip-nondeterminism (0.017-1) unstable; urgency=medium
 
   * New upstream version:
