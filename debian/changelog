@@ -1,3 +1,9 @@
+strip-nondeterminism (0.018-1~bpo8+1) jessie-backports; urgency=medium
+
+  * Rebuild for jessie-backports.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 May 2016 19:14:07 +0000
+
 strip-nondeterminism (0.018-1) unstable; urgency=medium
 
   * New upstream release:
