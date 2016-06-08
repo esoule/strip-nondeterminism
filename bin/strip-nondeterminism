@@ -103,6 +103,13 @@ the file name extension.
 Instead of stripping timestamps from files, set them to the given number
 of seconds since January 1, 1970.
 
+=item B<--clamp-timestamp>
+
+Only replace timestamps if they are later than the time specified to
+B<--timestamp>.  You can use this option to ensure that only timestamps
+introduced as part of the build process are replaced.  NOT YET IMPLEMENTED
+FOR ALL FILE FORMATS.
+
 =item B<-h>, B<--help>
 
 Display this help message.
