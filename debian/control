@@ -40,6 +40,7 @@ Depends:
  libfile-stripnondeterminism-perl (= ${binary:Version}),
  ${misc:Depends},
  ${perl:Depends},
+Multi-Arch: foreign
 Description: file non-deterministic information stripper — stand-alone tool
  StripNondeterminism is a library for stripping non-deterministic
  information, such as timestamps and file system order, from files. It
@@ -59,6 +60,7 @@ Depends:
  libtimedate-perl,
  ${misc:Depends},
  ${perl:Depends},
+Multi-Arch: foreign
 Description: file non-deterministic information stripper — Debhelper add-on
  StripNondeterminism is a library for stripping non-deterministic
  information, such as timestamps and file system order, from files. It
