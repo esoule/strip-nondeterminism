@@ -29,13 +29,14 @@ Getopt::Long::Configure(qw(no_ignore_case permute bundling));
 
 my $cmd = $0;
 $cmd =~ s/.*\///;
-my $usage = "Usage: $cmd [-t|--type FILETYPE] [-T|--timestamp SECONDS] FILENAME\n";
+my $usage = "Usage: $cmd [-t|--type FILETYPE] [-T|--timestamp SECONDS] [--clamp-timestamp] FILENAME\n";
 
-my ($filetype, $timestamp, $want_help, $want_version);
+my ($filetype, $timestamp, $clamp_timestamp, $want_help, $want_version);
 my $getopt = Getopt::Long::Parser->new;
 $getopt->configure(qw(no_ignore_case permute bundling));
 $getopt->getoptions('type|t=s', \$filetype,
 		    'timestamp|T=i', \$timestamp,
+		    'clamp-timestamp!', \$clamp_timestamp,
 		    'help|h', \$want_help,
 		    'version|V', \$want_version) or die $usage;
 
@@ -53,6 +54,7 @@ $ENV{'TZ'} = 'UTC';
 tzset();
 
 $File::StripNondeterminism::canonical_time = $timestamp;
+$File::StripNondeterminism::clamp_time = $clamp_timestamp;
 
 die $usage if @ARGV == 0;
 

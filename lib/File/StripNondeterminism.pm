@@ -31,7 +31,7 @@ use File::StripNondeterminism::handlers::png;
 use File::StripNondeterminism::handlers::javaproperties;
 use File::StripNondeterminism::handlers::zip;
 
-our($VERSION, $canonical_time);
+our($VERSION, $canonical_time, $clamp_time);
 
 $VERSION = '0.018'; # 0.018
 
