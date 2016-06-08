@@ -83,6 +83,8 @@ sub _jar_normalize_member {
 			# maven header should be within first 1kb of file
 		File::StripNondeterminism::handlers::zip::normalize_member($member,
 				\&File::StripNondeterminism::handlers::javaproperties::normalize);
+	} elsif ($member->fileName() =~ /\.jar$/) {
+		File::StripNondeterminism::handlers::zip::normalize_member($member, \&normalize);
 	}
 }
 
