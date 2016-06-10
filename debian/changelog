@@ -1,3 +1,13 @@
+strip-nondeterminism (0.019-1) unstable; urgency=medium
+
+  * New upstream release:
+    - Recursively normalize JAR files embedded within JAR files
+      (Closes: #823917)
+    - Add framework for "clamping" the timestamp
+    - Add timestamp clamping support to gzip handler
+
+ -- Andrew Ayer <agwa@andrewayer.name>  Thu, 09 Jun 2016 21:17:19 -0700
+
 strip-nondeterminism (0.018-2) unstable; urgency=medium
 
   [ Helmut Grohne ]
