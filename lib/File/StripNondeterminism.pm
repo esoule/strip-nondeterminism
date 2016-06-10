@@ -31,9 +31,9 @@ use File::StripNondeterminism::handlers::png;
 use File::StripNondeterminism::handlers::javaproperties;
 use File::StripNondeterminism::handlers::zip;
 
-our($VERSION, $canonical_time);
+our($VERSION, $canonical_time, $clamp_time);
 
-$VERSION = '0.018'; # 0.018
+$VERSION = '0.019'; # 0.019
 
 sub _get_file_type {
 	my $file=shift;

@@ -55,8 +55,13 @@ sub normalize {
 	$new_flg &= ~FNAME;	# Don't include filename
 	$new_flg &= ~FHCRC;	# Don't include header CRC (not all implementations support it)
 	unless ($mtime == 0) {	# Don't set a deterministic timestamp if there wasn't already a timestamp
-		# If there's no canonical time set, zero out the mtime (this is what `gzip -n` does):
-		$mtime = $File::StripNondeterminism::canonical_time // 0;
+		if (defined $File::StripNondeterminism::canonical_time) {
+			if (!$File::StripNondeterminism::clamp_time || $mtime > $File::StripNondeterminism::canonical_time) {
+				$mtime = $File::StripNondeterminism::canonical_time;
+			}
+		} else {
+			$mtime = 0; # gzip treats 0 as "no timestamp"
+		}
 	}
 	# TODO: question: normalize some of the other fields, such as OS?
 
