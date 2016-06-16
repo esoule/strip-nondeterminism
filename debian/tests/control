@@ -1,0 +1,1 @@
+Test-Command: mkdir "${ADTTMP}/t" && cp -rv t/* "${ADTTMP}/t/" && cd "${ADTTMP}" && perl -MExtUtils::Command::MM -MTest::Harness t/*.t
