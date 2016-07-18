@@ -54,6 +54,9 @@ sub normalize {
 
 	my $tempfile = File::Temp->new(DIR => dirname($filename));
 
+	my $buf;
+	my $bytes_read;
+
 	open(my $fh, '+<', $filename) or die "$filename: open: $!";
 	read($fh, my $magic, 8); $magic eq "\x89PNG\r\n\x1a\n"
 		or die "$filename: does not appear to be a PNG";
@@ -62,16 +65,26 @@ sub normalize {
 	while (read($fh, my $header, 8) == 8) {
 		my ($len, $type) = unpack('Na4', $header);
 
-		# Always read(2) (including the CRC) even if we're going to skip
-		read $fh, my $data, $len + 4;
+		# We cannot trust the value of $len, so we only read(2) if it
+		# has a sane size.
+		if ($len < 4096) {
+			read $fh, my $data, $len + 4;
 
-		if ($type eq "tIME") {
-			print $tempfile time_chunk($canonical_time) if defined($canonical_time);
-		} elsif ($type =~ /[tiz]EXt/ && $data =~ /^(date:[^\0]+|Creation Time)\0/) {
-			print $tempfile text_chunk($1, strftime("%Y-%m-%dT%H:%M:%S-00:00",
-							gmtime($canonical_time))) if defined($canonical_time);
-		} else {
-			print $tempfile $header . $data;
+			if ($type eq "tIME") {
+				print $tempfile time_chunk($canonical_time) if defined($canonical_time);
+				next;
+			} elsif (($type =~ /[tiz]EXt/) && ($data =~ /^(date:[^\0]+|Creation Time)\0/)) {
+				print $tempfile text_chunk($1, strftime("%Y-%m-%dT%H:%M:%S-00:00",
+								gmtime($canonical_time))) if defined($canonical_time);
+				next;
+			}
+		}
+
+		# Read/write in chunks
+		print $tempfile $header;
+		while (($len > 0) && ($bytes_read = read($fh, $buf, 4096))) {
+			$len = $len - $bytes_read;
+			print $tempfile $buf;
 		}
 
 		# Stop processing immediately in case there's garbage after the
@@ -83,8 +96,6 @@ sub normalize {
 	# garbage (see http://www.w3.org/TR/PNG/#15FileConformance item c), however
 	# in the interest of strip-nondeterminism being as transparent as possible,
 	# we preserve the garbage.
-	my $bytes_read;
-	my $buf;
 	while ($bytes_read = read($fh, $buf, 4096)) {
 		print $tempfile $buf;
 	}
