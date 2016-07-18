@@ -72,11 +72,11 @@ sub normalize {
 							gmtime($canonical_time))) if defined($canonical_time);
 		} else {
 			print $tempfile $header . $data;
-
-			last if $type eq 'IEND'; # Stop processing immediately, in case
-						 # there's garbage after the PNG datastream.
-						 # (see https://bugs.debian.org/802057)
 		}
+
+		# Stop processing immediately in case there's garbage after the
+		# PNG datastream. (https://bugs.debian.org/802057)
+		last if $type eq 'IEND';
 	}
 
 	# Copy through trailing garbage.  Conformant PNG files don't have trailing
