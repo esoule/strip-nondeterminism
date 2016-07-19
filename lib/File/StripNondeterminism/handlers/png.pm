@@ -25,6 +25,7 @@ use warnings;
 use File::Basename qw/dirname/;
 use POSIX qw/strftime/;
 use Archive::Zip;
+use List::Util qw/min/;
 
 sub crc {
 	my ($data) = @_;
@@ -112,7 +113,7 @@ sub _normalize {
 
 		while ($len > 0) {
 			# Can't trust $len so read data part in chunks
-			$bytes_read = read($fh, $buf, 4096);
+			$bytes_read = read($fh, $buf, min($len, 4096));
 
 			if ($bytes_read == 0) {
 				warn "$filename: invalid length in $type header";
