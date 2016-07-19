@@ -65,6 +65,8 @@ sub normalize {
 	while (read($fh, my $header, 8) == 8) {
 		my ($len, $type) = unpack('Na4', $header);
 
+		# Include the trailing CRC when reading
+		$len += 4;
 		# We cannot trust the value of $len, so we only read(2) if it
 		# has a sane size.
 		if ($len < 4096) {
