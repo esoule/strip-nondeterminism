@@ -25,6 +25,7 @@ use warnings;
 use File::Basename qw/dirname/;
 use POSIX qw/strftime/;
 use Archive::Zip;
+use List::Util qw/min/;
 
 sub crc {
 	my ($data) = @_;
@@ -50,52 +51,95 @@ sub text_chunk {
 sub normalize {
 	my ($filename) = @_;
 
-	my $canonical_time = $File::StripNondeterminism::canonical_time;
-
 	my $tempfile = File::Temp->new(DIR => dirname($filename));
 
 	open(my $fh, '+<', $filename) or die "$filename: open: $!";
+
+	if (_normalize($filename, $fh, $tempfile)) {
+		chmod((stat($fh))[2] & 07777, $tempfile->filename);
+		rename($tempfile->filename, $filename)
+			or die "$filename: unable to overwrite: rename: $!";
+	}
+
+	$tempfile->unlink_on_destroy(0);
+
+	close $fh;
+}
+
+sub _normalize {
+	my ($filename, $fh, $tempfile) = @_;
+
+	my $canonical_time = $File::StripNondeterminism::canonical_time;
+
+	my $buf;
+	my $changed;
+	my $bytes_read;
+
 	read($fh, my $magic, 8); $magic eq "\x89PNG\r\n\x1a\n"
 		or die "$filename: does not appear to be a PNG";
+
 	print $tempfile $magic;
 
 	while (read($fh, my $header, 8) == 8) {
 		my ($len, $type) = unpack('Na4', $header);
 
-		# Always read(2) (including the CRC) even if we're going to skip
-		read $fh, my $data, $len + 4;
+		# Include the trailing CRC when reading
+		$len += 4;
 
-		if ($type eq "tIME") {
-			print $tempfile time_chunk($canonical_time) if defined($canonical_time);
-		} elsif ($type =~ /[tiz]EXt/ && $data =~ /^(date:[^\0]+|Creation Time)\0/) {
-			print $tempfile text_chunk($1, strftime("%Y-%m-%dT%H:%M:%S-00:00",
-							gmtime($canonical_time))) if defined($canonical_time);
-		} else {
-			print $tempfile $header . $data;
+		# We cannot trust the value of $len so we cannot simply read
+		# that many bytes in memory. Therefore rely on a sane value
+		# for a "header" and hope that matches everything.
+		if ($len < 4096) {
+			my $bytes_read = read($fh, my $data, $len);
 
-			last if $type eq 'IEND'; # Stop processing immediately, in case
-						 # there's garbage after the PNG datastream.
-						 # (see https://bugs.debian.org/802057)
+			if ($bytes_read != $len) {
+				warn "$filename: invalid length in $type header";
+				return 0;
+			}
+
+			if ($type eq "tIME") {
+				print $tempfile time_chunk($canonical_time) if defined($canonical_time);
+				$changed = 1;
+				next;
+			} elsif (($type =~ /[tiz]EXt/) && ($data =~ /^(date:[^\0]+|Creation Time)\0/)) {
+				print $tempfile text_chunk($1, strftime("%Y-%m-%dT%H:%M:%S-00:00",
+								gmtime($canonical_time))) if defined($canonical_time);
+				$changed = 1;
+				next;
+			}
 		}
+
+		print $tempfile $header;
+
+		while ($len > 0) {
+			# Can't trust $len so read data part in chunks
+			$bytes_read = read($fh, $buf, min($len, 4096));
+
+			if ($bytes_read == 0) {
+				warn "$filename: invalid length in $type header";
+				return 0;
+			}
+
+			print $tempfile $buf;
+			$len -= $bytes_read;
+		}
+		defined($bytes_read) or die "$filename: read failed: $!";
+
+		# Stop processing immediately in case there's garbage after the
+		# PNG datastream. (https://bugs.debian.org/802057)
+		last if $type eq 'IEND';
 	}
 
 	# Copy through trailing garbage.  Conformant PNG files don't have trailing
 	# garbage (see http://www.w3.org/TR/PNG/#15FileConformance item c), however
 	# in the interest of strip-nondeterminism being as transparent as possible,
 	# we preserve the garbage.
-	my $bytes_read;
-	my $buf;
 	while ($bytes_read = read($fh, $buf, 4096)) {
 		print $tempfile $buf;
 	}
 	defined($bytes_read) or die "$filename: read failed: $!";
 
-	chmod((stat($fh))[2] & 07777, $tempfile->filename);
-	rename($tempfile->filename, $filename)
-		or die "$filename: unable to overwrite: rename: $!";
-	$tempfile->unlink_on_destroy(0);
-
-	close $fh;
+	return $changed;
 }
 
 1;

@@ -33,7 +33,7 @@ use File::StripNondeterminism::handlers::zip;
 
 our($VERSION, $canonical_time, $clamp_time);
 
-$VERSION = '0.019'; # 0.019
+$VERSION = '0.020'; # 0.020
 
 sub _get_file_type {
 	my $file=shift;
@@ -83,7 +83,7 @@ sub get_normalizer_for_file {
 		return \&File::StripNondeterminism::handlers::javaproperties::normalize;
 	}
 	# zip
-	if (m/\.(zip|pk3|epub|whl|xpi|htb)$/ && _get_file_type($_) =~ m/Zip archive data|EPUB document/) {
+	if (m/\.(zip|pk3|epub|whl|xpi|htb|zhfst)$/ && _get_file_type($_) =~ m/Zip archive data|EPUB document/) {
 		return \&File::StripNondeterminism::handlers::zip::normalize;
 	}
 	return undef;
