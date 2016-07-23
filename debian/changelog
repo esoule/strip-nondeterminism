@@ -1,3 +1,19 @@
+strip-nondeterminism (0.020-1) unstable; urgency=medium
+
+  [ Mattia Rizzolo ]
+  * Run the upstream testsuite in an autopkgtest
+
+  [ Chris Lamb ]
+  * .zhfst files are also ZIP files
+  * Improve readability in PNG handler by not including IEND detection in "else"
+  * Don't trust the value of $len in PNG handler. (Closes: #831443)
+  * Include CRC when reading potential PNG blocks
+  * Rewrite PNG handler to support bailing out on invalid header lengths
+  * Correct the max number of bytes we read when copying PNG chunk data
+  * Release 0.020
+
+ -- Chris Lamb <lamby@debian.org>  Sat, 23 Jul 2016 19:41:59 +0100
+
 strip-nondeterminism (0.019-1) unstable; urgency=medium
 
   * New upstream release:
