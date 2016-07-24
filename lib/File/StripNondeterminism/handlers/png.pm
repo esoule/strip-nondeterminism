@@ -107,11 +107,8 @@ sub _normalize {
 				next;
 			}
 
-			# Not a chunk we care about but we already read the
-			# data so we cannot fall through
 			print $tempfile $header . $data;
-			next;
-		}
+		} else {
 			print $tempfile $header;
 
 			while ($len > 0) {
@@ -127,6 +124,7 @@ sub _normalize {
 				$len -= $bytes_read;
 			}
 			defined($bytes_read) or die "$filename: read failed: $!";
+		}
 
 		# Stop processing immediately in case there's garbage after the
 		# PNG datastream. (https://bugs.debian.org/802057)
