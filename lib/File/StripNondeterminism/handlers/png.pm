@@ -107,6 +107,11 @@ sub _normalize {
 				$modified = 1;
 				next;
 			}
+
+			# Not a chunk we care about but we already read the
+			# data so we cannot fall through
+			print $tempfile $header . $data;
+			next;
 		}
 
 		print $tempfile $header;
