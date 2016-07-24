@@ -45,7 +45,7 @@ foreach my $filename (@fixtures) {
 		plan tests => 2;
 
 		isnt(undef, $normalizer, "Normalizer found for $in");
-		$normalizer->($in);
+		$normalizer->($in) if defined $normalizer;
 		ok(compare($in, $out) == 0, "Got expected output");
 	}
 }
