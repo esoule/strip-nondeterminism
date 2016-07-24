@@ -112,22 +112,21 @@ sub _normalize {
 			print $tempfile $header . $data;
 			next;
 		}
+			print $tempfile $header;
 
-		print $tempfile $header;
+			while ($len > 0) {
+				# Can't trust $len so read data part in chunks
+				$bytes_read = read($fh, $buf, min($len, 4096));
 
-		while ($len > 0) {
-			# Can't trust $len so read data part in chunks
-			$bytes_read = read($fh, $buf, min($len, 4096));
+				if ($bytes_read == 0) {
+					warn "$filename: invalid length in '$type' header";
+					return 0;
+				}
 
-			if ($bytes_read == 0) {
-				warn "$filename: invalid length in '$type' header";
-				return 0;
+				print $tempfile $buf;
+				$len -= $bytes_read;
 			}
-
-			print $tempfile $buf;
-			$len -= $bytes_read;
-		}
-		defined($bytes_read) or die "$filename: read failed: $!";
+			defined($bytes_read) or die "$filename: read failed: $!";
 
 		# Stop processing immediately in case there's garbage after the
 		# PNG datastream. (https://bugs.debian.org/802057)
