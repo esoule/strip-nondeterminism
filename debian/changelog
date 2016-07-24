@@ -1,3 +1,15 @@
+strip-nondeterminism (0.021-1) unstable; urgency=medium
+
+  * Fix PNG handling caused by double-read(2). (Closes: #832306)
+  * Unlink tempfile in the correct scope.
+  * Standardise on $modified over $changed.
+  * handlers/ar.pm: Normalise whitespace
+  * handlers/png.pm: Ensure $modified is always defined.
+  * Add test fixtures for PNG handler.
+  * Add a PNG test that strips a teXT chunk
+
+ -- Chris Lamb <lamby@debian.org>  Sun, 24 Jul 2016 12:57:12 +0100
+
 strip-nondeterminism (0.020-1) unstable; urgency=medium
 
   [ Mattia Rizzolo ]
