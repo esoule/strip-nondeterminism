@@ -1,3 +1,13 @@
+strip-nondeterminism (0.022-1) unstable; urgency=medium
+
+  * handlers/png: Keep IEND detection. This was a regression from 0.020-1.
+    Thanks to James Cowgill (jcowgill). (Closes: #832306)
+    - Add regression testcase for IEND/PNG issue from #802057.
+  * handlers/png: Wrap $type in single quotes in warnings at the very least.
+  * handlers/png: Warn if file contains garbage after IEND header.
+
+ -- Chris Lamb <lamby@debian.org>  Sun, 24 Jul 2016 15:33:29 +0100
+
 strip-nondeterminism (0.021-1) unstable; urgency=medium
 
   * Fix PNG handling caused by double-read(2). (Closes: #832306)
