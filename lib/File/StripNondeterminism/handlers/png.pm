@@ -59,9 +59,8 @@ sub normalize {
 		chmod((stat($fh))[2] & 07777, $tempfile->filename);
 		rename($tempfile->filename, $filename)
 			or die "$filename: unable to overwrite: rename: $!";
+		$tempfile->unlink_on_destroy(0);
 	}
-
-	$tempfile->unlink_on_destroy(0);
 
 	close $fh;
 }
