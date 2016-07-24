@@ -40,5 +40,5 @@ foreach my $filename (@fixtures) {
 	copy($filename, $in) or die "Copy failed: $!";
 	File::StripNondeterminism::get_normalizer_for_file($in)->($in);
 
-	ok(compare($in, $out) == 0, $filename);
+	ok(compare($in, $out) == 0, "$filename -> $out");
 }
