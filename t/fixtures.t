@@ -38,7 +38,13 @@ foreach my $filename (@fixtures) {
 	(my $out = $filename) =~ s/\.in$/.out/;
 
 	copy($filename, $in) or die "Copy failed: $!";
-	File::StripNondeterminism::get_normalizer_for_file($in)->($in);
 
-	ok(compare($in, $out) == 0, "$filename -> $out");
+	my $normalizer = File::StripNondeterminism::get_normalizer_for_file($in);
+
+	subtest $filename => sub {
+		plan tests => 1;
+
+		$normalizer->($in);
+		ok(compare($in, $out) == 0, "Got expected output");
+	}
 }
