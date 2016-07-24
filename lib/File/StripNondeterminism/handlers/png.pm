@@ -59,9 +59,8 @@ sub normalize {
 		chmod((stat($fh))[2] & 07777, $tempfile->filename);
 		rename($tempfile->filename, $filename)
 			or die "$filename: unable to overwrite: rename: $!";
+		$tempfile->unlink_on_destroy(0);
 	}
-
-	$tempfile->unlink_on_destroy(0);
 
 	close $fh;
 }
@@ -72,7 +71,7 @@ sub _normalize {
 	my $canonical_time = $File::StripNondeterminism::canonical_time;
 
 	my $buf;
-	my $changed;
+	my $modified = 0;
 	my $bytes_read;
 
 	read($fh, my $magic, 8); $magic eq "\x89PNG\r\n\x1a\n"
@@ -99,14 +98,19 @@ sub _normalize {
 
 			if ($type eq "tIME") {
 				print $tempfile time_chunk($canonical_time) if defined($canonical_time);
-				$changed = 1;
+				$modified = 1;
 				next;
 			} elsif (($type =~ /[tiz]EXt/) && ($data =~ /^(date:[^\0]+|Creation Time)\0/)) {
 				print $tempfile text_chunk($1, strftime("%Y-%m-%dT%H:%M:%S-00:00",
 								gmtime($canonical_time))) if defined($canonical_time);
-				$changed = 1;
+				$modified = 1;
 				next;
 			}
+
+			# Not a chunk we care about but we already read the
+			# data so we cannot fall through
+			print $tempfile $header . $data;
+			next;
 		}
 
 		print $tempfile $header;
@@ -139,7 +143,7 @@ sub _normalize {
 	}
 	defined($bytes_read) or die "$filename: read failed: $!";
 
-	return $changed;
+	return $modified;
 }
 
 1;
