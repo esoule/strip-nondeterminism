@@ -137,11 +137,15 @@ sub _normalize {
 	# Copy through trailing garbage.  Conformant PNG files don't have trailing
 	# garbage (see http://www.w3.org/TR/PNG/#15FileConformance item c), however
 	# in the interest of strip-nondeterminism being as transparent as possible,
-	# we preserve the garbage.
+	# we preserve the garbage.(#802057)
+	my $garbage = 0;
 	while ($bytes_read = read($fh, $buf, 4096)) {
 		print $tempfile $buf;
+		$garbage += $bytes_read;
 	}
 	defined($bytes_read) or die "$filename: read failed: $!";
+	warn "$filename: $garbage bytes of garbage after IEND chunk"
+		if $garbage > 0;
 
 	return $modified;
 }
