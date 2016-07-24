@@ -24,7 +24,6 @@ use warnings;
 
 use File::Basename qw/dirname/;
 use POSIX qw/strftime/;
-use Archive::Zip;
 use List::Util qw/min/;
 
 sub crc {
