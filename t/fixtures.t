@@ -42,8 +42,9 @@ foreach my $filename (@fixtures) {
 	my $normalizer = File::StripNondeterminism::get_normalizer_for_file($in);
 
 	subtest $filename => sub {
-		plan tests => 1;
+		plan tests => 2;
 
+		isnt(undef, $normalizer, "Normalizer found for $in");
 		$normalizer->($in);
 		ok(compare($in, $out) == 0, "Got expected output");
 	}
