@@ -61,7 +61,7 @@ sub normalize {
 	my $minor = int($revision % 256);
 	return 0 if $major > 1;
 
-	my $changed = 0;
+	my $modified = 0;
 	for (my $i=0; $i < $nstrings; $i++) {
 		my $len = unpack($fmt, substr($buf, $orig_to + $i*8, 4));
 		next if $len > 0;
@@ -85,17 +85,17 @@ sub normalize {
 		next if length($trans_msg) != $trans_len;
 
 		$buf = substr($buf, 0, $trans_offset) . $trans_msg . substr($buf, $trans_offset + $trans_len);
-		$changed = 1;
+		$modified = 1;
 	}
 
-	if ($changed) {
+	if ($modified) {
 		open(my $fh, '>', $mo_filename) or die "Can't open file $mo_filename for writing: $!";
 		binmode($fh);
 		print $fh $buf;
 		close($fh);
 	}
 
-	return $changed;
+	return $modified;
 }
 
 1;
