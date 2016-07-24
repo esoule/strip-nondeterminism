@@ -37,7 +37,7 @@ sub normalize {
 	my $buf;
 
 	open(my $fh, '+<', $file)
-	    or die("failed to open $file for read+write: $!");
+		or die("failed to open $file for read+write: $!");
 
 	read $fh, $buf, $GLOBAL_HEADER_LENGTH;
 	return 0 if $buf ne $GLOBAL_HEADER;
@@ -48,7 +48,7 @@ sub normalize {
 		die "reading $file failed: $!" if !defined $count;
 		last if $count == 0;
 
-		# http://en.wikipedia.org/wiki/Ar_(Unix)    
+		# http://en.wikipedia.org/wiki/Ar_(Unix)
 		#from   to     Name                      Format
 		#0      15     File name                 ASCII
 		#16     27     File modification date    Decimal
