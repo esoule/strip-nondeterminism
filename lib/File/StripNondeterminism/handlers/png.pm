@@ -72,7 +72,7 @@ sub _normalize {
 	my $canonical_time = $File::StripNondeterminism::canonical_time;
 
 	my $buf;
-	my $modified;
+	my $modified = 0;
 	my $bytes_read;
 
 	read($fh, my $magic, 8); $magic eq "\x89PNG\r\n\x1a\n"
