@@ -31,6 +31,7 @@ $temp = tempdir( CLEANUP => 1 );
 my @fixtures = glob('t/fixtures/*/*.in.*');
 
 plan tests => scalar @fixtures;
+$File::StripNondeterminism::canonical_time = 1423159771;
 
 foreach my $filename (@fixtures) {
 	my $in = "$temp/" . basename($filename);
