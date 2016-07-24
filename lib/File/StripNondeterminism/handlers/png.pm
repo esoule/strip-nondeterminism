@@ -92,7 +92,7 @@ sub _normalize {
 			my $bytes_read = read($fh, my $data, $len);
 
 			if ($bytes_read != $len) {
-				warn "$filename: invalid length in $type header";
+				warn "$filename: invalid length in '$type' header";
 				return 0;
 			}
 
@@ -120,7 +120,7 @@ sub _normalize {
 			$bytes_read = read($fh, $buf, min($len, 4096));
 
 			if ($bytes_read == 0) {
-				warn "$filename: invalid length in $type header";
+				warn "$filename: invalid length in '$type' header";
 				return 0;
 			}
 
