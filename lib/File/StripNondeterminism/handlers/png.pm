@@ -92,7 +92,7 @@ sub _normalize {
 			my $bytes_read = read($fh, my $data, $len);
 
 			if ($bytes_read != $len) {
-				warn "$filename: invalid length in $type header";
+				warn "$filename: invalid length in '$type' header";
 				return 0;
 			}
 
@@ -107,27 +107,24 @@ sub _normalize {
 				next;
 			}
 
-			# Not a chunk we care about but we already read the
-			# data so we cannot fall through
 			print $tempfile $header . $data;
-			next;
-		}
+		} else {
+			print $tempfile $header;
 
-		print $tempfile $header;
+			while ($len > 0) {
+				# Can't trust $len so read data part in chunks
+				$bytes_read = read($fh, $buf, min($len, 4096));
 
-		while ($len > 0) {
-			# Can't trust $len so read data part in chunks
-			$bytes_read = read($fh, $buf, min($len, 4096));
+				if ($bytes_read == 0) {
+					warn "$filename: invalid length in '$type' header";
+					return 0;
+				}
 
-			if ($bytes_read == 0) {
-				warn "$filename: invalid length in $type header";
-				return 0;
+				print $tempfile $buf;
+				$len -= $bytes_read;
 			}
-
-			print $tempfile $buf;
-			$len -= $bytes_read;
+			defined($bytes_read) or die "$filename: read failed: $!";
 		}
-		defined($bytes_read) or die "$filename: read failed: $!";
 
 		# Stop processing immediately in case there's garbage after the
 		# PNG datastream. (https://bugs.debian.org/802057)
@@ -137,11 +134,15 @@ sub _normalize {
 	# Copy through trailing garbage.  Conformant PNG files don't have trailing
 	# garbage (see http://www.w3.org/TR/PNG/#15FileConformance item c), however
 	# in the interest of strip-nondeterminism being as transparent as possible,
-	# we preserve the garbage.
+	# we preserve the garbage.(#802057)
+	my $garbage = 0;
 	while ($bytes_read = read($fh, $buf, 4096)) {
 		print $tempfile $buf;
+		$garbage += $bytes_read;
 	}
 	defined($bytes_read) or die "$filename: read failed: $!";
+	warn "$filename: $garbage bytes of garbage after IEND chunk"
+		if $garbage > 0;
 
 	return $modified;
 }
