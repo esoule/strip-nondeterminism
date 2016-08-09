@@ -94,7 +94,7 @@ sub _jar_archive_filter {
 	# Don't normalize signed JARs, since our modifications will break the signature.
 	# Alternatively, we could strip the signature.  However, if a JAR file is signed,
 	# it is highly likely that the JAR file was part of the source and not produced
-	# as part of the build, and therefore contains no non-determinism.  Thus, ignoring
+	# as part of the build, and therefore contains no nondeterminism.  Thus, ignoring
 	# the file makes more sense.
 	#
 	# According to the jarsigner(1) man page, a signed JAR has a .SF file in the
