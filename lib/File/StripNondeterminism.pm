@@ -79,7 +79,7 @@ sub get_normalizer_for_file {
 		return \&File::StripNondeterminism::handlers::png::normalize;
 	}
 	# pom.properties, version.properties
-	if (m/(pom|version)\.properties$/ && File::StripNondeterminism::handlers::javaproperties::is_java_properties_file($_)) {
+	if (m/\.properties$/ && File::StripNondeterminism::handlers::javaproperties::is_java_properties_file($_)) {
 		return \&File::StripNondeterminism::handlers::javaproperties::normalize;
 	}
 	# zip
