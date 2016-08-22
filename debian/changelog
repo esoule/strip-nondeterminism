@@ -1,3 +1,23 @@
+strip-nondeterminism (0.023-1) unstable; urgency=medium
+
+  * Support Android .apk files with the JAR normalizer.
+  * handlers/png.pm: Drop unused Archive::Zip import
+  * Remove hyphen from non-determinism and non-deterministic.
+  * javaproperties.pm: Match more styles of .properties and loosen filename matching.
+  * Improve tests:
+    - Make fixture runner generic to all normalizer types.
+    - Replace (single) pearregistry test with a fixture.
+    - Set a canonical time for fixture tests.
+    - Add gzip testcase fixture.
+    - Replace t/javadoc.t with fixture
+    - Replace t/ar.t with a fixture.
+    - t/javaproperties: move pom.properties and version.properties tests to fixtures
+    - t/fixtures.t: move to using subtests
+    - t/fixtures.t: Explicitly test that we can find a normalizer
+    - t/fixtures.t: Don't run normalizer if we didn't find one.
+
+ -- Chris Lamb <lamby@debian.org>  Mon, 22 Aug 2016 23:36:15 +0100
+
 strip-nondeterminism (0.022-1) unstable; urgency=medium
 
   * handlers/png: Keep IEND detection. This was a regression from 0.020-1.
