@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-dh_strip_nondeterminism - strip uninteresting, non-deterministic information from files
+dh_strip_nondeterminism - strip uninteresting, nondeterministic information from files
 
 =cut
 
@@ -20,12 +20,12 @@ B<dh_strip_nondeterminism> [S<I<debhelper options>>] [B<-X>I<item>]
 =head1 DESCRIPTION
 
 B<dh_strip_nondeterminism> is a debhelper program that is responsible
-for stripping uninteresting, non-deterministic information, such as
+for stripping uninteresting, nondeterministic information, such as
 timestamps, from compiled files so that the build is reproducible.
 
 This program examines your package build directories and works out what
 to strip on its own. It uses L<file(1)> and filenames to figure out what
-files should have non-determinism stripped from them.  In general it
+files should have nondeterminism stripped from them.  In general it
 seems to make very good guesses, and will do the right thing in almost
 all cases.
 

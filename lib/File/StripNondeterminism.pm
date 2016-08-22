@@ -33,7 +33,7 @@ use File::StripNondeterminism::handlers::zip;
 
 our($VERSION, $canonical_time, $clamp_time);
 
-$VERSION = '0.022'; # 0.022
+$VERSION = '0.023'; # 0.023
 
 sub _get_file_type {
 	my $file=shift;
@@ -63,7 +63,7 @@ sub get_normalizer_for_file {
 		return \&File::StripNondeterminism::handlers::gzip::normalize;
 	}
 	# jar
-	if (m/\.(jar|war|hpi)$/ && _get_file_type($_) =~ m/(Java|Zip) archive data/) {
+	if (m/\.(jar|war|hpi|apk)$/ && _get_file_type($_) =~ m/(Java|Zip) archive data/) {
 		return \&File::StripNondeterminism::handlers::jar::normalize;
 	}
 	# javadoc
@@ -79,7 +79,7 @@ sub get_normalizer_for_file {
 		return \&File::StripNondeterminism::handlers::png::normalize;
 	}
 	# pom.properties, version.properties
-	if (m/(pom|version)\.properties$/ && File::StripNondeterminism::handlers::javaproperties::is_java_properties_file($_)) {
+	if (m/\.properties$/ && File::StripNondeterminism::handlers::javaproperties::is_java_properties_file($_)) {
 		return \&File::StripNondeterminism::handlers::javaproperties::normalize;
 	}
 	# zip

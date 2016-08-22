@@ -26,19 +26,26 @@ use File::Temp qw(tempdir);
 use File::StripNondeterminism;
 use Test::More;
 
-$dir = tempdir( CLEANUP => 1 );
+$temp = tempdir( CLEANUP => 1 );
 
-my @fixtures = glob('t/fixtures/png/*.in.png');
+my @fixtures = glob('t/fixtures/*/*.in');
+
 plan tests => scalar @fixtures;
+$File::StripNondeterminism::canonical_time = 1423159771;
 
-foreach (@fixtures) {
-	my $name = basename($_, '.in.png');
-	my $path = "$dir/$name.in.png";
+foreach my $filename (@fixtures) {
+	my $in = "$temp/" . basename($filename, '.in');
+	(my $out = $filename) =~ s/\.in$/.out/;
 
-	copy("t/fixtures/png/$name.in.png", $path) or die "Copy failed: $!";
+	copy($filename, $in) or die "Copy failed: $!";
 
-	$normalizer = File::StripNondeterminism::get_normalizer_for_file($path);
-	$normalizer->($path);
+	my $normalizer = File::StripNondeterminism::get_normalizer_for_file($in);
 
-	ok(compare($path, "t/fixtures/png/$name.out.png") == 0, $name);
+	subtest $filename => sub {
+		plan tests => 2;
+
+		isnt(undef, $normalizer, "Normalizer found for $in");
+		$normalizer->($in) if defined $normalizer;
+		ok(compare($in, $out) == 0, "Got expected output");
+	}
 }
