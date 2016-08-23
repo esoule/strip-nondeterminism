@@ -1,3 +1,9 @@
+strip-nondeterminism (0.023-2) unstable; urgency=medium
+
+  * Allow stderr in autopkgtest.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Tue, 23 Aug 2016 14:40:49 +0000
+
 strip-nondeterminism (0.023-1) unstable; urgency=medium
 
   * Support Android .apk files with the JAR normalizer.
