@@ -1,3 +1,9 @@
+strip-nondeterminism (0.023-2~bpo8+1) jessie-backports; urgency=medium
+
+  * Rebuild for jessie-backports.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Mon, 29 Aug 2016 17:02:27 +0000
+
 strip-nondeterminism (0.023-2) unstable; urgency=medium
 
   * Allow stderr in autopkgtest.
