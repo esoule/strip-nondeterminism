@@ -21,6 +21,7 @@ package File::StripNondeterminism::handlers::jar;
 use strict;
 use warnings;
 
+use File::StripNondeterminism::Common qw(copy_data);
 use Archive::Zip;
 use File::Basename;
 use File::StripNondeterminism::handlers::zip;
@@ -57,9 +58,9 @@ sub _jar_normalize_manifest {
 	}
 
 	if ($modified) {
-		# Rename temporary file over the file
-		chmod((stat($fh))[2] & 07777, $tempfile->filename);
-		rename($tempfile->filename, $filename) or die "$filename: unable to overwrite: rename: $!";
+		$tempfile->close;
+		copy_data($tempfile->filename, $filename)
+			or die "$filename: unable to overwrite: copy_data: $!";
 		$tempfile->unlink_on_destroy(0);
 	}
 	return $modified;

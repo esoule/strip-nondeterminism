@@ -22,6 +22,7 @@ package File::StripNondeterminism::handlers::javadoc;
 use strict;
 use warnings;
 
+use File::StripNondeterminism::Common qw(copy_data);
 use File::Temp;
 use File::Basename;
 use POSIX qw(strftime);
@@ -80,9 +81,9 @@ sub normalize {
 	}
 	defined($bytes_read) or die "$filename: read failed: $!";
 
-	# Rename temporary file over the file
-	chmod((stat($fh))[2] & 07777, $tempfile->filename);
-	rename($tempfile->filename, $filename) or die "$filename: unable to overwrite: rename: $!";
+	$tempfile->close;
+	copy_data($tempfile->filename, $filename)
+		or die "$filename: unable to overwrite: copy_data: $!";
 	$tempfile->unlink_on_destroy(0);
 
 	return 1;
