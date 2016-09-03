@@ -133,7 +133,7 @@ sub normalize {
 	my $zip = Archive::Zip->new();
 	my @errors;
 	if (try(sub { $zip->read($zip_filename) }, \@errors) != AZ_OK) {
-		if (grep /zip64 not supported/, @errors) {
+		if (grep { /zip64 not supported/ } @errors) {
 			# Ignore zip64 files, which aren't supported by Archive::Zip.
 			# Ignoring unsupported files, instead of erroring out, is
 			# consistent with the rest of strip-nondeterminism's behavior,
