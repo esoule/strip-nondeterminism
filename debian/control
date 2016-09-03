@@ -5,6 +5,7 @@ Build-Depends:
  debhelper (>= 9),
 Build-Depends-Indep:
  libarchive-zip-perl,
+ libdevel-cover-perl <!nocheck>,
  perl,
 Maintainer: Reproducible builds folks <reproducible-builds@lists.alioth.debian.org>
 Uploaders:
