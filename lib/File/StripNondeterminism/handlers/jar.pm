@@ -28,7 +28,7 @@ use File::StripNondeterminism::handlers::zip;
 use File::StripNondeterminism::handlers::javadoc;
 use File::StripNondeterminism::handlers::javaproperties;
 
-sub _jar_filename_cmp ($$) {
+sub _jar_filename_cmp {
 	my ($a, $b) = @_;
 	# META-INF/ and META-INF/MANIFEST.MF are expected to be the first entries in the Zip archive.
 	return 0 if $a eq $b;
