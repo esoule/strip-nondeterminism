@@ -64,6 +64,8 @@ sub normalize_member {
 	}
 
 	unlink($filename);
+
+	return 1;
 }
 
 use constant {

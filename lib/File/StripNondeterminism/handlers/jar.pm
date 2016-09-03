@@ -87,6 +87,8 @@ sub _jar_normalize_member {
 	} elsif ($member->fileName() =~ /\.jar$/) {
 		File::StripNondeterminism::handlers::zip::normalize_member($member, \&normalize);
 	}
+
+	return 1;
 }
 
 sub _jar_archive_filter {

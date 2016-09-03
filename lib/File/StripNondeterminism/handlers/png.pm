@@ -63,6 +63,8 @@ sub normalize {
 	}
 
 	close $fh;
+
+	return 1;
 }
 
 sub _normalize {
