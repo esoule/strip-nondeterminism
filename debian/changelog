@@ -1,3 +1,19 @@
+strip-nondeterminism (0.024-1) unstable; urgency=medium
+
+  [ Chris Lamb ]
+  * Print test coverage report.
+  * jar.pm: Drop unnecessary subroutine prototypes.
+  * {ar,zip}.pm: Explicitly use oct(..) for integers with leading zeroes.
+  * {jar,png,zip}: Ensure subroutines end with return statement.
+  * zip.pm:
+    - Use block form of grep over expression form.
+    - zip.pm: Don't mix high and low-precedence booleans.
+
+  [ AYANOKOUZI, Ryuunosuke ]
+  * Preserve file attribute information of target file. (Closes: #836075)
+
+ -- Chris Lamb <lamby@debian.org>  Sat, 03 Sep 2016 20:06:37 +0100
+
 strip-nondeterminism (0.023-2) unstable; urgency=medium
 
   * Allow stderr in autopkgtest.
