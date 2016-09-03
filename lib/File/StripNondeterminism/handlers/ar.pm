@@ -74,7 +74,7 @@ sub normalize {
 		# group
 		syswrite $fh, sprintf("%-6d", 0);
 		# file mode
-		syswrite $fh, sprintf("%-8o", ($file_mode & 0100) ? 0755 : 0644);
+		syswrite $fh, sprintf("%-8o", ($file_mode & oct(100)) ? oct(755) : oct(644));
 
 		# move to next member
 		my $padding = $file_size % 2;

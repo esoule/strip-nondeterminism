@@ -154,12 +154,12 @@ sub normalize {
 		$options{member_normalizer}->($member) if exists $options{member_normalizer};
 		$member->setLastModFileDateTimeFromUnix($File::StripNondeterminism::canonical_time // SAFE_EPOCH);
 		if ($member->fileAttributeFormat() == FA_UNIX) {
-			$member->unixFileAttributes(($member->unixFileAttributes() & 0100) ? 0755 : 0644);
+			$member->unixFileAttributes(($member->unixFileAttributes() & oct(100)) ? oct(755) : oct(644));
 		}
 		$member->cdExtraField(normalize_extra_fields($member->cdExtraField(), CENTRAL_HEADER));
 		$member->localExtraField(normalize_extra_fields($member->localExtraField(), LOCAL_HEADER));
 	}
-	my $old_perms = (stat($zip_filename))[2] & 07777;
+	my $old_perms = (stat($zip_filename))[2] & oct(7777);
 	$zip->overwrite();
 	chmod($old_perms, $zip_filename);
 	return 1;
