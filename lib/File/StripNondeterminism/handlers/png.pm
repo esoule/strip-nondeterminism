@@ -22,6 +22,7 @@ package File::StripNondeterminism::handlers::png;
 use strict;
 use warnings;
 
+use File::StripNondeterminism::Common qw(copy_data);
 use File::Basename qw/dirname/;
 use POSIX qw/strftime/;
 use List::Util qw/min/;
@@ -55,13 +56,15 @@ sub normalize {
 	open(my $fh, '+<', $filename) or die "$filename: open: $!";
 
 	if (_normalize($filename, $fh, $tempfile)) {
-		chmod((stat($fh))[2] & 07777, $tempfile->filename);
-		rename($tempfile->filename, $filename)
-			or die "$filename: unable to overwrite: rename: $!";
+		$tempfile->close;
+		copy_data($tempfile->filename, $filename)
+			or die "$filename: unable to overwrite: copy_data: $!";
 		$tempfile->unlink_on_destroy(0);
 	}
 
 	close $fh;
+
+	return 1;
 }
 
 sub _normalize {

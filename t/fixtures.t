@@ -19,6 +19,9 @@
 # along with strip-nondeterminism.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+use strict;
+use warnings;
+
 use File::Basename qw(basename);
 use File::Compare qw(compare);
 use File::Copy qw(copy);
@@ -26,11 +29,10 @@ use File::Temp qw(tempdir);
 use File::StripNondeterminism;
 use Test::More;
 
-$temp = tempdir( CLEANUP => 1 );
+my $temp = tempdir( CLEANUP => 1 );
 
 my @fixtures = glob('t/fixtures/*/*.in');
 
-plan tests => scalar @fixtures;
 $File::StripNondeterminism::canonical_time = 1423159771;
 
 foreach my $filename (@fixtures) {
@@ -42,10 +44,25 @@ foreach my $filename (@fixtures) {
 	my $normalizer = File::StripNondeterminism::get_normalizer_for_file($in);
 
 	subtest $filename => sub {
-		plan tests => 2;
-
 		isnt(undef, $normalizer, "Normalizer found for $in");
+
+		my @stat_before = lstat $in;
 		$normalizer->($in) if defined $normalizer;
+		my @stat_after = lstat $in;
+		foreach (my $i = 0; $i < @stat_after; $i++) {
+			next if (
+				$i == 7 # size
+				|| $i == 8 # atime
+				|| $i == 9 # mtime
+				|| $i == 10 # ctime
+			);
+			is($stat_before[$i], $stat_after[$i], "$filename: stat[$i]");
+		}
+
 		ok(compare($in, $out) == 0, "Got expected output");
+
+		done_testing;
 	}
 }
+
+done_testing;
