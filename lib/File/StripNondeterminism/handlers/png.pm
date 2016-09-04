@@ -59,7 +59,6 @@ sub normalize {
 		$tempfile->close;
 		copy_data($tempfile->filename, $filename)
 			or die "$filename: unable to overwrite: copy_data: $!";
-		$tempfile->unlink_on_destroy(0);
 	}
 
 	close $fh;

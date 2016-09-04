@@ -29,13 +29,12 @@ use File::Temp qw(tempdir);
 use File::StripNondeterminism;
 use Test::More;
 
-my $temp = tempdir( CLEANUP => 1 );
-
 my @fixtures = glob('t/fixtures/*/*.in');
 
 $File::StripNondeterminism::canonical_time = 1423159771;
 
 foreach my $filename (@fixtures) {
+	my $temp = tempdir( CLEANUP => 1 );
 	my $in = "$temp/" . basename($filename, '.in');
 	(my $out = $filename) =~ s/\.in$/.out/;
 
@@ -60,6 +59,9 @@ foreach my $filename (@fixtures) {
 		}
 
 		ok(compare($in, $out) == 0, "Got expected output");
+
+		my @files = glob("$temp/*");
+		ok(scalar(@files) == 1, "Unexpected files leftover: " . join(" ", @files));
 
 		done_testing;
 	}
