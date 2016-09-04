@@ -14,6 +14,7 @@ Uploaders:
  Mattia Rizzolo <mattia@debian.org>,
  Chris Lamb <lamby@debian.org>,
 Standards-Version: 3.9.8
+Homepage: https://reproducible-builds.org/
 Vcs-Git: https://anonscm.debian.org/git/reproducible/strip-nondeterminism.git
 Vcs-Browser: https://anonscm.debian.org/git/reproducible/strip-nondeterminism.git
 
