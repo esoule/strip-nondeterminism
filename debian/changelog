@@ -1,3 +1,10 @@
+strip-nondeterminism (0.025-1) unstable; urgency=medium
+
+  * Drop all calls to unlink_on_destroy now that we copy the file. (Closes: #836670)
+    - Extend testsuite to ensure no extra files are leftover again.
+
+ -- Chris Lamb <lamby@debian.org>  Sun, 04 Sep 2016 17:43:00 +0100
+
 strip-nondeterminism (0.024-1) unstable; urgency=medium
 
   [ Chris Lamb ]
