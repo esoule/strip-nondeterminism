@@ -55,7 +55,7 @@ foreach my $filename (@fixtures) {
 		# Check that file attributes remain unchanged.
 		foreach (my $i = 0; $i < @stat_after; $i++) {
 			next if (
-				$i == 7 # size
+				   $i == 7 # size
 				|| $i == 8 # atime
 				|| $i == 9 # mtime
 				|| $i == 10 # ctime
