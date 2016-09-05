@@ -29,10 +29,9 @@ use File::Temp qw(tempdir);
 use File::StripNondeterminism;
 use Test::More;
 
-my @fixtures = glob('t/fixtures/*/*.in');
-
 $File::StripNondeterminism::canonical_time = 1423159771;
 
+my @fixtures = glob('t/fixtures/*/*.in');
 plan tests => scalar @fixtures;
 
 foreach my $filename (@fixtures) {
