@@ -51,6 +51,8 @@ foreach my $filename (@fixtures) {
 		my @stat_before = lstat $in;
 		$normalizer->($in) if defined $normalizer;
 		my @stat_after = lstat $in;
+
+		# Check that file attributes remain unchanged.
 		foreach (my $i = 0; $i < @stat_after; $i++) {
 			next if (
 				$i == 7 # size
