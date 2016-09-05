@@ -34,7 +34,10 @@ my @fixtures = glob('t/fixtures/*/*.in');
 $File::StripNondeterminism::canonical_time = 1423159771;
 
 foreach my $filename (@fixtures) {
+	# Use a temporary directory per fixture so we can check whether any
+	# extraneous files are leftover.
 	my $temp = tempdir( CLEANUP => 1 );
+
 	my $in = "$temp/" . basename($filename, '.in');
 	(my $out = $filename) =~ s/\.in$/.out/;
 
