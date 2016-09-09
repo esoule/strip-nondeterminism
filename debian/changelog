@@ -1,3 +1,25 @@
+strip-nondeterminism (0.026-1) unstable; urgency=medium
+
+  * handlers/jar.pm: Reintroduce subroutine prototype on _jar_filename_cmp to
+    fix ordering regression in .jar files.
+  * Add a testcase for jar file ordering and normalisation.
+  * bin/strip-nondeterminism: die if file does not exist (Closes: #800159)
+  * debian/rules:
+    - No need for -make hack as we'll have Makefile during package build.
+      (Closes: #836732)
+    - Update clean target to avoid FTBFS twice in a row.
+  * Add Homepage field.
+  * t/fixtures.t:
+    - Add a lookup table for descriptions of stat(1) indices.
+    - Don't test whether inode number has changed.
+    - Check that output matches expected before comparing attributes to make it
+      less confusing on failure.
+    - Re-add top-level "plan" call dropped in 0.024-1.
+    - Add comment why we use a per-fixture temporary directory.
+    - Re-order @fixtures setup for global->specific ordering.
+
+ -- Chris Lamb <lamby@debian.org>  Fri, 09 Sep 2016 11:02:04 +0100
+
 strip-nondeterminism (0.025-1) unstable; urgency=medium
 
   * Drop all calls to unlink_on_destroy now that we copy the file. (Closes: #836670)
