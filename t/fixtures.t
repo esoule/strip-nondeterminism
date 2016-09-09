@@ -32,7 +32,7 @@ use Test::More;
 # perlfunc(1)
 my %STAT = (
 	0 => "dev (device number of filesystem)",
-	1 => "ino (inode number)",
+	# 1 => "ino (inode number)",
 	2 => "mode (file mode (type and permissions))",
 	3 => "nlink (number of hard links to the file)",
 	4 => "uid (numeric user ID of file's owner)",
