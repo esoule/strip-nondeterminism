@@ -70,12 +70,12 @@ foreach my $filename (@fixtures) {
 		$normalizer->($in) if defined $normalizer;
 		my @stat_after = lstat $in;
 
+		ok(compare($in, $out) == 0, "Got expected output");
+
 		# Check that file attributes remain unchanged.
 		foreach my $i (sort keys %STAT) {
 			is($stat_before[$i], $stat_after[$i], "$filename: $STAT{$i}");
 		}
-
-		ok(compare($in, $out) == 0, "Got expected output");
 
 		my @files = glob("$temp/*");
 		ok(scalar(@files) == 1, "Unexpected files leftover: " . join(" ", @files));
