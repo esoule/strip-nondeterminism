@@ -59,6 +59,8 @@ $File::StripNondeterminism::clamp_time = $clamp_timestamp;
 die $usage if @ARGV == 0;
 
 for my $filename (@ARGV) {
+	die "$filename: Does not exist\n" unless -e $filename;
+
 	my $normalizer;
 	if (defined $filetype) {
 		$normalizer = File::StripNondeterminism::get_normalizer_by_name($filetype);

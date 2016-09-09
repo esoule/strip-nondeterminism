@@ -29,12 +29,33 @@ use File::Temp qw(tempdir);
 use File::StripNondeterminism;
 use Test::More;
 
-my @fixtures = glob('t/fixtures/*/*.in');
+# perlfunc(1)
+my %STAT = (
+	0 => "dev (device number of filesystem)",
+	# 1 => "ino (inode number)",
+	2 => "mode (file mode (type and permissions))",
+	3 => "nlink (number of hard links to the file)",
+	4 => "uid (numeric user ID of file's owner)",
+	5 => "gid (numeric group ID of file's owner)",
+	6 => "rdev (the device identifier; special files only)",
+	# 7 => "size (total size of file, in bytes)",
+	# 8 => "atime (last access time in seconds since the epoch)",
+	# 9 => "mtime (last modified time in seconds since the epoch)",
+	# 10 => "ctime (inode change time in seconds since the epoch)",
+	11 => "blksize (preferred I/O size in bytes for interacting with the file)",
+	12 => "blocks (actual number of system-specific blocks allocated on disk)",
+);
 
 $File::StripNondeterminism::canonical_time = 1423159771;
 
+my @fixtures = glob('t/fixtures/*/*.in');
+plan tests => scalar @fixtures;
+
 foreach my $filename (@fixtures) {
+	# Use a temporary directory per fixture so we can check whether any
+	# extraneous files are leftover.
 	my $temp = tempdir( CLEANUP => 1 );
+
 	my $in = "$temp/" . basename($filename, '.in');
 	(my $out = $filename) =~ s/\.in$/.out/;
 
@@ -48,17 +69,13 @@ foreach my $filename (@fixtures) {
 		my @stat_before = lstat $in;
 		$normalizer->($in) if defined $normalizer;
 		my @stat_after = lstat $in;
-		foreach (my $i = 0; $i < @stat_after; $i++) {
-			next if (
-				$i == 7 # size
-				|| $i == 8 # atime
-				|| $i == 9 # mtime
-				|| $i == 10 # ctime
-			);
-			is($stat_before[$i], $stat_after[$i], "$filename: stat[$i]");
-		}
 
 		ok(compare($in, $out) == 0, "Got expected output");
+
+		# Check that file attributes remain unchanged.
+		foreach my $i (sort keys %STAT) {
+			is($stat_before[$i], $stat_after[$i], "$filename: $STAT{$i}");
+		}
 
 		my @files = glob("$temp/*");
 		ok(scalar(@files) == 1, "Unexpected files leftover: " . join(" ", @files));
