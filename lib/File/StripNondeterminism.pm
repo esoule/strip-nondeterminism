@@ -34,7 +34,7 @@ use File::StripNondeterminism::handlers::zip;
 
 our($VERSION, $canonical_time, $clamp_time);
 
-$VERSION = '0.026'; # 0.026
+$VERSION = '0.027'; # 0.027
 
 sub init {
 	$ENV{'TZ'} = 'UTC';
