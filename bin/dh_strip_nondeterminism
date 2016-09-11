@@ -11,7 +11,6 @@ use File::Find;
 use Debian::Debhelper::Dh_Lib;
 use File::StripNondeterminism;
 use Date::Parse;
-use POSIX qw(tzset);
 
 =head1 SYNOPSIS
 
@@ -62,8 +61,7 @@ sub testfile {
 	}
 }
 
-$ENV{'TZ'} = 'UTC';
-tzset();
+File::StripNondeterminism::init();
 
 foreach my $package (@{$dh{DOPACKAGES}}) {
 	my $tmp=tmpdir($package);

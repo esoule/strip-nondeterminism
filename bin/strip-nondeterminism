@@ -23,7 +23,6 @@ use strict;
 use warnings;
 
 use File::StripNondeterminism;
-use POSIX qw(tzset);
 use Getopt::Long;
 Getopt::Long::Configure(qw(no_ignore_case permute bundling));
 
@@ -50,8 +49,7 @@ if ($want_version) {
 	exit 0;
 }
 
-$ENV{'TZ'} = 'UTC';
-tzset();
+File::StripNondeterminism::init()
 
 $File::StripNondeterminism::canonical_time = $timestamp;
 $File::StripNondeterminism::clamp_time = $clamp_timestamp;
