@@ -46,6 +46,8 @@ my %STAT = (
 	12 => "blocks (actual number of system-specific blocks allocated on disk)",
 );
 
+File::StripNondeterminism::init();
+
 $File::StripNondeterminism::canonical_time = 1423159771;
 
 my @fixtures = glob('t/fixtures/*/*.in');

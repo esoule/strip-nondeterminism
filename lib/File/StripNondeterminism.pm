@@ -21,6 +21,7 @@ package File::StripNondeterminism;
 use strict;
 use warnings;
 
+use POSIX qw(tzset);
 use File::StripNondeterminism::handlers::ar;
 use File::StripNondeterminism::handlers::gettext;
 use File::StripNondeterminism::handlers::gzip;
@@ -33,7 +34,12 @@ use File::StripNondeterminism::handlers::zip;
 
 our($VERSION, $canonical_time, $clamp_time);
 
-$VERSION = '0.026'; # 0.026
+$VERSION = '0.027'; # 0.027
+
+sub init {
+	$ENV{'TZ'} = 'UTC';
+	tzset();
+}
 
 sub _get_file_type {
 	my $file=shift;

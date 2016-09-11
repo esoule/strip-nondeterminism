@@ -27,6 +27,8 @@ use File::StripNondeterminism;
 use strict;
 use warnings;
 
+File::StripNondeterminism::init();
+
 my $dir = tempdir( CLEANUP => 1 );
 my $path;
 my $fh;
