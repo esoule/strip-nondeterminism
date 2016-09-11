@@ -1,3 +1,10 @@
+strip-nondeterminism (0.027-1) unstable; urgency=medium
+
+  * Add a File::StripNondeterminism::init method to avoid tzset DRY violation.
+    - Also set timezone in tests. (Closes: #837382)
+
+ -- Chris Lamb <lamby@debian.org>  Sun, 11 Sep 2016 23:10:35 +0100
+
 strip-nondeterminism (0.026-1) unstable; urgency=medium
 
   * handlers/jar.pm: Reintroduce subroutine prototype on _jar_filename_cmp to
