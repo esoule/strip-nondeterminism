@@ -1,3 +1,9 @@
+strip-nondeterminism (0.028-1) unstable; urgency=medium
+
+  * bin/strip-nondeterminism: Add missing semicolon.
+
+ -- Chris Lamb <lamby@debian.org>  Mon, 12 Sep 2016 09:06:01 +0100
+
 strip-nondeterminism (0.027-1) unstable; urgency=medium
 
   * Add a File::StripNondeterminism::init method to avoid tzset DRY violation.
