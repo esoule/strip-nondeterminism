@@ -49,7 +49,7 @@ if ($want_version) {
 	exit 0;
 }
 
-File::StripNondeterminism::init()
+File::StripNondeterminism::init();
 
 $File::StripNondeterminism::canonical_time = $timestamp;
 $File::StripNondeterminism::clamp_time = $clamp_timestamp;
