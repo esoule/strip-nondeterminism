@@ -36,7 +36,8 @@ use constant {
 sub normalize {
 	my ($filename) = @_;
 
-	open(my $fh, '<', $filename) or die "Unable to open $filename for reading: $!";
+	open(my $fh, '<', $filename)
+	  or die "Unable to open $filename for reading: $!";
 
 	# See RFC 1952
 
@@ -54,10 +55,13 @@ sub normalize {
 
 	my $new_flg = $flg;
 	$new_flg &= ~FNAME;	# Don't include filename
-	$new_flg &= ~FHCRC;	# Don't include header CRC (not all implementations support it)
-	unless ($mtime == 0) {	# Don't set a deterministic timestamp if there wasn't already a timestamp
+	$new_flg &= ~FHCRC
+	  ;	# Don't include header CRC (not all implementations support it)
+	unless ($mtime == 0)
+	{	# Don't set a deterministic timestamp if there wasn't already a timestamp
 		if (defined $File::StripNondeterminism::canonical_time) {
-			if (!$File::StripNondeterminism::clamp_time || $mtime > $File::StripNondeterminism::canonical_time) {
+			if (  !$File::StripNondeterminism::clamp_time
+				|| $mtime > $File::StripNondeterminism::canonical_time) {
 				$mtime = $File::StripNondeterminism::canonical_time;
 			}
 		} else {
@@ -69,7 +73,8 @@ sub normalize {
 	my $tempfile = File::Temp->new(DIR => dirname($filename));
 
 	# Write a new header
-	print $tempfile pack('CCCCl<CC', $id1, $id2, $cm, $new_flg, $mtime, $xfl, $os);
+	print $tempfile
+	  pack('CCCCl<CC', $id1, $id2, $cm, $new_flg, $mtime, $xfl, $os);
 
 	if ($flg & FEXTRA) {	# Copy through
 		# 0   1   2
@@ -79,7 +84,8 @@ sub normalize {
 		my $buf;
 		read($fh, $buf, 2) == 2 or die "$filename: Malformed gzip file";
 		my ($xlen) = unpack('v', $buf);
-		read($fh, $buf, $xlen) == $xlen or die "$filename: Malformed gzip file";
+		read($fh, $buf, $xlen) == $xlen
+		  or die "$filename: Malformed gzip file";
 		print $tempfile pack('vA*', $xlen, $buf);
 	}
 	if ($flg & FNAME) {	# Read but do not copy through
@@ -115,8 +121,9 @@ sub normalize {
 	}
 
 	# Copy through the rest of the file.
-	# TODO: also normalize concatenated gzip files.  This will require reading and understanding
-	# each DEFLATE block (see RFC 1951), since gzip doesn't include lengths anywhere.
+	# TODO: also normalize concatenated gzip files.  This will require
+	# reading and understanding each DEFLATE block (see RFC 1951), since
+	# gzip doesn't include lengths anywhere.
 	while (1) {
 		my $buf;
 		my $bytes_read = read($fh, $buf, 4096);
@@ -127,7 +134,7 @@ sub normalize {
 
 	$tempfile->close;
 	copy_data($tempfile->filename, $filename)
-		or die "$filename: unable to overwrite: copy_data: $!";
+	  or die "$filename: unable to overwrite: copy_data: $!";
 
 	return 1;
 }

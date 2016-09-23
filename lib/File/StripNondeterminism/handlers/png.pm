@@ -40,7 +40,8 @@ sub chunk {
 sub time_chunk {
 	my ($seconds) = @_;
 	my ($sec, $min, $hour, $mday, $mon, $year) = gmtime($seconds);
-	return chunk('tIME', pack('nCCCCC', 1900+$year, $mon+1, $mday, $hour, $min, $sec));
+	return chunk('tIME',
+		pack('nCCCCC', 1900+$year, $mon+1, $mday, $hour, $min, $sec));
 }
 
 sub text_chunk {
@@ -58,7 +59,7 @@ sub normalize {
 	if (_normalize($filename, $fh, $tempfile)) {
 		$tempfile->close;
 		copy_data($tempfile->filename, $filename)
-			or die "$filename: unable to overwrite: copy_data: $!";
+		  or die "$filename: unable to overwrite: copy_data: $!";
 	}
 
 	close $fh;
@@ -75,8 +76,9 @@ sub _normalize {
 	my $modified = 0;
 	my $bytes_read;
 
-	read($fh, my $magic, 8); $magic eq "\x89PNG\r\n\x1a\n"
-		or die "$filename: does not appear to be a PNG";
+	read($fh, my $magic, 8);
+	$magic eq "\x89PNG\r\n\x1a\n"
+	  or die "$filename: does not appear to be a PNG";
 
 	print $tempfile $magic;
 
@@ -98,12 +100,17 @@ sub _normalize {
 			}
 
 			if ($type eq "tIME") {
-				print $tempfile time_chunk($canonical_time) if defined($canonical_time);
+				print $tempfile time_chunk($canonical_time)
+				  if defined($canonical_time);
 				$modified = 1;
 				next;
-			} elsif (($type =~ /[tiz]EXt/) && ($data =~ /^(date:[^\0]+|Creation Time)\0/)) {
-				print $tempfile text_chunk($1, strftime("%Y-%m-%dT%H:%M:%S-00:00",
-								gmtime($canonical_time))) if defined($canonical_time);
+			} elsif (($type =~ /[tiz]EXt/)
+				&& ($data =~ /^(date:[^\0]+|Creation Time)\0/)) {
+				print $tempfile text_chunk(
+					$1,
+					strftime(
+						"%Y-%m-%dT%H:%M:%S-00:00",gmtime($canonical_time))
+				) if defined($canonical_time);
 				$modified = 1;
 				next;
 			}
@@ -143,7 +150,7 @@ sub _normalize {
 	}
 	defined($bytes_read) or die "$filename: read failed: $!";
 	warn "$filename: $garbage bytes of garbage after IEND chunk"
-		if $garbage > 0;
+	  if $garbage > 0;
 
 	return $modified;
 }

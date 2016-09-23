@@ -45,6 +45,7 @@ things to exclude.
 init();
 
 my @nondeterministic_files;
+
 sub testfile {
 	return if -l $_ or -d $_; # Skip directories and symlinks always.
 
@@ -70,7 +71,8 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 	find(\&testfile,$tmp);
 	next unless @nondeterministic_files;
 
-	$File::StripNondeterminism::canonical_time = eval { get_source_date_epoch() };
+	$File::StripNondeterminism::canonical_time
+	  = eval { get_source_date_epoch() };
 	if (not defined $File::StripNondeterminism::canonical_time) {
 		# Hack for old versions of debhelper
 		isnative($package); # Sets $dh{DATE} as a side-effect
@@ -79,7 +81,8 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 
 	foreach (@nondeterministic_files) {
 		my ($path, $normalize) = @$_;
-		eval { $normalize->($path); 1 } or die "dh_strip_nondeterminism: $path: $@";
+		eval { $normalize->($path); 1 }
+		  or die "dh_strip_nondeterminism: $path: $@";
 	}
 }
 

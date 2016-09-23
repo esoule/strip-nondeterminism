@@ -28,16 +28,19 @@ Getopt::Long::Configure(qw(no_ignore_case permute bundling));
 
 my $cmd = $0;
 $cmd =~ s/.*\///;
-my $usage = "Usage: $cmd [-t|--type FILETYPE] [-T|--timestamp SECONDS] [--clamp-timestamp] FILENAME\n";
+my $usage
+  = "Usage: $cmd [-t|--type FILETYPE] [-T|--timestamp SECONDS] [--clamp-timestamp] FILENAME\n";
 
 my ($filetype, $timestamp, $clamp_timestamp, $want_help, $want_version);
 my $getopt = Getopt::Long::Parser->new;
 $getopt->configure(qw(no_ignore_case permute bundling));
-$getopt->getoptions('type|t=s', \$filetype,
-		    'timestamp|T=i', \$timestamp,
-		    'clamp-timestamp!', \$clamp_timestamp,
-		    'help|h', \$want_help,
-		    'version|V', \$want_version) or die $usage;
+$getopt->getoptions(
+	'type|t=s', \$filetype,
+	'timestamp|T=i', \$timestamp,
+	'clamp-timestamp!', \$clamp_timestamp,
+	'help|h', \$want_help,
+	'version|V', \$want_version
+) or die $usage;
 
 if ($want_help) {
 	print $usage;
@@ -61,14 +64,17 @@ for my $filename (@ARGV) {
 
 	my $normalizer;
 	if (defined $filetype) {
-		$normalizer = File::StripNondeterminism::get_normalizer_by_name($filetype);
+		$normalizer
+		  = File::StripNondeterminism::get_normalizer_by_name($filetype);
 		die "$filetype: Unknown file type\n" unless $normalizer;
 	} else {
-		$normalizer = File::StripNondeterminism::get_normalizer_for_file($filename);
+		$normalizer
+		  = File::StripNondeterminism::get_normalizer_for_file($filename);
 		next unless $normalizer;
 	}
 
-	eval { $normalizer->($filename); 1 } or die "strip-nondeterminism: $filename: $@";
+	eval { $normalizer->($filename); 1 }
+	  or die "strip-nondeterminism: $filename: $@";
 }
 
 __END__

@@ -28,7 +28,8 @@ sub read_file {
 	my $filename = shift;
 
 	local $/ = undef;
-	open(my $fh, '<', $filename) or die "Can't open file $filename for reading: $!";
+	open(my $fh, '<', $filename)
+	  or die "Can't open file $filename for reading: $!";
 	binmode($fh);
 	my $buf = <$fh>;
 	close($fh);
@@ -56,7 +57,8 @@ sub normalize {
 		return 0;
 	}
 
-	my ($revision, $nstrings, $orig_to, $trans_to) = unpack($fmt x 4, substr($buf, 1*4, 4*4));
+	my ($revision, $nstrings, $orig_to, $trans_to)
+	  = unpack($fmt x 4, substr($buf, 1*4, 4*4));
 	my $major = int($revision / 256);
 	my $minor = int($revision % 256);
 	return 0 if $major > 1;
@@ -74,22 +76,25 @@ sub normalize {
 
 		my $pot_date = $1;
 		my $time;
-		eval {
-			$time = Time::Piece->strptime($pot_date, "%Y-%m-%d %H:%M%z");
-		};
+		eval {$time = Time::Piece->strptime($pot_date, "%Y-%m-%d %H:%M%z");};
 		next if $@;
 		next if $time <= $norm_time;
 
 		my $new_time = strftime("%Y-%m-%d %H:%M%z", gmtime($norm_time));
-		$trans_msg =~ s/\QPOT-Creation-Date: $pot_date\E/POT-Creation-Date: $new_time/;
+		$trans_msg
+		  =~ s/\QPOT-Creation-Date: $pot_date\E/POT-Creation-Date: $new_time/;
 		next if length($trans_msg) != $trans_len;
 
-		$buf = substr($buf, 0, $trans_offset) . $trans_msg . substr($buf, $trans_offset + $trans_len);
+		$buf
+		  = substr($buf, 0, $trans_offset)
+		  . $trans_msg
+		  . substr($buf, $trans_offset + $trans_len);
 		$modified = 1;
 	}
 
 	if ($modified) {
-		open(my $fh, '>', $mo_filename) or die "Can't open file $mo_filename for writing: $!";
+		open(my $fh, '>', $mo_filename)
+		  or die "Can't open file $mo_filename for writing: $!";
 		binmode($fh);
 		print $fh $buf;
 		close($fh);

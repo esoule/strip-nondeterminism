@@ -38,7 +38,7 @@ sub normalize {
 	my ($filename) = @_;
 
 	open(my $fh, '<', $filename)
-		or die "Unable to open $filename for reading: $!";
+	  or die "Unable to open $filename for reading: $!";
 
 	my $modified = 0;
 	my $tempfile = File::Temp->new(DIR => dirname($filename));
@@ -46,7 +46,8 @@ sub normalize {
 
 	while (defined(my $line = <$fh>)) {
 		# Normalize _lastmodified
-		if ($line =~ s/(?<=s:13:"_lastmodified";i:)\d+(?=;)/$canonical_time/g) {
+		if ($line =~ s/(?<=s:13:"_lastmodified";i:)\d+(?=;)/$canonical_time/g)
+		{
 			$modified = 1;
 		}
 
@@ -56,7 +57,7 @@ sub normalize {
 	if ($modified) {
 		$tempfile->close;
 		copy_data($tempfile->filename, $filename)
-			or die "$filename: unable to overwrite: copy_data: $!";
+		  or die "$filename: unable to overwrite: copy_data: $!";
 	}
 
 	return $modified;
