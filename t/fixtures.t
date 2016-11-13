@@ -51,7 +51,7 @@ File::StripNondeterminism::init();
 $File::StripNondeterminism::canonical_time = 1423159771;
 
 my @fixtures = glob('t/fixtures/*/*.in');
-plan tests => scalar @fixtures;
+plan tests => (scalar @fixtures) * ((scalar keys %STAT) + 3);
 
 foreach my $filename (@fixtures) {
 	# Use a temporary directory per fixture so we can check whether any
@@ -65,7 +65,7 @@ foreach my $filename (@fixtures) {
 
 	my $normalizer = File::StripNondeterminism::get_normalizer_for_file($in);
 
-	subtest $filename => sub {
+	if (1) {
 		isnt(undef, $normalizer, "Normalizer found for $in");
 
 		my @stat_before = lstat $in;
@@ -82,7 +82,6 @@ foreach my $filename (@fixtures) {
 		my @files = glob("$temp/*");
 		ok(scalar(@files) == 1, "Unexpected files leftover: " . join(" ", @files));
 
-		done_testing;
 	}
 }
 
