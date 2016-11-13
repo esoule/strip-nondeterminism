@@ -26,8 +26,11 @@ use Test::More;
 
 my %BINARIES = (
 	'bin/strip-nondeterminism --help' => 0,
-	'bin/dh_strip_nondeterminism --help' => 1,
 );
+
+if (eval{require Debian::Debhelper::Dh_Lib}) {
+	$BINARIES{'bin/dh_strip_nondeterminism --help'} = 1;
+}
 
 plan tests => scalar keys %BINARIES;
 
