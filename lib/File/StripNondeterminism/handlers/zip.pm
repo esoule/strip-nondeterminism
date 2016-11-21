@@ -79,6 +79,16 @@ use constant {
 	LOCAL_HEADER => 1
 };
 
+sub unixtime_to_winnt {
+	my $unixtime = shift || 0;
+
+	# WinNT epoch is 01-Jan-1601 00:00:00 UTC
+	# diff to unix time: `date -u -d "01-Jan-1601 00:00:00 UTC" +%s`
+	my $secondsdiff = 11644473600;
+
+	return $unixtime + $secondsdiff;
+}
+
 sub normalize_extra_fields {
 	# See http://sources.debian.net/src/zip/3.0-6/proginfo/extrafld.txt for extra field documentation
 	# $header_type is CENTRAL_HEADER or LOCAL_HEADER.
@@ -100,6 +110,26 @@ sub normalize_extra_fields {
 			for (my $i = 1; $i < $len; $i += 4) {
 				$result .= pack("V",
 					$File::StripNondeterminism::canonical_time // SAFE_EPOCH);
+			}
+		} elsif ($id == 0x000a) {
+			# first 4 bytes are reserved
+			$result .= substr($field, $pos, 2+2+4);
+			my ($tag, $tagsize) = (0, 0);
+			for (my $i = 2+2+4; $i < $len; $i += $tagsize) {
+				($tag, $tagsize) = unpack("vv", substr($field, $pos + $i));
+				$result .= substr($field, $pos + $i, 2+2);
+				if ($tag == 0x0001 && $tagsize == 24) {
+					# timestamp in 1/10th microseconds
+					my $timestamp = unixtime_to_winnt($File::StripNondeterminism::canonical_time) * 10**7;
+					# mtime
+					$result .= pack("VV", $timestamp % (2**32), $timestamp / (2**32));
+					# atime
+					$result .= pack("VV", $timestamp % (2**32), $timestamp / (2**32));
+					# ctime
+					$result .= pack("VV", $timestamp % (2**32), $timestamp / (2**32));
+				} else {
+					$result .= substr($field, $pos + $i, $tagsize)
+				}
 			}
 		} elsif ($id == 0x7875) { # Info-ZIP New Unix Extra Field
 			$result .= substr($field, $pos, 4);
