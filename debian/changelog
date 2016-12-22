@@ -1,3 +1,24 @@
+strip-nondeterminism (0.029-1) unstable; urgency=medium
+
+  [ Chris Lamb ]
+  * t/binaries.t:
+    - Don't make tests rely on Debian::Debhelper::Dh_Lib for non-Debian
+      distributions.
+    - Smoke test strip-nondeterminism(1) and dh_strip_nondeterminism(1) to
+      prevent regressions like a3c16cd08.
+  * Makefile.PL: Change "NAME" argument to a Perl package name.
+  * .pertidyrc: Inherit/copy from lintian's version but using tabs over spaces.
+  * Run perltidy across codebase.
+
+  [ Reiner Herrmann ]
+  * zip: normalize NTFS FIleTimes. (Closes: #845203)
+
+  [ Anders Kaseorg ]
+  * libfile-stripnondeterminism-perl: Treat .par files as Zip archives.
+    (Closes: #846895)
+
+ -- Chris Lamb <lamby@debian.org>  Thu, 22 Dec 2016 10:55:20 +0000
+
 strip-nondeterminism (0.028-1) unstable; urgency=medium
 
   * bin/strip-nondeterminism: Add missing semicolon.
