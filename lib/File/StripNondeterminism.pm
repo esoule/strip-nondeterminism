@@ -34,7 +34,7 @@ use File::StripNondeterminism::handlers::zip;
 
 our($VERSION, $canonical_time, $clamp_time);
 
-$VERSION = '0.028'; # 0.028
+$VERSION = '0.029'; # 0.029
 
 sub init {
 	$ENV{'TZ'} = 'UTC';
@@ -43,9 +43,9 @@ sub init {
 
 sub _get_file_type {
 	my $file=shift;
-	open (FILE, '-|') # handle all filenames safely
-		|| exec('file', $file)
-		|| die "can't exec file: $!";
+	open(FILE, '-|') # handle all filenames safely
+	  || exec('file', $file)
+	  || die "can't exec file: $!";
 	my $type=<FILE>;
 	close FILE;
 	return $type;
@@ -69,15 +69,21 @@ sub get_normalizer_for_file {
 		return \&File::StripNondeterminism::handlers::gzip::normalize;
 	}
 	# jar
-	if (m/\.(jar|war|hpi|apk)$/ && _get_file_type($_) =~ m/(Java|Zip) archive data/) {
+	if (m/\.(jar|war|hpi|apk)$/
+		&& _get_file_type($_) =~ m/(Java|Zip) archive data/) {
 		return \&File::StripNondeterminism::handlers::jar::normalize;
 	}
 	# javadoc
-	if (m/\.html$/ && File::StripNondeterminism::handlers::javadoc::is_javadoc_file($_)) {
+	if (m/\.html$/
+		&& File::StripNondeterminism::handlers::javadoc::is_javadoc_file($_)) {
 		return \&File::StripNondeterminism::handlers::javadoc::normalize;
 	}
 	# pear registry
-	if (m/\.reg$/ && File::StripNondeterminism::handlers::pearregistry::is_registry_file($_)) {
+	if (
+		m/\.reg$/
+		&& File::StripNondeterminism::handlers::pearregistry::is_registry_file(
+			$_)
+	  ) {
 		return \&File::StripNondeterminism::handlers::pearregistry::normalize;
 	}
 	# PNG
@@ -85,11 +91,17 @@ sub get_normalizer_for_file {
 		return \&File::StripNondeterminism::handlers::png::normalize;
 	}
 	# pom.properties, version.properties
-	if (m/\.properties$/ && File::StripNondeterminism::handlers::javaproperties::is_java_properties_file($_)) {
-		return \&File::StripNondeterminism::handlers::javaproperties::normalize;
+	if (
+		m/\.properties$/
+		&& File::StripNondeterminism::handlers::javaproperties::is_java_properties_file(
+			$_)
+	  ) {
+		return
+		  \&File::StripNondeterminism::handlers::javaproperties::normalize;
 	}
 	# zip
-	if (m/\.(zip|pk3|epub|whl|xpi|htb|zhfst)$/ && _get_file_type($_) =~ m/Zip archive data|EPUB document/) {
+	if (m/\.(zip|pk3|epub|whl|xpi|htb|zhfst|par)$/
+		&& _get_file_type($_) =~ m/Zip archive data|EPUB document/) {
 		return \&File::StripNondeterminism::handlers::zip::normalize;
 	}
 	return undef;
@@ -98,14 +110,22 @@ sub get_normalizer_for_file {
 sub get_normalizer_by_name {
 	$_ = shift;
 	return \&File::StripNondeterminism::handlers::ar::normalize if $_ eq 'ar';
-	return \&File::StripNondeterminism::handlers::gettext::normalize if $_ eq 'gettext';
-	return \&File::StripNondeterminism::handlers::gzip::normalize if $_ eq 'gzip';
-	return \&File::StripNondeterminism::handlers::jar::normalize if $_ eq 'jar';
-	return \&File::StripNondeterminism::handlers::javadoc::normalize if $_ eq 'javadoc';
-	return \&File::StripNondeterminism::handlers::pearregistry::normalize if $_ eq 'pearregistry';
-	return \&File::StripNondeterminism::handlers::png::normalize if $_ eq 'png';
-	return \&File::StripNondeterminism::handlers::javaproperties::normalize if $_ eq 'javaproperties';
-	return \&File::StripNondeterminism::handlers::zip::normalize if $_ eq 'zip';
+	return \&File::StripNondeterminism::handlers::gettext::normalize
+	  if $_ eq 'gettext';
+	return \&File::StripNondeterminism::handlers::gzip::normalize
+	  if $_ eq 'gzip';
+	return \&File::StripNondeterminism::handlers::jar::normalize
+	  if $_ eq 'jar';
+	return \&File::StripNondeterminism::handlers::javadoc::normalize
+	  if $_ eq 'javadoc';
+	return \&File::StripNondeterminism::handlers::pearregistry::normalize
+	  if $_ eq 'pearregistry';
+	return \&File::StripNondeterminism::handlers::png::normalize
+	  if $_ eq 'png';
+	return \&File::StripNondeterminism::handlers::javaproperties::normalize
+	  if $_ eq 'javaproperties';
+	return \&File::StripNondeterminism::handlers::zip::normalize
+	  if $_ eq 'zip';
 	return undef;
 }
 

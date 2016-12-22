@@ -34,13 +34,16 @@ use constant SAFE_EPOCH => 315576060;
 sub peek_member {
 	my ($member, $nbytes) = @_;
 	my $original_size = $member->compressedSize();
-	my $old_compression_method = $member->desiredCompressionMethod(COMPRESSION_STORED);
+	my $old_compression_method
+	  = $member->desiredCompressionMethod(COMPRESSION_STORED);
 	$member->rewindData() == AZ_OK or die "failed to rewind ZIP member";
 	my ($buffer, $status) = $member->readChunk($nbytes);
-	die "failed to read ZIP member" if $status != AZ_OK && $status != AZ_STREAM_END;
+	die "failed to read ZIP member"
+	  if $status != AZ_OK && $status != AZ_STREAM_END;
 	$member->endRead();
 	$member->desiredCompressionMethod($old_compression_method);
-	$member->{'compressedSize'} = $original_size; # Work around https://github.com/redhotpenguin/perl-Archive-Zip/issues/11
+	$member->{'compressedSize'} = $original_size
+	  ; # Work around https://github.com/redhotpenguin/perl-Archive-Zip/issues/11
 	return $$buffer;
 }
 
@@ -53,14 +56,17 @@ sub normalize_member {
 	my $filename = "$tempdir/member";
 	my $original_size = $member->compressedSize();
 	$member->extractToFileNamed($filename);
-	$member->{'compressedSize'} = $original_size; # Work around https://github.com/redhotpenguin/perl-Archive-Zip/issues/11
+	$member->{'compressedSize'} = $original_size
+	  ; # Work around https://github.com/redhotpenguin/perl-Archive-Zip/issues/11
 
 	# Normalize the temporary file.
 	if ($normalizer->($filename)) {
 		# Normalizer modified the temporary file.
 		# Replace the member's contents with the temporary file's contents.
 		open(my $fh, '<', $filename) or die "Unable to open $filename: $!";
-		$member->contents(do { local $/; <$fh> });
+		$member->contents(
+			do { local $/; <$fh> }
+		);
 	}
 
 	unlink($filename);
@@ -72,6 +78,17 @@ use constant {
 	CENTRAL_HEADER => 0,
 	LOCAL_HEADER => 1
 };
+
+sub unixtime_to_winnt {
+	my $unixtime = shift || 0;
+
+	# WinNT epoch is 01-Jan-1601 00:00:00 UTC
+	# diff to unix time: `date -u -d "01-Jan-1601 00:00:00 UTC" +%s`
+	my $secondsdiff = 11644473600;
+
+	return $unixtime + $secondsdiff;
+}
+
 sub normalize_extra_fields {
 	# See http://sources.debian.net/src/zip/3.0-6/proginfo/extrafld.txt for extra field documentation
 	# $header_type is CENTRAL_HEADER or LOCAL_HEADER.
@@ -91,20 +108,42 @@ sub normalize_extra_fields {
 			# len determines how many timestamps this field contains
 			# this works for both the central header and local header version
 			for (my $i = 1; $i < $len; $i += 4) {
-				$result .= pack("V", $File::StripNondeterminism::canonical_time // SAFE_EPOCH);
+				$result .= pack("V",
+					$File::StripNondeterminism::canonical_time // SAFE_EPOCH);
+			}
+		} elsif ($id == 0x000a) {
+			# first 4 bytes are reserved
+			$result .= substr($field, $pos, 2+2+4);
+			my ($tag, $tagsize) = (0, 0);
+			for (my $i = 2+2+4; $i < $len; $i += $tagsize) {
+				($tag, $tagsize) = unpack("vv", substr($field, $pos + $i));
+				$result .= substr($field, $pos + $i, 2+2);
+				if ($tag == 0x0001 && $tagsize == 24) {
+					# timestamp in 1/10th microseconds
+					my $timestamp = unixtime_to_winnt($File::StripNondeterminism::canonical_time) * 10**7;
+					# mtime
+					$result .= pack("VV", $timestamp % (2**32), $timestamp / (2**32));
+					# atime
+					$result .= pack("VV", $timestamp % (2**32), $timestamp / (2**32));
+					# ctime
+					$result .= pack("VV", $timestamp % (2**32), $timestamp / (2**32));
+				} else {
+					$result .= substr($field, $pos + $i, $tagsize)
+				}
 			}
 		} elsif ($id == 0x7875) { # Info-ZIP New Unix Extra Field
 			$result .= substr($field, $pos, 4);
-			#  Version       1 byte      version of this extra field, currently 1
-			#  UIDSize       1 byte      Size of UID field
-			#  UID           Variable    UID for this entry
-			#  GIDSize       1 byte      Size of GID field
-			#  GID           Variable    GID for this entry
-			# (Same format for both central header and local header)
+		  #  Version       1 byte      version of this extra field, currently 1
+		  #  UIDSize       1 byte      Size of UID field
+		  #  UID           Variable    UID for this entry
+		  #  GIDSize       1 byte      Size of GID field
+		  #  GID           Variable    GID for this entry
+		  # (Same format for both central header and local header)
 			if (ord(substr($field, $pos + 4, 1)) == 1) {
 				my $uid_len = ord(substr($field, $pos + 5, 1));
 				my $gid_len = ord(substr($field, $pos + 6 + $uid_len, 1));
-				$result .= pack("CCx${uid_len}Cx${gid_len}", 1, $uid_len, $gid_len);
+				$result
+				  .= pack("CCx${uid_len}Cx${gid_len}", 1, $uid_len, $gid_len);
 			} else {
 				$result .= substr($field, $pos + 4, $len);
 			}
@@ -121,7 +160,8 @@ sub normalize_extra_fields {
 sub try {
 	my ($sub, $errors) = @_;
 	@$errors = ();
-	my $old_error_handler = Archive::Zip::setErrorHandler(sub { push @$errors, @_ });
+	my $old_error_handler
+	  = Archive::Zip::setErrorHandler(sub { push @$errors, @_ });
 	my $res = $sub->();
 	Archive::Zip::setErrorHandler($old_error_handler);
 	return $res;
@@ -146,20 +186,28 @@ sub normalize {
 			die "Reading ZIP archive failed: " . join("\n", @errors);
 		}
 	}
-	if (exists($options{archive_filter}) and not($options{archive_filter}->($zip))) {
+	if (exists($options{archive_filter})
+		and not($options{archive_filter}->($zip))) {
 		return 0;
 	}
 	my @filenames = sort $filename_cmp $zip->memberNames();
 	for my $filename (@filenames) {
 		my $member = $zip->removeMember($filename);
 		$zip->addMember($member);
-		$options{member_normalizer}->($member) if exists $options{member_normalizer};
-		$member->setLastModFileDateTimeFromUnix($File::StripNondeterminism::canonical_time // SAFE_EPOCH);
+		$options{member_normalizer}->($member)
+		  if exists $options{member_normalizer};
+		$member->setLastModFileDateTimeFromUnix(
+			$File::StripNondeterminism::canonical_time // SAFE_EPOCH);
 		if ($member->fileAttributeFormat() == FA_UNIX) {
-			$member->unixFileAttributes(($member->unixFileAttributes() & oct(100)) ? oct(755) : oct(644));
+			$member->unixFileAttributes(
+				($member->unixFileAttributes() & oct(100))
+				? oct(755)
+				: oct(644));
 		}
-		$member->cdExtraField(normalize_extra_fields($member->cdExtraField(), CENTRAL_HEADER));
-		$member->localExtraField(normalize_extra_fields($member->localExtraField(), LOCAL_HEADER));
+		$member->cdExtraField(
+			normalize_extra_fields($member->cdExtraField(), CENTRAL_HEADER));
+		$member->localExtraField(
+			normalize_extra_fields($member->localExtraField(), LOCAL_HEADER));
 	}
 	my $old_perms = (stat($zip_filename))[2] & oct(7777);
 	$zip->overwrite();

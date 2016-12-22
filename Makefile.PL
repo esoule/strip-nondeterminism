@@ -5,7 +5,7 @@ use ExtUtils::MakeMaker;
 my $MMVER = eval $ExtUtils::MakeMaker::VERSION;
 
 WriteMakefile(
-	NAME		=> 'strip-nondeterminism',
+	NAME		=> 'File::StripNondeterminism',
 	AUTHOR		=> 'Andrew Ayer <agwa@andrewayer.name>',
 	VERSION_FROM	=> 'lib/File/StripNondeterminism.pm',
 	ABSTRACT	=> 'tool for stripping nondeterminism from files',

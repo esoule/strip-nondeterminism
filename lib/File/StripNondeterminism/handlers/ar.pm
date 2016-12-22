@@ -37,7 +37,7 @@ sub normalize {
 	my $buf;
 
 	open(my $fh, '+<', $file)
-		or die("failed to open $file for read+write: $!");
+	  or die("failed to open $file for read+write: $!");
 
 	read $fh, $buf, $GLOBAL_HEADER_LENGTH;
 	return 0 if $buf ne $GLOBAL_HEADER;
@@ -59,26 +59,30 @@ sub normalize {
 		#58     59     File magic                \140\012
 
 		die "Incorrect header length"
-		if length $buf != $FILE_HEADER_LENGTH;
+		  if length $buf != $FILE_HEADER_LENGTH;
 		die "Incorrect file magic"
-		if substr($buf, 58, length($FILE_MAGIC)) ne $FILE_MAGIC;
+		  if substr($buf, 58, length($FILE_MAGIC)) ne $FILE_MAGIC;
 
 		my $file_mode = oct(substr($buf, 40, 8));
 		my $file_size = substr($buf, 48, 10);
 		seek $fh, $file_header_start + 16, SEEK_SET;
 
 		# mtime
-		syswrite $fh, sprintf("%-12d", $File::StripNondeterminism::canonical_time // 0);
+		syswrite $fh,
+		  sprintf("%-12d", $File::StripNondeterminism::canonical_time // 0);
 		# owner
 		syswrite $fh, sprintf("%-6d", 0);
 		# group
 		syswrite $fh, sprintf("%-6d", 0);
 		# file mode
-		syswrite $fh, sprintf("%-8o", ($file_mode & oct(100)) ? oct(755) : oct(644));
+		syswrite $fh,
+		  sprintf("%-8o", ($file_mode & oct(100)) ? oct(755) : oct(644));
 
 		# move to next member
 		my $padding = $file_size % 2;
-		seek $fh, $file_header_start + $FILE_HEADER_LENGTH + $file_size + $padding, SEEK_SET;
+		seek $fh,
+		  $file_header_start + $FILE_HEADER_LENGTH + $file_size + $padding,
+		  SEEK_SET;
 
 	}
 
