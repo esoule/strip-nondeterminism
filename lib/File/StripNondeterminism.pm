@@ -29,6 +29,7 @@ use File::StripNondeterminism::handlers::jar;
 use File::StripNondeterminism::handlers::javadoc;
 use File::StripNondeterminism::handlers::pearregistry;
 use File::StripNondeterminism::handlers::bflt;
+use File::StripNondeterminism::handlers::uimage;
 use File::StripNondeterminism::handlers::png;
 use File::StripNondeterminism::handlers::javaproperties;
 use File::StripNondeterminism::handlers::zip;
@@ -85,6 +86,10 @@ sub get_normalizer_for_file {
 	if (m/\.bflt$/ && _get_file_type($_) =~ m/BFLT executable \- version 4/) {
 		return \&File::StripNondeterminism::handlers::bflt::normalize;
 	}
+	# uImage
+	if (m/\.uImage$/ && File::StripNondeterminism::handlers::uimage::is_uimage_file($_)) {
+		return \&File::StripNondeterminism::handlers::uimage::normalize;
+	}
 	# PNG
 	if (m/\.png$/ && _get_file_type($_) =~ m/PNG image data/) {
 		return \&File::StripNondeterminism::handlers::png::normalize;
@@ -109,6 +114,7 @@ sub get_normalizer_by_name {
 	return \&File::StripNondeterminism::handlers::javadoc::normalize if $_ eq 'javadoc';
 	return \&File::StripNondeterminism::handlers::pearregistry::normalize if $_ eq 'pearregistry';
 	return \&File::StripNondeterminism::handlers::bflt::normalize if $_ eq 'bflt';
+	return \&File::StripNondeterminism::handlers::uimage::normalize if $_ eq 'uimage';
 	return \&File::StripNondeterminism::handlers::png::normalize if $_ eq 'png';
 	return \&File::StripNondeterminism::handlers::javaproperties::normalize if $_ eq 'javaproperties';
 	return \&File::StripNondeterminism::handlers::zip::normalize if $_ eq 'zip';
