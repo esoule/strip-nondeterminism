@@ -28,6 +28,7 @@ use File::StripNondeterminism::handlers::gzip;
 use File::StripNondeterminism::handlers::jar;
 use File::StripNondeterminism::handlers::javadoc;
 use File::StripNondeterminism::handlers::pearregistry;
+use File::StripNondeterminism::handlers::bflt;
 use File::StripNondeterminism::handlers::png;
 use File::StripNondeterminism::handlers::javaproperties;
 use File::StripNondeterminism::handlers::zip;
@@ -86,6 +87,11 @@ sub get_normalizer_for_file {
 	  ) {
 		return \&File::StripNondeterminism::handlers::pearregistry::normalize;
 	}
+	# bFLT
+	if (m/\.bflt$/
+		&& File::StripNondeterminism::handlers::bflt::is_bflt_file($_)) {
+		return \&File::StripNondeterminism::handlers::bflt::normalize;
+	}
 	# PNG
 	if (m/\.png$/ && _get_file_type($_) =~ m/PNG image data/) {
 		return \&File::StripNondeterminism::handlers::png::normalize;
@@ -120,6 +126,8 @@ sub get_normalizer_by_name {
 	  if $_ eq 'javadoc';
 	return \&File::StripNondeterminism::handlers::pearregistry::normalize
 	  if $_ eq 'pearregistry';
+	return \&File::StripNondeterminism::handlers::bflt::normalize
+	  if $_ eq 'bflt';
 	return \&File::StripNondeterminism::handlers::png::normalize
 	  if $_ eq 'png';
 	return \&File::StripNondeterminism::handlers::javaproperties::normalize
