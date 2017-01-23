@@ -83,7 +83,7 @@ sub get_normalizer_for_file {
 		return \&File::StripNondeterminism::handlers::pearregistry::normalize;
 	}
 	# bFLT
-	if (m/\.bflt$/ && _get_file_type($_) =~ m/BFLT executable \- version 4/) {
+	if (m/\.bflt$/ && File::StripNondeterminism::handlers::bflt::is_bflt_file($_)) {
 		return \&File::StripNondeterminism::handlers::bflt::normalize;
 	}
 	# uImage

@@ -23,6 +23,13 @@ use warnings;
 use Fcntl q/SEEK_SET/;
 
 use constant bFLT => 0x62464C54;
+use constant FLAT_HDRLEN => 64;
+
+# Heuristic values
+use constant MAX_OFFSET => 0xFFFFFFF;
+use constant MAX_STACK_SIZE => 0xFFFFFF;
+use constant MAX_COUNT => 0xFFFFFF;
+use constant RESERVED_FLAGS => 0xFFFFFFC0;
 
 # From elf2flt flat.h
 # /*
@@ -53,6 +60,51 @@ use constant bFLT => 0x62464C54;
 #     uint32_t filler[5];    /* Reservered, set to zero */
 # };
 
+sub is_bflt_header {
+	my ($hdr) = @_;
+
+	my ($f_magic, $f_rev, $f_entry, $f_data_start,
+		$f_data_end, $f_bss_end, $f_stack_size, $f_reloc_start,
+		$f_reloc_count, $f_flags, $f_build_date, $filler_11,
+		$filler_12, $filler_13, $filler_14, $filler_15) = unpack('NNNNNNNNNNNNNNNN', $hdr);
+
+	return 0 unless ($f_magic == bFLT);
+
+	return 0 unless ($f_rev == 4);
+
+	return 0 unless ($f_entry < MAX_OFFSET && $f_data_start < MAX_OFFSET
+			&& $f_data_end < MAX_OFFSET && $f_bss_end < MAX_OFFSET);
+
+	return 0 unless ($f_stack_size < MAX_STACK_SIZE);
+
+	return 0 unless ($f_reloc_start < MAX_OFFSET && $f_reloc_count < MAX_COUNT);
+
+	return 0 unless (($f_flags & RESERVED_FLAGS) == 0);
+
+	return 0 unless ($filler_11 == 0 && $filler_12 == 0
+		&& $filler_13 == 0 && $filler_14 == 0 && $filler_15 == 0);
+
+	return 1;
+}
+
+sub is_bflt_fh {
+	my ($fh) = @_;
+	my $hdr;
+
+	binmode($fh);
+
+	my $bytes_read = sysread($fh, $hdr, FLAT_HDRLEN);
+	return 0 unless $bytes_read == FLAT_HDRLEN;
+
+	return is_bflt_header($hdr);
+}
+
+sub is_bflt_file {
+	my ($filename) = @_;
+	my $fh;
+	return open($fh, '<', $filename) && is_bflt_fh($fh);
+}
+
 sub normalize {
 	my ($filename) = @_;
 
@@ -62,8 +114,8 @@ sub normalize {
 	binmode($fh);
 
 	my $hdr;
-	my $bytes_read = sysread($fh, $hdr, 64);
-	return 0 unless $bytes_read == 64;
+	my $bytes_read = sysread($fh, $hdr, FLAT_HDRLEN);
+	return 0 unless $bytes_read == FLAT_HDRLEN;
 
 	my ($f_magic, $f_rev, $f_entry, $f_data_start,
 		$f_data_end, $f_bss_end, $f_stack_size, $f_reloc_start,
@@ -72,6 +124,7 @@ sub normalize {
 
 	return 0 unless $f_magic == bFLT;
 	return 0 unless $f_rev == 4;
+	return 0 unless (is_bflt_header($hdr));
 
 	my $f_build_date_orig = $f_build_date;
 
