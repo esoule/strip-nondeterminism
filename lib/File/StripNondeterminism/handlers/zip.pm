@@ -197,6 +197,10 @@ sub normalize {
 	my @filenames = sort $filename_cmp $zip->memberNames();
 	for my $filename (@filenames) {
 		my $member = $zip->removeMember($filename);
+		if ($member->isEncrypted()) {
+			warn "strip-nondeterminism: $zip_filename: ignoring encrypted zip file\n";
+			return 0;
+		}
 		$zip->addMember($member);
 		# member_normalizer returns the timestamp to use.
 		my $timestamp = exists $options{member_normalizer}
