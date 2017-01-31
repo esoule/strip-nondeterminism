@@ -13,7 +13,7 @@ After releasing, please upload a signed tarball:
 
   $ VERSION=FIXME
 
-  $ git archive --format=tar --prefix=strip-nondeterminism-${VERSION} ${VERSION} | bzip2 -9 > strip-nondeterminism-${VERSION}.tar.bz2
+  $ git archive --format=tar --prefix=strip-nondeterminism-${VERSION}/ ${VERSION} | bzip2 -9 > strip-nondeterminism-${VERSION}.tar.bz2
 
   $ gpg --detach-sig --armor --output=strip-nondeterminism-${VERSION}.tar.bz2.asc < strip-nondeterminism-${VERSION}.tar.bz2
 
