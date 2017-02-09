@@ -82,7 +82,7 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 	foreach (@nondeterministic_files) {
 		my ($path, $normalize) = @$_;
 		eval { $normalize->($path); 1 }
-		  or die "dh_strip_nondeterminism: $path: $@";
+		  or error("$path: $@");
 	}
 }
 
