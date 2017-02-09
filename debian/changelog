@@ -1,3 +1,15 @@
+strip-nondeterminism (0.030-1) unstable; urgency=medium
+
+  * Print log entry when fixing a file. (Closes: #777239)
+  * Run our entire testsuite in autopkgtests; `perl -MExtUtils::Command::MM
+    -MTest::Harness` was ignoring all but the first argument. (Closes: #852517)
+  * Use error() from Dh_Lib.pm over manual die().
+  * Add watch file with cryptographic signature verification.
+  * Add documentation regarding uploading a signed tarball.
+  * Add myself to AUTHORS and debian/copyright.
+
+ -- Chris Lamb <lamby@debian.org>  Thu, 09 Feb 2017 22:11:16 +1300
+
 strip-nondeterminism (0.029-2) unstable; urgency=medium
 
   [ Chris Lamb ]
