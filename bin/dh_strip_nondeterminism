@@ -95,8 +95,9 @@ L<debhelper(7)>
 
 This program is a part of debhelper.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 Andrew Ayer <agwa@andrewayer.name>
+Chris Lamb <lamby@debian.org>
 
 =cut
