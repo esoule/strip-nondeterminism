@@ -29,9 +29,9 @@ Getopt::Long::Configure(qw(no_ignore_case permute bundling));
 my $cmd = $0;
 $cmd =~ s/.*\///;
 my $usage
-  = "Usage: $cmd [-t|--type FILETYPE] [-T|--timestamp SECONDS] [--clamp-timestamp] FILENAME\n";
+  = "Usage: $cmd [-v|--verbose] [-t|--type FILETYPE] [-T|--timestamp SECONDS] [--clamp-timestamp] FILENAME\n";
 
-my ($filetype, $timestamp, $clamp_timestamp, $want_help, $want_version);
+my ($filetype, $timestamp, $clamp_timestamp, $want_help, $verbose, $want_version);
 my $getopt = Getopt::Long::Parser->new;
 $getopt->configure(qw(no_ignore_case permute bundling));
 $getopt->getoptions(
@@ -39,6 +39,7 @@ $getopt->getoptions(
 	'timestamp|T=i', \$timestamp,
 	'clamp-timestamp!', \$clamp_timestamp,
 	'help|h', \$want_help,
+	'verbose|v', \$verbose,
 	'version|V', \$want_version
 ) or die $usage;
 
@@ -73,6 +74,7 @@ for my $filename (@ARGV) {
 		next unless $normalizer;
 	}
 
+	print "Normalizing $filename\n" if $verbose;
 	eval { $normalizer->($filename); 1 }
 	  or die "strip-nondeterminism: $filename: $@";
 }
