@@ -79,10 +79,13 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 		$File::StripNondeterminism::canonical_time = str2time($dh{DATE});
 	}
 
+	verbose_print("Using $File::StripNondeterminism::canonical_time as canonical time");
+
 	foreach (@nondeterministic_files) {
 		my ($path, $normalize) = @$_;
+		verbose_print("Normalizing $path");
 		eval { $normalize->($path); 1 }
-		  or die "dh_strip_nondeterminism: $path: $@";
+		  or error("$path: $@");
 	}
 }
 
@@ -92,8 +95,9 @@ L<debhelper(7)>
 
 This program is a part of debhelper.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 Andrew Ayer <agwa@andrewayer.name>
+Chris Lamb <lamby@debian.org>
 
 =cut
