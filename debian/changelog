@@ -1,3 +1,11 @@
+strip-nondeterminism (0.031-1) unstable; urgency=medium
+
+  * Don't test for stat(2) blksize and blocks; they are filesystem-specific and
+    we are already checking the pre- and post-processing contents anyway.
+    (Closes: #854937)
+
+ -- Chris Lamb <lamby@debian.org>  Mon, 13 Feb 2017 17:41:27 +1300
+
 strip-nondeterminism (0.030-1) unstable; urgency=medium
 
   * Print log entry when fixing a file. (Closes: #777239)
