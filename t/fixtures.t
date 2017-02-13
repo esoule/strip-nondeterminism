@@ -42,8 +42,8 @@ my %STAT = (
 	# 8 => "atime (last access time in seconds since the epoch)",
 	# 9 => "mtime (last modified time in seconds since the epoch)",
 	# 10 => "ctime (inode change time in seconds since the epoch)",
-	11 => "blksize (preferred I/O size in bytes for interacting with the file)",
-	12 => "blocks (actual number of system-specific blocks allocated on disk)",
+	# 11 => "blksize (preferred I/O size in bytes for interacting with the file)",
+	# 12 => "blocks (actual number of system-specific blocks allocated on disk)",
 );
 
 File::StripNondeterminism::init();
