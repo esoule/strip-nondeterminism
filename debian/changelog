@@ -1,3 +1,9 @@
+strip-nondeterminism (0.031-1~bpo8+1) jessie-backports; urgency=medium
+
+  * Rebuild for jessie-backports.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Sat, 18 Feb 2017 17:45:24 +0100
+
 strip-nondeterminism (0.031-1) unstable; urgency=medium
 
   * Don't test for stat(2) blksize and blocks; they are filesystem-specific and
