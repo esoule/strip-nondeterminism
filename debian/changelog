@@ -1,3 +1,12 @@
+strip-nondeterminism (0.032-1) unstable; urgency=medium
+
+  * Add support for testing files we should reject.
+  * Fix a possible endless loop while stripping ar files due to trusting the
+    file's file size data. Thanks to Tobias Stoeckmann (tobias@stoeckmann.org)
+    for the report, patch and testcase. (Closes: #857975)
+
+ -- Chris Lamb <lamby@debian.org>  Fri, 17 Mar 2017 09:25:53 +0100
+
 strip-nondeterminism (0.031-1) unstable; urgency=medium
 
   * Don't test for stat(2) blksize and blocks; they are filesystem-specific and
