@@ -43,7 +43,7 @@ foreach my $filename (@failures) {
 		my $normalizer = File::StripNondeterminism::get_normalizer_for_file($in);
 		$normalizer->($in);
 	};
-	ok($@ ne "");
+	ok($@ ne "", $filename);
 }
 
 done_testing;
