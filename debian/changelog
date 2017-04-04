@@ -1,3 +1,9 @@
+strip-nondeterminism (0.032-1~bpo8+1) jessie-backports; urgency=medium
+
+  * Rebuild for jessie-backports.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Tue, 04 Apr 2017 18:52:55 +0200
+
 strip-nondeterminism (0.032-1) unstable; urgency=medium
 
   * Add support for testing files we should reject.
