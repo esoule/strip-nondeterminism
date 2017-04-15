@@ -65,6 +65,10 @@ sub normalize {
 
 		my $file_mode = oct(substr($buf, 40, 8));
 		my $file_size = substr($buf, 48, 10);
+
+		die "Incorrect file size"
+		  if $file_size < 1;
+
 		seek $fh, $file_header_start + 16, SEEK_SET;
 
 		# mtime
