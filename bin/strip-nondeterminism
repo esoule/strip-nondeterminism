@@ -60,15 +60,16 @@ $File::StripNondeterminism::clamp_time = $clamp_timestamp;
 
 die $usage if @ARGV == 0;
 
+my $normalizer;
+if (defined $filetype) {
+	$normalizer
+	  = File::StripNondeterminism::get_normalizer_by_name($filetype);
+	die "$filetype: Unknown file type\n" unless $normalizer;
+}
 for my $filename (@ARGV) {
 	die "$filename: Does not exist\n" unless -e $filename;
 
-	my $normalizer;
-	if (defined $filetype) {
-		$normalizer
-		  = File::StripNondeterminism::get_normalizer_by_name($filetype);
-		die "$filetype: Unknown file type\n" unless $normalizer;
-	} else {
+	if (!defined $filetype) {
 		$normalizer
 		  = File::StripNondeterminism::get_normalizer_for_file($filename);
 		next unless $normalizer;
