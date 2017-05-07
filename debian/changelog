@@ -1,3 +1,19 @@
+strip-nondeterminism (0.033-1) unstable; urgency=medium
+
+  [ Chris Lamb ]
+  * Move from verbose_print to nonquiet_print so we print when normalising a
+    file. This is so we can start to target the removal of
+    strip-nondeterminism itself. (Closes: #862031)
+  * Update package long descriptions to clarify that this tool is a temporary
+    workaround. (Closes: #862029)
+  * Include the filename when testing failure fixtures.
+
+  [ Bernhard M. Wiedemann ]
+  * Only call get_normalizer_by_name once
+  * Make get_normalizer_by_name O(1)
+
+ -- Chris Lamb <lamby@debian.org>  Sun, 07 May 2017 19:32:19 +0200
+
 strip-nondeterminism (0.032-1) unstable; urgency=medium
 
   * Add support for testing files we should reject.
