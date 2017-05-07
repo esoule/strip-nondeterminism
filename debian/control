@@ -34,7 +34,7 @@ Description: file non-deterministic information stripper — Perl module
  build product, when the build process itself cannot be made deterministic.
  .
  It is used as part of the Reproducible Builds project, although it should be
- considered a temmporary workaround which should not be needed in the long
+ considered a temporary workaround which should not be needed in the long
  term; upstream software should be reproducible even without using such a tool.
  .
  This package installs the Perl module ‘File::StripNondeterminism’.
@@ -55,7 +55,7 @@ Description: file non-deterministic information stripper — stand-alone tool
  build product, when the build process itself cannot be made deterministic.
  .
  It is used as part of the Reproducible Builds project, although it should be
- considered a temmporary workaround which should not be needed in the long
+ considered a temporary workaround which should not be needed in the long
  term; upstream software should be reproducible even without using such a tool.
  .
  This package installs the stand-alone ‘strip-nondeterminism’ tool.
@@ -78,7 +78,7 @@ Description: file non-deterministic information stripper — Debhelper add-on
  build product, when the build process itself cannot be made deterministic.
  .
  It is used as part of the Reproducible Builds project, although it should be
- considered a temmporary workaround which should not be needed in the long
+ considered a temporary workaround which should not be needed in the long
  term; upstream software should be reproducible even without using such a tool.
  .
  This package installs the ‘dh_strip_nondeterminism’ Debhelper command that
