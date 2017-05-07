@@ -34,7 +34,7 @@ use File::StripNondeterminism::handlers::zip;
 
 our($VERSION, $canonical_time, $clamp_time);
 
-$VERSION = '0.032'; # 0.032
+$VERSION = '0.033'; # 0.033
 
 sub init {
 	$ENV{'TZ'} = 'UTC';
@@ -107,26 +107,20 @@ sub get_normalizer_for_file {
 	return undef;
 }
 
+our %typemap = (
+	ar	=> \&File::StripNondeterminism::handlers::ar::normalize,
+	gettext	=> \&File::StripNondeterminism::handlers::gettext::normalize,
+	gzip	=> \&File::StripNondeterminism::handlers::gzip::normalize,
+	jar	=> \&File::StripNondeterminism::handlers::jar::normalize,
+	javadoc	=> \&File::StripNondeterminism::handlers::javadoc::normalize,
+	pearregistry => \&File::StripNondeterminism::handlers::pearregistry::normalize,
+	png	=> \&File::StripNondeterminism::handlers::png::normalize,
+	javaproperties => \&File::StripNondeterminism::handlers::javaproperties::normalize,
+	zip	=> \&File::StripNondeterminism::handlers::zip::normalize,
+);
 sub get_normalizer_by_name {
 	$_ = shift;
-	return \&File::StripNondeterminism::handlers::ar::normalize if $_ eq 'ar';
-	return \&File::StripNondeterminism::handlers::gettext::normalize
-	  if $_ eq 'gettext';
-	return \&File::StripNondeterminism::handlers::gzip::normalize
-	  if $_ eq 'gzip';
-	return \&File::StripNondeterminism::handlers::jar::normalize
-	  if $_ eq 'jar';
-	return \&File::StripNondeterminism::handlers::javadoc::normalize
-	  if $_ eq 'javadoc';
-	return \&File::StripNondeterminism::handlers::pearregistry::normalize
-	  if $_ eq 'pearregistry';
-	return \&File::StripNondeterminism::handlers::png::normalize
-	  if $_ eq 'png';
-	return \&File::StripNondeterminism::handlers::javaproperties::normalize
-	  if $_ eq 'javaproperties';
-	return \&File::StripNondeterminism::handlers::zip::normalize
-	  if $_ eq 'zip';
-	return undef;
+	return $typemap{$_};
 }
 
 1;
