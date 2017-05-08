@@ -1,3 +1,10 @@
+strip-nondeterminism (0.033-2) unstable; urgency=medium
+
+  * Correct temmporary -> temporary typo in package long description. Thanks
+    to Niels Thykier (nthykier).
+
+ -- Chris Lamb <lamby@debian.org>  Mon, 08 May 2017 11:52:36 +0200
+
 strip-nondeterminism (0.033-1) unstable; urgency=medium
 
   [ Chris Lamb ]
