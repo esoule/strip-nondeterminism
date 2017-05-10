@@ -56,6 +56,7 @@ sub normalize_member {
 	my $filename = "$tempdir/member";
 	my $original_size = $member->compressedSize();
 	$member->extractToFileNamed($filename);
+	chmod(0600, $filename);
 	$member->{'compressedSize'} = $original_size
 	  ; # Work around https://github.com/redhotpenguin/perl-Archive-Zip/issues/11
 
