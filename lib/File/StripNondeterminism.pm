@@ -36,12 +36,12 @@ our($VERSION, $canonical_time, $clamp_time);
 
 $VERSION = '0.033'; # 0.033
 
-sub init {
+sub init() {
 	$ENV{'TZ'} = 'UTC';
 	tzset();
 }
 
-sub _get_file_type {
+sub _get_file_type($) {
 	my $file=shift;
 	open(FILE, '-|') # handle all filenames safely
 	  || exec('file', $file)
@@ -51,7 +51,7 @@ sub _get_file_type {
 	return $type;
 }
 
-sub get_normalizer_for_file {
+sub get_normalizer_for_file($) {
 	$_ = shift;
 
 	return undef if -d $_; # Skip directories
@@ -118,7 +118,7 @@ our %typemap = (
 	javaproperties => \&File::StripNondeterminism::handlers::javaproperties::normalize,
 	zip	=> \&File::StripNondeterminism::handlers::zip::normalize,
 );
-sub get_normalizer_by_name {
+sub get_normalizer_by_name($) {
 	$_ = shift;
 	return $typemap{$_};
 }

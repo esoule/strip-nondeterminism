@@ -35,7 +35,7 @@ use File::Copy;
 # 2. This function simulates file editing of "$to_path".
 # 3. After this function, "$to_path" would be a file associated with
 #    a copied "data" from "from_path" and a "inode" from "$to_path".
-sub copy_data {
+sub copy_data($$) {
 	my $from_path = shift;
 	my $to_path = shift;
 

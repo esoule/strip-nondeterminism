@@ -27,24 +27,24 @@ use File::Basename qw/dirname/;
 use POSIX qw/strftime/;
 use List::Util qw/min/;
 
-sub crc {
+sub crc($) {
 	my ($data) = @_;
 	return Archive::Zip::computeCRC32($data);
 }
 
-sub chunk {
+sub chunk($$) {
 	my ($type, $data) = @_;
 	return pack('Na4a*N', length($data), $type, $data, crc($type . $data));
 }
 
-sub time_chunk {
+sub time_chunk($) {
 	my ($seconds) = @_;
 	my ($sec, $min, $hour, $mday, $mon, $year) = gmtime($seconds);
 	return chunk('tIME',
 		pack('nCCCCC', 1900+$year, $mon+1, $mday, $hour, $min, $sec));
 }
 
-sub text_chunk {
+sub text_chunk($$) {
 	my ($keyword, $data) = @_;
 	return chunk('tEXt', pack('Z*a*', $keyword, $data));
 }

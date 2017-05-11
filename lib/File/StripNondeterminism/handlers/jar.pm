@@ -40,7 +40,7 @@ sub _jar_filename_cmp($$) {
 	return $a cmp $b;
 }
 
-sub _jar_normalize_manifest {
+sub _jar_normalize_manifest($) {
 	my ($filename) = @_;
 
 	open(my $fh, '<', $filename)
@@ -67,7 +67,7 @@ sub _jar_normalize_manifest {
 	return $modified;
 }
 
-sub _jar_normalize_member {
+sub _jar_normalize_member($) {
 	my ($member) = @_; # $member is a ref to an Archive::Zip::Member
 	return if $member->isDirectory();
 
@@ -98,7 +98,7 @@ sub _jar_normalize_member {
 	return 1;
 }
 
-sub _jar_archive_filter {
+sub _jar_archive_filter($) {
 	my ($zip) = @_;
 
 	# Don't normalize signed JARs, since our modifications will break the

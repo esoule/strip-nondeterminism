@@ -25,7 +25,7 @@ use File::StripNondeterminism::Common qw(copy_data);
 use File::Temp;
 use File::Basename;
 
-sub is_registry_file {
+sub is_registry_file($) {
 	my ($filename) = @_;
 
 	# Registry files will always start with "a:"
