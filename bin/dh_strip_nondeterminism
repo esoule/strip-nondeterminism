@@ -83,8 +83,8 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 
 	foreach (@nondeterministic_files) {
 		my ($path, $normalize) = @$_;
-		nonquiet_print("Normalizing $path");
-		eval { $normalize->($path); 1 }
+		verbose_print("Normalizing $path");
+		eval { $normalize->($path) or nonquiet_print("Normalized $path"); 1; }
 		  or error("$path: $@");
 	}
 }
