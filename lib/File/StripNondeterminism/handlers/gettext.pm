@@ -24,7 +24,7 @@ use POSIX qw(strftime);
 use strict;
 use warnings;
 
-sub read_file {
+sub read_file($) {
 	my $filename = shift;
 
 	local $/ = undef;

@@ -31,7 +31,7 @@ use Archive::Zip qw/:CONSTANTS :ERROR_CODES/;
 use constant SAFE_EPOCH => 315576060;
 
 # Extract and return the first $nbytes of $member (an Archive::Zip::Member)
-sub peek_member {
+sub peek_member($$) {
 	my ($member, $nbytes) = @_;
 	my $original_size = $member->compressedSize();
 	my $old_compression_method
@@ -48,7 +48,7 @@ sub peek_member {
 }
 
 # Normalize the contents of $member (an Archive::Zip::Member) with $normalizer
-sub normalize_member {
+sub normalize_member($$) {
 	my ($member, $normalizer) = @_;
 
 	# Extract the member to a temporary file.
@@ -56,6 +56,7 @@ sub normalize_member {
 	my $filename = "$tempdir/member";
 	my $original_size = $member->compressedSize();
 	$member->extractToFileNamed($filename);
+	chmod(0600, $filename);
 	$member->{'compressedSize'} = $original_size
 	  ; # Work around https://github.com/redhotpenguin/perl-Archive-Zip/issues/11
 
@@ -79,7 +80,7 @@ use constant {
 	LOCAL_HEADER => 1
 };
 
-sub unixtime_to_winnt {
+sub unixtime_to_winnt($) {
 	my $unixtime = shift || 0;
 
 	# WinNT epoch is 01-Jan-1601 00:00:00 UTC
@@ -89,7 +90,7 @@ sub unixtime_to_winnt {
 	return $unixtime + $secondsdiff;
 }
 
-sub normalize_extra_fields {
+sub normalize_extra_fields($$) {
 	# See http://sources.debian.net/src/zip/3.0-6/proginfo/extrafld.txt for extra field documentation
 	# $header_type is CENTRAL_HEADER or LOCAL_HEADER.
 	# WARNING: some fields have a different format depending on the header type
@@ -157,7 +158,7 @@ sub normalize_extra_fields {
 	return $result;
 }
 
-sub try {
+sub try(&$) {
 	my ($sub, $errors) = @_;
 	@$errors = ();
 	my $old_error_handler
