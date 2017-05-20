@@ -1,3 +1,19 @@
+strip-nondeterminism (0.034-1) unstable; urgency=medium
+
+  [ Chris Lamb ]
+  * Only print log messages by default if the file was actually modified
+    rather than if we merely identified a file (see 0.033-1). This was not
+    only noisy in-of itself and somewhat misleading, it moreover defeated the
+    point of adding these log messages in the first place - ie. identifying
+    normalizers we can start to remove from strip-nondeterminism.
+    (Closes: #863033)
+
+  [ Bernhard M. Wiedemann ]
+  * zip: make sure we have permissions on extracted file
+  * Add function prototypes.
+
+ -- Chris Lamb <lamby@debian.org>  Sat, 20 May 2017 15:19:52 +0200
+
 strip-nondeterminism (0.033-2) unstable; urgency=medium
 
   * Correct temmporary -> temporary typo in package long description. Thanks
