@@ -1,3 +1,16 @@
+strip-nondeterminism (0.035-1) unstable; urgency=medium
+
+  [ Bernhard M. Wiedemann ]
+  * Add CPIO handler and test case.
+
+  [ Chris Lamb ]
+  * Add libarchive-cpio-perl with the !nocheck build profile; it is not a hard
+    runtime requirement.
+    - Add dpkg-dev dependency for build profile.
+  * Bump debhelper compatibility level to 10.
+
+ -- Chris Lamb <lamby@debian.org>  Mon, 19 Jun 2017 06:21:49 +0800
+
 strip-nondeterminism (0.034-1) unstable; urgency=medium
 
   [ Chris Lamb ]
