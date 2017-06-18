@@ -14,6 +14,7 @@ WriteMakefile(
 	ABSTRACT	=> 'tool for stripping nondeterminism from files',
 	EXE_FILES	=> [qw(bin/dh_strip_nondeterminism bin/strip-nondeterminism)],
 	PREREQ_PM => {
+		'Archive::Cpio'	=> 0, # required to pass tests
 		'Archive::Zip'	=> 0,
 		'Getopt::Long'	=> 0,
 	},
