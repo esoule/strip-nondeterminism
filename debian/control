@@ -4,6 +4,7 @@ Priority: optional
 Build-Depends:
  debhelper (>= 9),
 Build-Depends-Indep:
+ libarchive-cpio-perl <!nocheck>,
  libarchive-zip-perl,
  libdevel-cover-perl,
  perl,
