@@ -27,6 +27,8 @@ Depends:
  libarchive-zip-perl,
  ${misc:Depends},
  ${perl:Depends},
+Recommends:
+ libarchive-cpio-perl,
 Description: file non-deterministic information stripper — Perl module
  StripNondeterminism is a library for stripping non-deterministic information
  such as timestamps and filesystem ordering from various file and archive
