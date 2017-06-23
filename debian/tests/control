@@ -1,2 +1,2 @@
 Tests: testsuite
-Restrictions: allow-stderr, needs-recommends
+Restrictions: allow-stderr
