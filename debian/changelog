@@ -1,3 +1,17 @@
+strip-nondeterminism (0.035-2) unstable; urgency=medium
+
+  [ Chris Lamb ]
+  * Bump Standards-Version to 4.0.0.
+
+  [ Mattia Rizzolo ]
+  * Add libarchive-cpio-perl to libfile-stripnondeterminism-perl's Recommends.
+  * debian/tests:
+    + Move the autopkgtest command to a separate script.
+    + Require libarchive-cpio-perl when running autopkgtest;
+      fixes autopkgtest failure due to missing Archive::Cpio.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Fri, 23 Jun 2017 09:56:46 +0200
+
 strip-nondeterminism (0.035-1) unstable; urgency=medium
 
   [ Bernhard M. Wiedemann ]
