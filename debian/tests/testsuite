@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -eu
+
+tmp="${AUTOPKGTEST_TMP:-"${ADTTMP:-"$(mktemp -d)"}"}"
+
+mkdir -p "$tmp"
+cp -rv t/ bin/ "$tmp"
+cd "$tmp"
+
+set +e
+ret=0
+for X in t/*.t; do
+    perl -MExtUtils::Command::MM -MTest::Harness "$X" || ret=$?
+done
+
+if [ "$ret" -eq 0 ]; then
+    echo "Tests succeeded"
+else
+    echo "Tests failed" >&2
+fi
+
+exit $ret
