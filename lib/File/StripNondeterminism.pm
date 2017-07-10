@@ -22,9 +22,6 @@ use strict;
 use warnings;
 
 use POSIX qw(tzset);
-use File::StripNondeterminism::handlers::javadoc;
-use File::StripNondeterminism::handlers::pearregistry;
-use File::StripNondeterminism::handlers::javaproperties;
 
 our($VERSION, $canonical_time, $clamp_time);
 
@@ -72,29 +69,29 @@ sub get_normalizer_for_file($) {
 		return _handler('jar');
 	}
 	# javadoc
-	if (m/\.html$/
-		&& File::StripNondeterminism::handlers::javadoc::is_javadoc_file($_)) {
-		return _handler('javadoc');
+	if (m/\.html$/) {
+		# Loading the handler forces the load of the javadoc package as well
+		my $handler = _handler('javadoc');
+		return $handler
+			if File::StripNondeterminism::handlers::javadoc::is_javadoc_file($_);
 	}
 	# pear registry
-	if (
-		m/\.reg$/
-		&& File::StripNondeterminism::handlers::pearregistry::is_registry_file(
-			$_)
-	  ) {
-		return _handler('pearregistry');
+	if (m/\.reg$/) {
+		# Loading the handler forces the load of the pearregistry package as well
+		my $handler = _handler('pearregistry');
+		return $handler
+			if File::StripNondeterminism::handlers::pearregistry::is_registry_file($_);
 	}
 	# PNG
 	if (m/\.png$/ && _get_file_type($_) =~ m/PNG image data/) {
 		return _handler('png');
 	}
 	# pom.properties, version.properties
-	if (
-		m/\.properties$/
-		&& File::StripNondeterminism::handlers::javaproperties::is_java_properties_file(
-			$_)
-	  ) {
-		return _handler('javaproperties');
+	if (m/\.properties$/) {
+		# Loading the handler forces the load of the javaproperties package as well
+		my $handler = _handler('javaproperties');
+		return $handler
+			if File::StripNondeterminism::handlers::javaproperties::is_java_properties_file($_);
 	}
 	# zip
 	if (m/\.(zip|pk3|epub|whl|xpi|htb|zhfst|par)$/
