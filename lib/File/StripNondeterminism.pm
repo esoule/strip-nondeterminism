@@ -73,14 +73,16 @@ sub get_normalizer_for_file($) {
 		# Loading the handler forces the load of the javadoc package as well
 		my $handler = _handler('javadoc');
 		return $handler
-			if File::StripNondeterminism::handlers::javadoc::is_javadoc_file($_);
+		  if File::StripNondeterminism::handlers::javadoc::is_javadoc_file($_);
 	}
 	# pear registry
 	if (m/\.reg$/) {
-		# Loading the handler forces the load of the pearregistry package as well
+	  # Loading the handler forces the load of the pearregistry package as well
 		my $handler = _handler('pearregistry');
 		return $handler
-			if File::StripNondeterminism::handlers::pearregistry::is_registry_file($_);
+		  if
+		  File::StripNondeterminism::handlers::pearregistry::is_registry_file(
+			$_);
 	}
 	# PNG
 	if (m/\.png$/ && _get_file_type($_) =~ m/PNG image data/) {
@@ -88,10 +90,12 @@ sub get_normalizer_for_file($) {
 	}
 	# pom.properties, version.properties
 	if (m/\.properties$/) {
-		# Loading the handler forces the load of the javaproperties package as well
+	# Loading the handler forces the load of the javaproperties package as well
 		my $handler = _handler('javaproperties');
 		return $handler
-			if File::StripNondeterminism::handlers::javaproperties::is_java_properties_file($_);
+		  if
+		  File::StripNondeterminism::handlers::javaproperties::is_java_properties_file(
+			$_);
 	}
 	# zip
 	if (m/\.(zip|pk3|epub|whl|xpi|htb|zhfst|par)$/
@@ -100,7 +104,6 @@ sub get_normalizer_for_file($) {
 	}
 	return undef;
 }
-
 
 our %HANDLER_CACHE;
 our %KNOWN_HANDLERS = (
@@ -118,14 +121,16 @@ our %KNOWN_HANDLERS = (
 
 sub _handler {
 	my ($handler_name) = @_;
-	return $HANDLER_CACHE{$handler_name} if exists($HANDLER_CACHE{$handler_name});
+	return $HANDLER_CACHE{$handler_name}
+	  if exists($HANDLER_CACHE{$handler_name});
 	die("Unknown handler: ${handler_name}\n")
-		if not exists($KNOWN_HANDLERS{$handler_name});
+	  if not exists($KNOWN_HANDLERS{$handler_name});
 	my $pkg = "File::StripNondeterminism::handlers::${handler_name}";
 	my $mod = "File/StripNondeterminism/handlers/${handler_name}.pm";
 	my $sub_name = "${pkg}::normalize";
 	require $mod;
 	no strict 'refs';
+
 	if (not defined &{$sub_name}) {
 		die("Internal error: No handler for $handler_name!?\n");
 	}
