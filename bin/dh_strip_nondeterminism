@@ -67,6 +67,8 @@ File::StripNondeterminism::init();
 foreach my $package (@{$dh{DOPACKAGES}}) {
 	my $tmp=tmpdir($package);
 
+	next if not -d $tmp;
+
 	@nondeterministic_files=();
 	find(\&testfile,$tmp);
 	next unless @nondeterministic_files;

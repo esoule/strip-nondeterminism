@@ -22,20 +22,10 @@ use strict;
 use warnings;
 
 use POSIX qw(tzset);
-use File::StripNondeterminism::handlers::ar;
-use File::StripNondeterminism::handlers::cpio;
-use File::StripNondeterminism::handlers::gettext;
-use File::StripNondeterminism::handlers::gzip;
-use File::StripNondeterminism::handlers::jar;
-use File::StripNondeterminism::handlers::javadoc;
-use File::StripNondeterminism::handlers::pearregistry;
-use File::StripNondeterminism::handlers::png;
-use File::StripNondeterminism::handlers::javaproperties;
-use File::StripNondeterminism::handlers::zip;
 
 our($VERSION, $canonical_time, $clamp_time);
 
-$VERSION = '0.035'; # 0.035
+$VERSION = '0.036'; # 0.036
 
 sub init() {
 	$ENV{'TZ'} = 'UTC';
@@ -59,74 +49,97 @@ sub get_normalizer_for_file($) {
 
 	# ar
 	if (m/\.a$/ && _get_file_type($_) =~ m/ar archive/) {
-		return \&File::StripNondeterminism::handlers::ar::normalize;
+		return _handler('ar');
 	}
 	# cpio
 	if (m/\.cpio$/ && _get_file_type($_) =~ m/cpio archive/) {
-		return \&File::StripNondeterminism::handlers::cpio::normalize;
+		return _handler('cpio');
 	}
 	# gettext
 	if (m/\.g?mo$/ && _get_file_type($_) =~ m/GNU message catalog/) {
-		return \&File::StripNondeterminism::handlers::gettext::normalize;
+		return _handler('gettext');
 	}
 	# gzip
 	if (m/\.(gz|dz)$/ && _get_file_type($_) =~ m/gzip compressed data/) {
-		return \&File::StripNondeterminism::handlers::gzip::normalize;
+		return _handler('gzip');
 	}
 	# jar
 	if (m/\.(jar|war|hpi|apk)$/
 		&& _get_file_type($_) =~ m/(Java|Zip) archive data/) {
-		return \&File::StripNondeterminism::handlers::jar::normalize;
+		return _handler('jar');
 	}
 	# javadoc
-	if (m/\.html$/
-		&& File::StripNondeterminism::handlers::javadoc::is_javadoc_file($_)) {
-		return \&File::StripNondeterminism::handlers::javadoc::normalize;
+	if (m/\.html$/) {
+		# Loading the handler forces the load of the javadoc package as well
+		my $handler = _handler('javadoc');
+		return $handler
+		  if File::StripNondeterminism::handlers::javadoc::is_javadoc_file($_);
 	}
 	# pear registry
-	if (
-		m/\.reg$/
-		&& File::StripNondeterminism::handlers::pearregistry::is_registry_file(
-			$_)
-	  ) {
-		return \&File::StripNondeterminism::handlers::pearregistry::normalize;
+	if (m/\.reg$/) {
+	  # Loading the handler forces the load of the pearregistry package as well
+		my $handler = _handler('pearregistry');
+		return $handler
+		  if
+		  File::StripNondeterminism::handlers::pearregistry::is_registry_file(
+			$_);
 	}
 	# PNG
 	if (m/\.png$/ && _get_file_type($_) =~ m/PNG image data/) {
-		return \&File::StripNondeterminism::handlers::png::normalize;
+		return _handler('png');
 	}
 	# pom.properties, version.properties
-	if (
-		m/\.properties$/
-		&& File::StripNondeterminism::handlers::javaproperties::is_java_properties_file(
-			$_)
-	  ) {
-		return
-		  \&File::StripNondeterminism::handlers::javaproperties::normalize;
+	if (m/\.properties$/) {
+	# Loading the handler forces the load of the javaproperties package as well
+		my $handler = _handler('javaproperties');
+		return $handler
+		  if
+		  File::StripNondeterminism::handlers::javaproperties::is_java_properties_file(
+			$_);
 	}
 	# zip
 	if (m/\.(zip|pk3|epub|whl|xpi|htb|zhfst|par)$/
 		&& _get_file_type($_) =~ m/Zip archive data|EPUB document/) {
-		return \&File::StripNondeterminism::handlers::zip::normalize;
+		return _handler('zip');
 	}
 	return undef;
 }
 
-our %typemap = (
-	ar	=> \&File::StripNondeterminism::handlers::ar::normalize,
-	cpio	=> \&File::StripNondeterminism::handlers::cpio::normalize,
-	gettext	=> \&File::StripNondeterminism::handlers::gettext::normalize,
-	gzip	=> \&File::StripNondeterminism::handlers::gzip::normalize,
-	jar	=> \&File::StripNondeterminism::handlers::jar::normalize,
-	javadoc	=> \&File::StripNondeterminism::handlers::javadoc::normalize,
-	pearregistry => \&File::StripNondeterminism::handlers::pearregistry::normalize,
-	png	=> \&File::StripNondeterminism::handlers::png::normalize,
-	javaproperties => \&File::StripNondeterminism::handlers::javaproperties::normalize,
-	zip	=> \&File::StripNondeterminism::handlers::zip::normalize,
+our %HANDLER_CACHE;
+our %KNOWN_HANDLERS = (
+	ar	=> 1,
+	cpio	=> 1,
+	gettext	=> 1,
+	gzip	=> 1,
+	jar	=> 1,
+	javadoc	=> 1,
+	pearregistry => 1,
+	png	=> 1,
+	javaproperties => 1,
+	zip	=> 1,
 );
+
+sub _handler {
+	my ($handler_name) = @_;
+	return $HANDLER_CACHE{$handler_name}
+	  if exists($HANDLER_CACHE{$handler_name});
+	die("Unknown handler: ${handler_name}\n")
+	  if not exists($KNOWN_HANDLERS{$handler_name});
+	my $pkg = "File::StripNondeterminism::handlers::${handler_name}";
+	my $mod = "File/StripNondeterminism/handlers/${handler_name}.pm";
+	my $sub_name = "${pkg}::normalize";
+	require $mod;
+	no strict 'refs';
+
+	if (not defined &{$sub_name}) {
+		die("Internal error: No handler for $handler_name!?\n");
+	}
+	my $handler = \&{$sub_name};
+	return $HANDLER_CACHE{$handler_name} = $handler;
+}
+
 sub get_normalizer_by_name($) {
-	$_ = shift;
-	return $typemap{$_};
+	return _handler(shift);
 }
 
 1;
