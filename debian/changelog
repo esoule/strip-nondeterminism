@@ -1,3 +1,19 @@
+strip-nondeterminism (0.036-1) unstable; urgency=medium
+
+  [ Niels Thykier ]
+  * File::StripNondeterminism:
+    + Optimize load times of File::StripNondeterminism.
+      dh_strip-nondeterminism was accounting for ~4.5% of the total runtime
+      for a (mostly) no-op dh package build. This cost applied even to
+      packages for which dh_strip-nondeterminism did not normalise any files.
+      (Closes: #867982)
+    + Apply perltidy.
+  * dh_strip_nondeterminism: Don't assume tmpdir() exists. This will become
+    more relevant for Debhelper compat level 11's `dh_auto_install` which will
+    only create destination directories it needs. (Closes: #868064)
+
+ -- Chris Lamb <lamby@debian.org>  Tue, 11 Jul 2017 19:41:39 +0100
+
 strip-nondeterminism (0.035-2) unstable; urgency=medium
 
   [ Chris Lamb ]
