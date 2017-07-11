@@ -1,3 +1,11 @@
+strip-nondeterminism (0.037-1) unstable; urgency=medium
+
+  * Add missing File::Temp imports in JAR and PNG handlers. This appears to
+    have been exposed by lazily-loading handlers in #867982. Thanks to Paul
+    Gevers for the report. (Closes: #868077)
+
+ -- Chris Lamb <lamby@debian.org>  Tue, 11 Jul 2017 21:37:09 +0100
+
 strip-nondeterminism (0.036-1) unstable; urgency=medium
 
   [ Niels Thykier ]
