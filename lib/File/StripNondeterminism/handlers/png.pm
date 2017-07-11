@@ -22,6 +22,7 @@ package File::StripNondeterminism::handlers::png;
 use strict;
 use warnings;
 
+use File::Temp;
 use File::StripNondeterminism::Common qw(copy_data);
 use File::Basename qw/dirname/;
 use POSIX qw/strftime/;
