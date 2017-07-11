@@ -27,6 +27,7 @@ use File::Basename;
 use File::StripNondeterminism::handlers::zip;
 use File::StripNondeterminism::handlers::javadoc;
 use File::StripNondeterminism::handlers::javaproperties;
+use File::Temp;
 
 sub _jar_filename_cmp($$) {
 	my ($a, $b) = @_;
