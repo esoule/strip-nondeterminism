@@ -22,6 +22,7 @@ use strict;
 use warnings;
 
 use File::Temp;
+use File::StripNondeterminism;
 use Archive::Zip qw/:CONSTANTS :ERROR_CODES/;
 
 # A magic number from Archive::Zip for the earliest timestamp that

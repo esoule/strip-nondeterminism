@@ -22,6 +22,7 @@ package File::StripNondeterminism::handlers::javadoc;
 use strict;
 use warnings;
 
+use File::StripNondeterminism;
 use File::StripNondeterminism::Common qw(copy_data);
 use File::Temp;
 use File::Basename;

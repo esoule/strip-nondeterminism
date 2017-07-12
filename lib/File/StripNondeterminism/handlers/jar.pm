@@ -21,6 +21,7 @@ package File::StripNondeterminism::handlers::jar;
 use strict;
 use warnings;
 
+use File::StripNondeterminism;
 use File::StripNondeterminism::Common qw(copy_data);
 use Archive::Zip;
 use File::Basename;

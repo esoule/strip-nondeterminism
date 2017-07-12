@@ -19,6 +19,8 @@ package File::StripNondeterminism::handlers::cpio;
 use strict;
 use warnings;
 
+use File::StripNondeterminism;
+
 sub normalize {
 	my ($file) = @_;
 	# if we cannot load the Cpio module, we just leave the file alone
