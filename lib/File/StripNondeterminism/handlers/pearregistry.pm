@@ -21,6 +21,7 @@ package File::StripNondeterminism::handlers::pearregistry;
 use strict;
 use warnings;
 
+use File::StripNondeterminism;
 use File::StripNondeterminism::Common qw(copy_data);
 use File::Temp;
 use File::Basename;

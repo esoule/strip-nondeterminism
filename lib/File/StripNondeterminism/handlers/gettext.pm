@@ -24,6 +24,8 @@ use POSIX qw(strftime);
 use strict;
 use warnings;
 
+use File::StripNondeterminism;
+
 sub read_file($) {
 	my $filename = shift;
 

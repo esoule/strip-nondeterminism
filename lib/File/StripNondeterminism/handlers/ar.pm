@@ -25,6 +25,8 @@ use warnings;
 
 use Fcntl q/SEEK_SET/;
 
+use File::StripNondeterminism;
+
 sub normalize {
 	my ($file) = @_;
 
