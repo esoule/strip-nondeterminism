@@ -1,3 +1,12 @@
+strip-nondeterminism (0.038-1) unstable; urgency=medium
+
+  [ Niels Thykier ]
+  * Add missing use statements in handler modules. This is yet more fallout
+    from lazily-loading the handlers in #867982. Thanks to Christian Marillat
+    for the report. (Closes: #868111)
+
+ -- Chris Lamb <lamby@debian.org>  Wed, 12 Jul 2017 09:04:11 +0100
+
 strip-nondeterminism (0.037-1) unstable; urgency=medium
 
   * Add missing File::Temp imports in JAR and PNG handlers. This appears to
