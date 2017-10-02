@@ -66,6 +66,8 @@ if (defined $filetype) {
 	  = File::StripNondeterminism::get_normalizer_by_name($filetype);
 	die "$filetype: Unknown file type\n" unless $normalizer;
 }
+print "$cmd: Not using a canonical time\n"
+  if not defined $timestamp and $verbose;
 for my $filename (@ARGV) {
 	die "$filename: Does not exist\n" unless -e $filename;
 
