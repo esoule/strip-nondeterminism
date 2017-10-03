@@ -92,6 +92,12 @@ sub _jar_normalize_member($$) {
 		# maven header should be within first 1kb of file
 		File::StripNondeterminism::handlers::zip::normalize_member($member,
 			\&File::StripNondeterminism::handlers::javaproperties::normalize);
+	} elsif ($member->fileName() =~ /\.clj$/) {
+		# Clojure considers the .class file to be stale if it shares
+		# the same timestamp of the .clj. We thus adjust the timestamps
+		# of the .clj to always be younger. We do not need to worry
+		# about underflowing due to SAFE_EPOCH.
+		$timestamp--;
 	} elsif ($member->fileName() =~ /\.jar$/) {
 		File::StripNondeterminism::handlers::zip::normalize_member($member,
 			\&normalize);
