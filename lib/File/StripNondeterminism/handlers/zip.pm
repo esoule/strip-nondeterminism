@@ -198,9 +198,11 @@ sub normalize {
 	for my $filename (@filenames) {
 		my $member = $zip->removeMember($filename);
 		$zip->addMember($member);
-		$options{member_normalizer}->($member)
-		  if exists $options{member_normalizer};
-		$member->setLastModFileDateTimeFromUnix($canonical_time);
+		# member_normalizer returns the timestamp to use.
+		my $timestamp = exists $options{member_normalizer}
+		  ? $options{member_normalizer}->($member, $canonical_time)
+		  : $canonical_time;
+		$member->setLastModFileDateTimeFromUnix($timestamp);
 		if ($member->fileAttributeFormat() == FA_UNIX) {
 			$member->unixFileAttributes(
 				($member->unixFileAttributes() & oct(100))

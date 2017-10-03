@@ -69,9 +69,9 @@ sub _jar_normalize_manifest($) {
 	return $modified;
 }
 
-sub _jar_normalize_member($) {
-	my ($member) = @_; # $member is a ref to an Archive::Zip::Member
-	return if $member->isDirectory();
+sub _jar_normalize_member($$) {
+	my ($member, $timestamp) = @_; # $member is a ref to an Archive::Zip::Member
+	return $timestamp if $member->isDirectory();
 
 	if ($member->fileName() =~ /\.html$/
 		&&File::StripNondeterminism::handlers::zip::peek_member($member, 1024)
@@ -97,7 +97,7 @@ sub _jar_normalize_member($) {
 			\&normalize);
 	}
 
-	return 1;
+	return $timestamp;
 }
 
 sub _jar_archive_filter($) {
