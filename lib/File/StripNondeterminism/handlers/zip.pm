@@ -91,11 +91,11 @@ sub unixtime_to_winnt($) {
 	return $unixtime + $secondsdiff;
 }
 
-sub normalize_extra_fields($$) {
+sub normalize_extra_fields($$$) {
 	# See http://sources.debian.net/src/zip/3.0-6/proginfo/extrafld.txt for extra field documentation
 	# $header_type is CENTRAL_HEADER or LOCAL_HEADER.
 	# WARNING: some fields have a different format depending on the header type
-	my ($field, $header_type) = @_;
+	my ($canonical_time, $field, $header_type) = @_;
 
 	my $result = "";
 	my $pos = 0;
@@ -110,8 +110,7 @@ sub normalize_extra_fields($$) {
 			# len determines how many timestamps this field contains
 			# this works for both the central header and local header version
 			for (my $i = 1; $i < $len; $i += 4) {
-				$result .= pack("V",
-					$File::StripNondeterminism::canonical_time // SAFE_EPOCH);
+				$result .= pack("V", $canonical_time);
 			}
 		} elsif ($id == 0x000a) {
 			# first 4 bytes are reserved
@@ -192,14 +191,14 @@ sub normalize {
 		and not($options{archive_filter}->($zip))) {
 		return 0;
 	}
+	my $canonical_time = $File::StripNondeterminism::canonical_time;
 	my @filenames = sort $filename_cmp $zip->memberNames();
 	for my $filename (@filenames) {
 		my $member = $zip->removeMember($filename);
 		$zip->addMember($member);
 		$options{member_normalizer}->($member)
 		  if exists $options{member_normalizer};
-		$member->setLastModFileDateTimeFromUnix(
-			$File::StripNondeterminism::canonical_time // SAFE_EPOCH);
+		$member->setLastModFileDateTimeFromUnix($canonical_time);
 		if ($member->fileAttributeFormat() == FA_UNIX) {
 			$member->unixFileAttributes(
 				($member->unixFileAttributes() & oct(100))
@@ -207,9 +206,9 @@ sub normalize {
 				: oct(644));
 		}
 		$member->cdExtraField(
-			normalize_extra_fields($member->cdExtraField(), CENTRAL_HEADER));
+			normalize_extra_fields($canonical_time, $member->cdExtraField(), CENTRAL_HEADER));
 		$member->localExtraField(
-			normalize_extra_fields($member->localExtraField(), LOCAL_HEADER));
+			normalize_extra_fields($canonical_time, $member->localExtraField(), LOCAL_HEADER));
 	}
 	my $old_perms = (stat($zip_filename))[2] & oct(7777);
 	$zip->overwrite();
