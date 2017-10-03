@@ -192,6 +192,8 @@ sub normalize {
 		return 0;
 	}
 	my $canonical_time = $File::StripNondeterminism::canonical_time;
+	$canonical_time = SAFE_EPOCH
+	  if not defined $canonical_time or $canonical_time < SAFE_EPOCH;
 	my @filenames = sort $filename_cmp $zip->memberNames();
 	for my $filename (@filenames) {
 		my $member = $zip->removeMember($filename);
