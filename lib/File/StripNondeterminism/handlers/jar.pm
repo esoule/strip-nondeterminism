@@ -97,7 +97,7 @@ sub _jar_normalize_member($$) {
 		# the same timestamp of the .clj. We thus adjust the timestamps
 		# of the .clj to always be to older than the .class. We do not
 		# need to worry about underflow due to Zip's SAFE_EPOCH, nor
-		# the 2s timestamp granularity of NTFS as the file is not
+		# the 2s timestamp granularity of FAT as the file is not
 		# extracted to the filesystem, merely queried.
 		$timestamp--;
 	} elsif ($member->fileName() =~ /\.jar$/) {
