@@ -69,9 +69,9 @@ sub _jar_normalize_manifest($) {
 	return $modified;
 }
 
-sub _jar_normalize_member($) {
-	my ($member) = @_; # $member is a ref to an Archive::Zip::Member
-	return if $member->isDirectory();
+sub _jar_normalize_member($$) {
+	my ($member, $timestamp) = @_; # $member is a ref to an Archive::Zip::Member
+	return $timestamp if $member->isDirectory();
 
 	if ($member->fileName() =~ /\.html$/
 		&&File::StripNondeterminism::handlers::zip::peek_member($member, 1024)
@@ -92,12 +92,20 @@ sub _jar_normalize_member($) {
 		# maven header should be within first 1kb of file
 		File::StripNondeterminism::handlers::zip::normalize_member($member,
 			\&File::StripNondeterminism::handlers::javaproperties::normalize);
+	} elsif ($member->fileName() =~ /\.clj$/) {
+		# Clojure considers the .class file to be stale if it shares
+		# the same timestamp of the .clj. We thus adjust the timestamps
+		# of the .clj to always be to older than the .class. We do not
+		# need to worry about underflow due to Zip's SAFE_EPOCH, nor
+		# the 2s timestamp granularity of FAT as the file is not
+		# extracted to the filesystem, merely queried.
+		$timestamp--;
 	} elsif ($member->fileName() =~ /\.jar$/) {
 		File::StripNondeterminism::handlers::zip::normalize_member($member,
 			\&normalize);
 	}
 
-	return 1;
+	return $timestamp;
 }
 
 sub _jar_archive_filter($) {

@@ -7,6 +7,7 @@ dh_strip_nondeterminism - strip uninteresting, nondeterministic information from
 =cut
 
 use strict;
+use B;
 use File::Find;
 use Debian::Debhelper::Dh_Lib;
 use File::StripNondeterminism;
@@ -62,6 +63,13 @@ sub testfile {
 	}
 }
 
+sub handler_name {
+	eval {
+		my $obj = B::svref_2object(shift());
+		return $obj->GV->STASH->NAME;
+	} || "unknown handler";
+}
+
 File::StripNondeterminism::init();
 
 foreach my $package (@{$dh{DOPACKAGES}}) {
@@ -85,7 +93,7 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 
 	foreach (@nondeterministic_files) {
 		my ($path, $normalize) = @$_;
-		verbose_print("Normalizing $path");
+		verbose_print("Normalizing $path using " . handler_name($normalize));
 		eval { $normalize->($path) or nonquiet_print("Normalized $path"); 1; }
 		  or error("$path: $@");
 	}
