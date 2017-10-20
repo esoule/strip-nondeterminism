@@ -1,8 +1,24 @@
-strip-nondeterminism (0.038-2) UNRELEASED; urgency=medium
+strip-nondeterminism (0.039-1) unstable; urgency=medium
 
+  [ Chris Lamb ]
+  * Clojure considers the .class file to be stale if it shares the same
+    timestamp of the .clj. We thus adjust the timestamps of the .clj to always
+    be younger. (Closes: #877418)
+    - {jar,zip}.pm: Allow $options{member_normalizer} callback to support
+      specifying the timestamp.
+    - zip.pm: Calculate the target canonical time in just one place.
+    * zip.pm: Ensure that we don't try and write an old timestamp;
+      Archive::Zip will do this anyway, just noisily.
+  * dh_strip_nondeterminism: Log which handler processed a file.
+    (Closes: #876140)
+  * bin/strip-nondeterminism: Print a warning in --verbose mode if no
+    canonical time specified.
+  * debian/watch: Use HTTPS URI.
+
+  [ Holger Levsen ]
   * Bump Standards-Version to 4.1.1, no changes needed.
 
- -- Holger Levsen <holger@debian.org>  Sat, 30 Sep 2017 02:09:43 +0200
+ -- Chris Lamb <lamby@debian.org>  Fri, 20 Oct 2017 09:11:36 -0400
 
 strip-nondeterminism (0.038-1) unstable; urgency=medium
 
