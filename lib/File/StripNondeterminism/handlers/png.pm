@@ -57,7 +57,7 @@ sub normalize {
 
 	my $tempfile = File::Temp->new(DIR => dirname($filename));
 
-	open(my $fh, '+<', $filename) or die "$filename: open: $!";
+	open(my $fh, '<', $filename) or die "$filename: open: $!";
 
 	if (_normalize($filename, $fh, $tempfile)) {
 		$tempfile->close;
