@@ -1,3 +1,14 @@
+strip-nondeterminism (0.040-1) unstable; urgency=medium
+
+  * In the png handler, don't open the original file in write mode.
+    Otherwise it dies when dealing with an unwritable (e.g. 444 or 555) file
+    that would otherwise be processed perfectly.
+  * debian/upstream/signing-key.asc: add my gpg key.
+  * debian/control: declare that strip-nondeterminism doesn't need root to
+    build.  Rules-Requires-Root: no
+
+ -- Mattia Rizzolo <mattia@debian.org>  Sun, 29 Oct 2017 16:42:39 +0100
+
 strip-nondeterminism (0.039-1) unstable; urgency=medium
 
   [ Chris Lamb ]
