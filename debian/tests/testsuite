@@ -5,7 +5,7 @@ set -eu
 tmp="${AUTOPKGTEST_TMP:-"${ADTTMP:-"$(mktemp -d)"}"}"
 
 mkdir -p "$tmp"
-cp -rv t/ bin/ "$tmp"
+cp -rv t/ bin/ debian/ "$tmp"
 cd "$tmp"
 
 set +e
