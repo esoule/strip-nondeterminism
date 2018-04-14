@@ -75,15 +75,6 @@ sub get_normalizer_for_file($) {
 		return $handler
 		  if File::StripNondeterminism::handlers::javadoc::is_javadoc_file($_);
 	}
-	# pear registry
-	if (m/\.reg$/) {
-	  # Loading the handler forces the load of the pearregistry package as well
-		my $handler = _handler('pearregistry');
-		return $handler
-		  if
-		  File::StripNondeterminism::handlers::pearregistry::is_registry_file(
-			$_);
-	}
 	# PNG
 	if (m/\.png$/ && _get_file_type($_) =~ m/PNG image data/) {
 		return _handler('png');
@@ -113,7 +104,6 @@ our %KNOWN_HANDLERS = (
 	gzip	=> 1,
 	jar	=> 1,
 	javadoc	=> 1,
-	pearregistry => 1,
 	png	=> 1,
 	javaproperties => 1,
 	zip	=> 1,
