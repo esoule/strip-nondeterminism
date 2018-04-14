@@ -25,7 +25,7 @@ use POSIX qw(tzset);
 
 our($VERSION, $canonical_time, $clamp_time);
 
-$VERSION = '0.040'; # 0.040
+$VERSION = '0.041'; # 0.041
 
 sub init() {
 	$ENV{'TZ'} = 'UTC';
@@ -75,14 +75,19 @@ sub get_normalizer_for_file($) {
 		return $handler
 		  if File::StripNondeterminism::handlers::javadoc::is_javadoc_file($_);
 	}
-	# pear registry
-	if (m/\.reg$/) {
-	  # Loading the handler forces the load of the pearregistry package as well
-		my $handler = _handler('pearregistry');
+	# bFLT
+	if (m/\.bflt$/) {
+		# Loading the handler forces the load of the bflt package as well
+		my $handler = _handler('bflt');
 		return $handler
-		  if
-		  File::StripNondeterminism::handlers::pearregistry::is_registry_file(
-			$_);
+		  if File::StripNondeterminism::handlers::bflt::is_bflt_file($_);
+	}
+	# uImage
+	if (m/\.uimage$/i) {
+		# Loading the handler forces the load of the uimage package as well
+		my $handler = _handler('uimage');
+		return $handler
+		  if File::StripNondeterminism::handlers::uimage::is_uimage_file($_);
 	}
 	# PNG
 	if (m/\.png$/ && _get_file_type($_) =~ m/PNG image data/) {
@@ -108,12 +113,13 @@ sub get_normalizer_for_file($) {
 our %HANDLER_CACHE;
 our %KNOWN_HANDLERS = (
 	ar	=> 1,
+	bflt	=> 1,
 	cpio	=> 1,
 	gettext	=> 1,
 	gzip	=> 1,
 	jar	=> 1,
 	javadoc	=> 1,
-	pearregistry => 1,
+	uimage	=> 1,
 	png	=> 1,
 	javaproperties => 1,
 	zip	=> 1,
