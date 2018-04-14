@@ -1,3 +1,17 @@
+strip-nondeterminism (0.041-1) unstable; urgency=medium
+
+  [ Chris Lamb ]
+  * Drop PHP Pear registry support; we can fix this in the toolchain instead.
+  * debian/copyright: Use HTTPS URI.
+  * Bump Standards-Version to 4.1.4.
+  * Bump debhelper compatibility level to 11.
+
+  [ Evgueni Souleimanov ]
+  * Add U-Boot Legacy Image (uImage) format support
+  * Add bFLT executable format support
+
+ -- Chris Lamb <lamby@debian.org>  Sat, 14 Apr 2018 19:51:14 +0100
+
 strip-nondeterminism (0.040-1) unstable; urgency=medium
 
   * In the png handler, don't open the original file in write mode.
