@@ -23,6 +23,7 @@ use warnings;
 
 use POSIX qw(tzset);
 use File::StripNondeterminism::handlers::ar;
+use File::StripNondeterminism::handlers::bflt;
 use File::StripNondeterminism::handlers::gettext;
 use File::StripNondeterminism::handlers::gzip;
 use File::StripNondeterminism::handlers::jar;
@@ -60,6 +61,11 @@ sub get_normalizer_for_file($) {
 	# ar
 	if (m/\.a$/ && _get_file_type($_) =~ m/ar archive/) {
 		return \&File::StripNondeterminism::handlers::ar::normalize;
+	}
+	# bFLT
+	if (m/\.bflt$/
+		&& File::StripNondeterminism::handlers::bflt::is_bflt_file($_)) {
+		return \&File::StripNondeterminism::handlers::bflt::normalize;
 	}
 	# gettext
 	if (m/\.g?mo$/ && _get_file_type($_) =~ m/GNU message catalog/) {
@@ -115,6 +121,7 @@ sub get_normalizer_for_file($) {
 
 our %typemap = (
 	ar	=> \&File::StripNondeterminism::handlers::ar::normalize,
+	bflt	=> \&File::StripNondeterminism::handlers::bflt::normalize,
 	gettext	=> \&File::StripNondeterminism::handlers::gettext::normalize,
 	gzip	=> \&File::StripNondeterminism::handlers::gzip::normalize,
 	jar	=> \&File::StripNondeterminism::handlers::jar::normalize,
