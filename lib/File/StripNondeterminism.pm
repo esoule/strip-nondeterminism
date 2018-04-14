@@ -84,6 +84,13 @@ sub get_normalizer_for_file($) {
 		  File::StripNondeterminism::handlers::pearregistry::is_registry_file(
 			$_);
 	}
+	# uImage
+	if (m/\.uimage$/i) {
+		# Loading the handler forces the load of the uimage package as well
+		my $handler = _handler('uimage');
+		return $handler
+		  if File::StripNondeterminism::handlers::uimage::is_uimage_file($_);
+	}
 	# PNG
 	if (m/\.png$/ && _get_file_type($_) =~ m/PNG image data/) {
 		return _handler('png');
@@ -114,6 +121,7 @@ our %KNOWN_HANDLERS = (
 	jar	=> 1,
 	javadoc	=> 1,
 	pearregistry => 1,
+	uimage	=> 1,
 	png	=> 1,
 	javaproperties => 1,
 	zip	=> 1,
