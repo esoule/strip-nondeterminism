@@ -84,6 +84,13 @@ sub get_normalizer_for_file($) {
 		  File::StripNondeterminism::handlers::pearregistry::is_registry_file(
 			$_);
 	}
+	# bFLT
+	if (m/\.bflt$/) {
+		# Loading the handler forces the load of the bflt package as well
+		my $handler = _handler('bflt');
+		return $handler
+		  if File::StripNondeterminism::handlers::bflt::is_bflt_file($_);
+	}
 	# uImage
 	if (m/\.uimage$/i) {
 		# Loading the handler forces the load of the uimage package as well
@@ -115,6 +122,7 @@ sub get_normalizer_for_file($) {
 our %HANDLER_CACHE;
 our %KNOWN_HANDLERS = (
 	ar	=> 1,
+	bflt	=> 1,
 	cpio	=> 1,
 	gettext	=> 1,
 	gzip	=> 1,
