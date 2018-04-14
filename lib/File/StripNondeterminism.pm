@@ -28,6 +28,7 @@ use File::StripNondeterminism::handlers::gzip;
 use File::StripNondeterminism::handlers::jar;
 use File::StripNondeterminism::handlers::javadoc;
 use File::StripNondeterminism::handlers::pearregistry;
+use File::StripNondeterminism::handlers::uimage;
 use File::StripNondeterminism::handlers::png;
 use File::StripNondeterminism::handlers::javaproperties;
 use File::StripNondeterminism::handlers::zip;
@@ -86,6 +87,11 @@ sub get_normalizer_for_file($) {
 	  ) {
 		return \&File::StripNondeterminism::handlers::pearregistry::normalize;
 	}
+	# uImage
+	if (m/\.uimage$/i
+		&& File::StripNondeterminism::handlers::uimage::is_uimage_file($_)) {
+		return \&File::StripNondeterminism::handlers::uimage::normalize;
+	}
 	# PNG
 	if (m/\.png$/ && _get_file_type($_) =~ m/PNG image data/) {
 		return \&File::StripNondeterminism::handlers::png::normalize;
@@ -114,6 +120,7 @@ our %typemap = (
 	jar	=> \&File::StripNondeterminism::handlers::jar::normalize,
 	javadoc	=> \&File::StripNondeterminism::handlers::javadoc::normalize,
 	pearregistry => \&File::StripNondeterminism::handlers::pearregistry::normalize,
+	uimage	=> \&File::StripNondeterminism::handlers::uimage::normalize,
 	png	=> \&File::StripNondeterminism::handlers::png::normalize,
 	javaproperties => \&File::StripNondeterminism::handlers::javaproperties::normalize,
 	zip	=> \&File::StripNondeterminism::handlers::zip::normalize,
