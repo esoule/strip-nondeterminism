@@ -1,3 +1,10 @@
+strip-nondeterminism (0.041-1ubuntu16.04.4ppa2) xenial; urgency=medium
+
+  [ Evgueni Souleimanov ]
+  * Backport to xenial
+
+ -- Evgueni Souleimanov <esoule@100500.ca>  Tue, 17 Apr 2018 00:33:00 +0000
+
 strip-nondeterminism (0.041-1) unstable; urgency=medium
 
   [ Chris Lamb ]
