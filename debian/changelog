@@ -1,3 +1,11 @@
+strip-nondeterminism (0.041-2) unstable; urgency=medium
+
+  [ Chris Lamb ]
+  * Update debian/copyright "Source" location to point to salsa.
+  * Update Vcs-{Git,Browser} as repository has been migrated to salsa.
+
+ -- Holger Levsen <holger@debian.org>  Sat, 02 Jun 2018 13:25:51 +0000
+
 strip-nondeterminism (0.041-1) unstable; urgency=medium
 
   [ Chris Lamb ]
