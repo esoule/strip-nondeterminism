@@ -12,9 +12,7 @@ Debhelper add-on.
 After releasing, please upload a signed tarball:
 
   $ VERSION=FIXME
-
   $ git archive --format=tar --prefix=strip-nondeterminism-${VERSION}/ ${VERSION} | bzip2 -9 > strip-nondeterminism-${VERSION}.tar.bz2
-
   $ gpg --detach-sig --armor --output=strip-nondeterminism-${VERSION}.tar.bz2.asc < strip-nondeterminism-${VERSION}.tar.bz2
 
-  $ scp strip-nondeterminism-${VERSION}* alioth.debian.org:/home/groups/reproducible/htdocs/releases/strip-nondeterminism
+And commit them to our LFS repository at https://salsa.debian.org/reproducible-builds/reproducible-lfs
