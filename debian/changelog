@@ -1,9 +1,10 @@
-strip-nondeterminism (0.041-1ubuntu16.04.4ppa2) xenial; urgency=medium
+strip-nondeterminism (0.041-2) unstable; urgency=medium
 
-  [ Evgueni Souleimanov ]
-  * Backport to xenial
+  [ Chris Lamb ]
+  * Update debian/copyright "Source" location to point to salsa.
+  * Update Vcs-{Git,Browser} as repository has been migrated to salsa.
 
- -- Evgueni Souleimanov <esoule@100500.ca>  Tue, 17 Apr 2018 00:33:00 +0000
+ -- Holger Levsen <holger@debian.org>  Sat, 02 Jun 2018 13:25:51 +0000
 
 strip-nondeterminism (0.041-1) unstable; urgency=medium
 
