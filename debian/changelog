@@ -1,3 +1,11 @@
+strip-nondeterminism (0.041-2ppa2ubuntu18.04) bionic; urgency=medium
+
+  [ Evgueni Souleimanov ]
+  * Fix error when using uimage handler
+  * Backport to bionic
+
+ -- Evgueni Souleimanov <esoule@100500.ca>  Sat, 09 Jun 2018 21:10:24 +0000
+
 strip-nondeterminism (0.041-2) unstable; urgency=medium
 
   [ Chris Lamb ]
