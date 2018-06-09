@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: strip-nondeterminism
-Source: https://anonscm.debian.org/cgit/reproducible/strip-nondeterminism.git
+Source: https://salsa.debian.org/reproducible-builds/strip-nondeterminism.git
 
 Files: *
 Copyright: Copyright (C) 2014 Andrew Ayer
