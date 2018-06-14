@@ -20,6 +20,8 @@ package File::StripNondeterminism::handlers::bflt;
 
 use strict;
 use warnings;
+
+use File::StripNondeterminism;
 use Fcntl q/SEEK_SET/;
 
 use constant bFLT => 0x62464C54;
