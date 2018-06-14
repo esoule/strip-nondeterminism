@@ -20,6 +20,9 @@ package File::StripNondeterminism::handlers::uimage;
 
 use strict;
 use warnings;
+
+use Archive::Zip ();
+use File::StripNondeterminism;
 use Fcntl q/SEEK_SET/;
 
 # /*
