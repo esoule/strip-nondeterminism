@@ -68,9 +68,8 @@ Description: file non-deterministic information stripper — stand-alone tool
 Package: dh-strip-nondeterminism
 Architecture: all
 Depends:
- debhelper,
+ debhelper (>= 9.20151004),
  libfile-stripnondeterminism-perl (= ${binary:Version}),
- libtimedate-perl,
  ${misc:Depends},
  ${perl:Depends},
 Multi-Arch: foreign
