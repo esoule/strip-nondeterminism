@@ -11,7 +11,6 @@ use B;
 use File::Find;
 use Debian::Debhelper::Dh_Lib;
 use File::StripNondeterminism;
-use Date::Parse;
 
 =head1 SYNOPSIS
 
@@ -81,13 +80,7 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 	find(\&testfile,$tmp);
 	next unless @nondeterministic_files;
 
-	$File::StripNondeterminism::canonical_time
-	  = eval { get_source_date_epoch() };
-	if (not defined $File::StripNondeterminism::canonical_time) {
-		# Hack for old versions of debhelper
-		isnative($package); # Sets $dh{DATE} as a side-effect
-		$File::StripNondeterminism::canonical_time = str2time($dh{DATE});
-	}
+	$File::StripNondeterminism::canonical_time = get_source_date_epoch();
 
 	verbose_print("Using $File::StripNondeterminism::canonical_time as canonical time");
 
