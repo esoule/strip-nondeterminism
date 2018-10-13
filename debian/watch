@@ -1,2 +1,3 @@
-version=3
-opts=pgpsigurlmangle=s/$/.asc/ https://reproducible.alioth.debian.org/releases/strip-nondeterminism/strip-nondeterminism-(.+).tar.bz2
+version=4
+opts=pgpmode=auto \
+https://reproducible-builds.org/_lfs/releases/@PACKAGE@/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@
