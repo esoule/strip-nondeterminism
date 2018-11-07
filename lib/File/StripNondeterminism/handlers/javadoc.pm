@@ -59,14 +59,14 @@ sub normalize {
 			  unless $line
 			  =~ /^\s*$/; # elide lines that are now whitespace-only
 			$modified = 1;
-		} elsif ($line =~ /\<META NAME="date" CONTENT="[^"]*"\>/i) {
+		} elsif ($line =~ /\<META NAME="(date|dc.created)" CONTENT="[^"]*"\>/i) {
 			if (defined $File::StripNondeterminism::canonical_time) {
 				my $date = strftime('%Y-%m-%d',
 					gmtime($File::StripNondeterminism::canonical_time));
 				$line
-				  =~ s/\<(META NAME="date" CONTENT)="[^"]*"\>/<$1="$date">/gi;
+				  =~ s/\<(META NAME="(?:date|dc.created)" CONTENT)="[^"]*"\>/<$1="$date">/gi;
 			} else {
-				$line =~ s/\<META NAME="date" CONTENT="[^"]*"\>//gi;
+				$line =~ s/\<META NAME="(?:date|dc.created)" CONTENT="[^"]*"\>//gi;
 			}
 			print $tempfile $line
 			  unless $line
