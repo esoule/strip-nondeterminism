@@ -25,7 +25,7 @@ use POSIX qw(tzset);
 
 our($VERSION, $canonical_time, $clamp_time);
 
-$VERSION = '0.043'; # 0.043
+$VERSION = '0.044'; # 0.044
 
 sub init() {
 	$ENV{'TZ'} = 'UTC';
