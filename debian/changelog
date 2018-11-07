@@ -1,3 +1,11 @@
+strip-nondeterminism (0.044-1) unstable; urgency=medium
+
+  [ Emmanuel Bourg ]
+  * Update the Javadoc handler to handle "dc.created" meta headers too for
+    OpenJDK 11. (Closes: #913132)
+
+ -- Chris Lamb <lamby@debian.org>  Wed, 07 Nov 2018 11:17:51 +0000
+
 strip-nondeterminism (0.043-2) unstable; urgency=medium
 
   * Fix d/watch after the move off alioth.debian.org.
