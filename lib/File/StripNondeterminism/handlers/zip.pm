@@ -76,11 +76,6 @@ sub normalize_member($$) {
 	return 1;
 }
 
-use constant {
-	CENTRAL_HEADER => 0,
-	LOCAL_HEADER => 1
-};
-
 sub unixtime_to_winnt($) {
 	my $unixtime = shift || 0;
 
@@ -91,11 +86,10 @@ sub unixtime_to_winnt($) {
 	return $unixtime + $secondsdiff;
 }
 
-sub normalize_extra_fields($$$) {
+sub normalize_extra_fields($$) {
 	# See http://sources.debian.net/src/zip/3.0-6/proginfo/extrafld.txt for extra field documentation
-	# $header_type is CENTRAL_HEADER or LOCAL_HEADER.
 	# WARNING: some fields have a different format depending on the header type
-	my ($canonical_time, $field, $header_type) = @_;
+	my ($canonical_time, $field) = @_;
 
 	my $result = "";
 	my $pos = 0;
@@ -149,6 +143,12 @@ sub normalize_extra_fields($$$) {
 				$result .= substr($field, $pos + 4, $len);
 			}
 		} else {
+			# Catch invalid field lengths by calculating whether we would
+			# read beyond the end of the file.
+			if ($pos + $len >= length($field)) {
+				warn "strip-nondeterminism: invalid extra field length ($len)";
+				return;
+			}
 			# use the current extra field unmodified.
 			$result .= substr($field, $pos, $len+4);
 		}
@@ -209,10 +209,11 @@ sub normalize {
 				? oct(755)
 				: oct(644));
 		}
-		$member->cdExtraField(
-			normalize_extra_fields($canonical_time, $member->cdExtraField(), CENTRAL_HEADER));
-		$member->localExtraField(
-			normalize_extra_fields($canonical_time, $member->localExtraField(), LOCAL_HEADER));
+		foreach my $x (qw(cdExtraField localExtraField)) {
+			my $result = normalize_extra_fields($canonical_time, $member->$x);
+			return 0 unless defined $result;
+			$member->$x($result);
+		}
 	}
 	my $old_perms = (stat($zip_filename))[2] & oct(7777);
 	$zip->overwrite();
