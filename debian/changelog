@@ -1,3 +1,12 @@
+strip-nondeterminism (0.45.0-1) unstable; urgency=medium
+
+  * Move to SemVer <https://semver.org/> versioning scheme.
+  * Catch invalid ZIP "local" field lengths; we were previously inherently
+    blindly the value supplied in the ZIP file. Thanks to Daniel Stender for
+    the report. (Closes: #803503)
+
+ -- Chris Lamb <lamby@debian.org>  Sun, 11 Nov 2018 17:42:30 +0100
+
 strip-nondeterminism (0.044-1) unstable; urgency=medium
 
   [ Emmanuel Bourg ]
