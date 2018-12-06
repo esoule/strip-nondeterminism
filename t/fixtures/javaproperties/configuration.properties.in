@@ -1,4 +1,0 @@
-#DITA-OT runtime configuration
-#Tue May 22 16:35:53 UTC 2012
-print_transtypes=pdf2;pdf;legacypdf;odt
-supported_image_extensions=.bmp;.svg;.png;.tif;.jpg;.gif;.jpeg;.tiff;.eps

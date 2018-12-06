@@ -89,15 +89,6 @@ sub get_normalizer_for_file($) {
 	if (m/\.png$/ && _get_file_type($_) =~ m/PNG image data/) {
 		return _handler('png');
 	}
-	# pom.properties, version.properties
-	if (m/\.properties$/) {
-	# Loading the handler forces the load of the javaproperties package as well
-		my $handler = _handler('javaproperties');
-		return $handler
-		  if
-		  File::StripNondeterminism::handlers::javaproperties::is_java_properties_file(
-			$_);
-	}
 	# zip
 	if (m/\.(zip|pk3|epub|whl|xpi|htb|zhfst|par)$/
 		&& _get_file_type($_) =~ m/Zip archive data|EPUB document/) {

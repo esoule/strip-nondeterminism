@@ -27,7 +27,6 @@ use Archive::Zip;
 use File::Basename;
 use File::StripNondeterminism::handlers::zip;
 use File::StripNondeterminism::handlers::javadoc;
-use File::StripNondeterminism::handlers::javaproperties;
 use File::Temp;
 
 sub _jar_filename_cmp($$) {
@@ -82,16 +81,6 @@ sub _jar_normalize_member($$) {
 	} elsif ($member->fileName() eq 'META-INF/MANIFEST.MF') {
 		File::StripNondeterminism::handlers::zip::normalize_member($member,
 			\&_jar_normalize_manifest);
-	} elsif (
-		$member->fileName() =~ /(pom|version)\.properties$/
-		&&File::StripNondeterminism::handlers::javaproperties::is_java_properties_header(
-			File::StripNondeterminism::handlers::zip::peek_member(
-				$member, 1024
-			))
-	  ) {
-		# maven header should be within first 1kb of file
-		File::StripNondeterminism::handlers::zip::normalize_member($member,
-			\&File::StripNondeterminism::handlers::javaproperties::normalize);
 	} elsif ($member->fileName() =~ /\.clj$/) {
 		# Clojure considers the .class file to be stale if it shares
 		# the same timestamp of the .clj. We thus adjust the timestamps
