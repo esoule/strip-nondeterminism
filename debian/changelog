@@ -1,3 +1,14 @@
+strip-nondeterminism (1.0.0-1) unstable; urgency=medium
+
+  * Ignore encrypted .zip files as we can never normalise them.
+    (Closes: #852207)
+  * Drop .ar handler; binutils is reproducible. (Closes: #781262, #843811)
+    - Update debian/copyright to drop reference to ar.pm.
+  * Remove javaproperties handler after Emmanuel Bourg's patch was released in
+    openjdk-11 11.0.1+13-3. (Closes: #914289)
+
+ -- Chris Lamb <lamby@debian.org>  Thu, 06 Dec 2018 18:13:32 +0100
+
 strip-nondeterminism (0.45.0-1) unstable; urgency=medium
 
   * Move to SemVer <https://semver.org/> versioning scheme.
