@@ -7,6 +7,7 @@ dh_strip_nondeterminism - strip uninteresting, nondeterministic information from
 =cut
 
 use strict;
+use warnings;
 use B;
 use File::Find;
 use Debian::Debhelper::Dh_Lib;
@@ -84,12 +85,14 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 
 	verbose_print("Using $File::StripNondeterminism::canonical_time as canonical time");
 
-	foreach (@nondeterministic_files) {
-		my ($path, $normalize) = @$_;
-		verbose_print("Normalizing $path using " . handler_name($normalize));
-		eval { $normalize->($path) or nonquiet_print("Normalized $path"); 1; }
-		  or error("$path: $@");
-	}
+	on_items_in_parallel(\@nondeterministic_files, sub {
+		foreach (@_) {
+			my ($path, $normalize) = @$_;
+			verbose_print("Normalizing $path using " . handler_name($normalize));
+			eval { $normalize->($path) or nonquiet_print("Normalized $path"); 1; }
+			  or error("$path: $@");
+		}
+	});
 }
 
 =head1 SEE ALSO
