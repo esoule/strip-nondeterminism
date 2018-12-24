@@ -16,7 +16,7 @@ Uploaders:
  Mattia Rizzolo <mattia@debian.org>,
  Chris Lamb <lamby@debian.org>,
 Rules-Requires-Root: no
-Standards-Version: 4.2.1
+Standards-Version: 4.3.0
 Homepage: https://reproducible-builds.org/
 Vcs-Git: https://salsa.debian.org/reproducible-builds/strip-nondeterminism.git
 Vcs-Browser: https://salsa.debian.org/reproducible-builds/strip-nondeterminism
