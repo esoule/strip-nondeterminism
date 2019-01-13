@@ -1,3 +1,13 @@
+strip-nondeterminism (1.1.0-1) unstable; urgency=medium
+
+  [ Holger Levsen ]
+  * Bump Standards-Version to 4.3.0
+
+  [ Igor Dvorzhak ]
+  * Parallelise dh_strip_nondeterminism script. (MR: !3)
+
+ -- Chris Lamb <lamby@debian.org>  Sun, 13 Jan 2019 18:40:42 +0000
+
 strip-nondeterminism (1.0.0-1) unstable; urgency=medium
 
   * Ignore encrypted .zip files as we can never normalise them.
