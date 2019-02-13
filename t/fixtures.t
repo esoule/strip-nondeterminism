@@ -72,7 +72,7 @@ foreach my $filename (@fixtures) {
 		$normalizer->($in) if defined $normalizer;
 		my @stat_after = lstat $in;
 
-		ok(compare($in, $out) == 0, "Got expected output");
+		ok(compare($in, $out) == 0, "Test output $in matched expected $out");
 
 		# Check that file attributes remain unchanged.
 		foreach my $i (sort keys %STAT) {

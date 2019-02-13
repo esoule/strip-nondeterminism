@@ -128,12 +128,12 @@ sub normalize_extra_fields($$) {
 			}
 		} elsif ($id == 0x7875) { # Info-ZIP New Unix Extra Field
 			$result .= substr($field, $pos, 4);
-		  #  Version       1 byte      version of this extra field, currently 1
-		  #  UIDSize       1 byte      Size of UID field
-		  #  UID           Variable    UID for this entry
-		  #  GIDSize       1 byte      Size of GID field
-		  #  GID           Variable    GID for this entry
-		  # (Same format for both central header and local header)
+			#  Version       1 byte      version of this extra field, currently 1
+			#  UIDSize       1 byte      Size of UID field
+			#  UID           Variable    UID for this entry
+			#  GIDSize       1 byte      Size of GID field
+			#  GID           Variable    GID for this entry
+			# (Same format for both central header and local header)
 			if (ord(substr($field, $pos + 4, 1)) == 1) {
 				my $uid_len = ord(substr($field, $pos + 5, 1));
 				my $gid_len = ord(substr($field, $pos + 6 + $uid_len, 1));
