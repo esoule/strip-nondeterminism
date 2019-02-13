@@ -45,7 +45,7 @@ things to exclude.
 
 init();
 
-my @nondeterministic_files;
+my (@nondeterministic_files, %seen);
 
 sub testfile {
 	return if -l $_ or -d $_; # Skip directories and symlinks always.
@@ -56,6 +56,11 @@ sub testfile {
 	foreach my $f (@{$dh{EXCLUDE}}) {
 		return if ($fn=~m/\Q$f\E/);
 	}
+
+	# Deduplicate hardlinks to avoid issues under parallelism
+	my ($dev, $inode, undef, $nlink) = stat($_);
+	return if defined $nlink && $nlink > 1 && $seen{"$inode.$dev"};
+	$seen{"$inode.$dev"} = 1;
 
 	my $normalizer = File::StripNondeterminism::get_normalizer_for_file($_);
 	if ($normalizer) {
