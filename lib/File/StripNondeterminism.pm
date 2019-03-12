@@ -25,7 +25,7 @@ use POSIX qw(tzset);
 
 our($VERSION, $canonical_time, $clamp_time);
 
-$VERSION = '1.1.1'; # <https://semver.org/>
+$VERSION = '1.1.2'; # <https://semver.org/>
 
 sub init() {
 	$ENV{'TZ'} = 'UTC';
@@ -35,7 +35,7 @@ sub init() {
 sub _get_file_type($) {
 	my $file=shift;
 	open(FILE, '-|') # handle all filenames safely
-	  || exec('file', $file)
+	  || exec('file', '--', $file)
 	  || die "can't exec file: $!";
 	my $type=<FILE>;
 	close FILE;
