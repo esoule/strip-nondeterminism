@@ -1,3 +1,11 @@
+strip-nondeterminism (1.1.2-1) unstable; urgency=medium
+
+  * Call file(1) with the "--" argument placeholder to fix normalisation of
+    files starting with a hyphen.
+    (Closes: reproducible-builds/strip-nondeterminism#6, #924407)
+
+ -- Chris Lamb <lamby@debian.org>  Tue, 12 Mar 2019 17:47:40 +0000
+
 strip-nondeterminism (1.1.1-1) unstable; urgency=medium
 
   * dh_strip_nondeterminism: Deduplicate hardlinks via stat(2) to avoid issues
