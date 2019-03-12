@@ -35,7 +35,7 @@ sub init() {
 sub _get_file_type($) {
 	my $file=shift;
 	open(FILE, '-|') # handle all filenames safely
-	  || exec('file', $file)
+	  || exec('file', '--', $file)
 	  || die "can't exec file: $!";
 	my $type=<FILE>;
 	close FILE;
