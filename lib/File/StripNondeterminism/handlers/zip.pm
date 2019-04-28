@@ -224,7 +224,7 @@ sub normalize {
 		}
 	}
 	my $old_perms = (stat($zip_filename))[2] & oct(7777);
-	$zip->overwrite();
+	return 0 unless $zip->overwrite() == AZ_OK;
 	chmod($old_perms, $zip_filename);
 	return 1;
 }
