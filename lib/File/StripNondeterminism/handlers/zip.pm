@@ -145,6 +145,10 @@ sub normalize_extra_fields($$) {
 		} else {
 			# Catch invalid field lengths by calculating whether we would
 			# read beyond the end of the file.
+			if (!defined($len)) {
+				warn "strip-nondeterminism: unknown extra field length";
+				return;
+			}
 			if ($pos + $len >= length($field)) {
 				warn "strip-nondeterminism: invalid extra field length ($len)";
 				return;
