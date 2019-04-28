@@ -1,3 +1,16 @@
+strip-nondeterminism (1.1.3-1) experimental; urgency=medium
+
+  * Workaround Archive::Zip's incorrect handling of the localExtraField field
+    by monkey-patching the accessor methods to always return normalised values.
+    This fixes the normalisation of Unix ownership (uid/gid) within .zip
+    archives, .epub files, etc.
+    (Closes: #858431, reproducible-builds/strip-nondeterminism#4)
+  * Check the return status from Archive::Zip when writing file to disk.
+  * Catch an edgecase where/if we can't parse the provided length of an
+    invalid field within .zip files.
+
+ -- Chris Lamb <lamby@debian.org>  Sun, 28 Apr 2019 17:30:27 +0100
+
 strip-nondeterminism (1.1.2-1) unstable; urgency=medium
 
   * Call file(1) with the "--" argument placeholder to fix normalisation of
