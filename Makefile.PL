@@ -17,6 +17,7 @@ WriteMakefile(
 		'Archive::Cpio'	=> 0, # required to pass tests
 		'Archive::Zip'	=> 0,
 		'Getopt::Long'	=> 0,
+		'Monkey::Patch'	=> 0,
 	},
 	LICENSE		=> "gpl",
 	dist		=> { COMPRESS => 'gzip -9nf', SUFFIX => 'gz', },

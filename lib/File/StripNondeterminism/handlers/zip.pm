@@ -24,6 +24,7 @@ use warnings;
 use File::Temp;
 use File::StripNondeterminism;
 use Archive::Zip qw/:CONSTANTS :ERROR_CODES/;
+use Monkey::Patch qw/patch_class/;
 
 # A magic number from Archive::Zip for the earliest timestamp that
 # can be represented by a Zip file.  From the Archive::Zip source:
@@ -145,6 +146,10 @@ sub normalize_extra_fields($$) {
 		} else {
 			# Catch invalid field lengths by calculating whether we would
 			# read beyond the end of the file.
+			if (!defined($len)) {
+				warn "strip-nondeterminism: unknown extra field length";
+				return;
+			}
 			if ($pos + $len >= length($field)) {
 				warn "strip-nondeterminism: invalid extra field length ($len)";
 				return;
@@ -213,14 +218,34 @@ sub normalize {
 				? oct(755)
 				: oct(644));
 		}
-		foreach my $x (qw(cdExtraField localExtraField)) {
-			my $result = normalize_extra_fields($canonical_time, $member->$x);
-			return 0 unless defined $result;
-			$member->$x($result);
-		}
 	}
 	my $old_perms = (stat($zip_filename))[2] & oct(7777);
-	$zip->overwrite();
+
+	# Archive::Zip::Member does not handle the localExtraField field (used for
+	# uid/gids) correctly or consistently.
+	#
+	# It does not populate localExtraField in the class upon initial reading of
+	# the file whilst it does for cdExtraField. One can workaround this
+	# manually with calls to _seekToLocalHeader and _readLocalFileHeader but
+	# upon writing to a file back to the disk Archive::Zip will ignore any
+	# stored value of localExtraField (!) and reload it again from the existing
+	# file handle in/around rewindData.
+	#
+	# We therefore monkey-patch the accessor methods of the Member class to
+	# ensure that normalised values are used in this final save.
+	#
+	# <https://salsa.debian.org/reproducible-builds/strip-nondeterminism/issues/4>
+	my @patches = map {
+		patch_class('Archive::Zip::Member', $_, sub {
+			my $fn = shift;
+			my $result = $fn->(@_);
+			return defined($result) ?
+				normalize_extra_fields($canonical_time, $result) : $result;
+		});
+	} qw(cdExtraField localExtraField);
+
+	return 0 unless $zip->overwrite() == AZ_OK;
+	undef @patches; # Remove our monkey patches
 	chmod($old_perms, $zip_filename);
 	return 1;
 }
