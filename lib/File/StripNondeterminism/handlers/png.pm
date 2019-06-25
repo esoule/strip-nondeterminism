@@ -29,6 +29,7 @@ use File::StripNondeterminism::Common qw(copy_data);
 use File::Basename qw/dirname/;
 use POSIX qw/strftime/;
 use List::Util qw/min/;
+use Time::Local qw/timegm/;
 
 sub crc($) {
 	my ($data) = @_;
@@ -45,6 +46,12 @@ sub time_chunk($) {
 	my ($sec, $min, $hour, $mday, $mon, $year) = gmtime($seconds);
 	return chunk('tIME',
 		pack('nCCCCC', 1900+$year, $mon+1, $mday, $hour, $min, $sec));
+}
+
+sub parse_time_chunk($) {
+	my ($data) = @_;
+	my ($year, $mon, $mday, $hour, $min, $sec) = unpack('nCCCCC', $data);
+	return timegm($sec, $min, $hour, $mday, $mon, $year);
 }
 
 sub text_chunk($$) {
@@ -103,9 +110,12 @@ sub _normalize {
 			}
 
 			if ($type eq "tIME") {
-				print $tempfile time_chunk($canonical_time)
-				  if defined($canonical_time);
 				$modified = 1;
+				next if not defined $canonical_time;
+				my $timestamp = $canonical_time;
+				$timestamp = min($timestamp, parse_time_chunk($data))
+					if $File::StripNondeterminism::clamp_time;
+				print $tempfile time_chunk($timestamp);
 				next;
 			} elsif (($type =~ /[tiz]EXt/)
 				&& ($data =~ /^(date:[^\0]+|Creation Time)\0/)) {
