@@ -90,7 +90,7 @@ sub get_normalizer_for_file($) {
 		return _handler('png');
 	}
 	# zip
-	if (m/\.(zip|pk3|epub|whl|xpi|htb|zhfst|par)$/
+	if (m/\.(zip|pk3|epub|whl|xpi|htb|zhfst|par|codadef)$/
 		&& _get_file_type($_) =~ m/Zip archive data|EPUB document/) {
 		return _handler('zip');
 	}
