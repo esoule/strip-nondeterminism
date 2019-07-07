@@ -1,3 +1,13 @@
+strip-nondeterminism (1.2.0-1) unstable; urgency=medium
+
+  * Upload to unstable now that buster has been released.
+  * Support timestamp clamping of "tIME" chunks in .png files.
+    (Closes: #931039)
+  * Identify data files from the COmmon Data Access (CODA) framework
+    as being .zip files.
+
+ -- Chris Lamb <lamby@debian.org>  Sun, 07 Jul 2019 11:45:14 -0300
+
 strip-nondeterminism (1.1.3-1) experimental; urgency=medium
 
   * Workaround Archive::Zip's incorrect handling of the localExtraField field
