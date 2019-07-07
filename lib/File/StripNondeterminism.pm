@@ -25,7 +25,7 @@ use POSIX qw(tzset);
 
 our($VERSION, $canonical_time, $clamp_time);
 
-$VERSION = '1.1.3'; # <https://semver.org/>
+$VERSION = '1.2.0'; # <https://semver.org/>
 
 sub init() {
 	$ENV{'TZ'} = 'UTC';
@@ -90,7 +90,7 @@ sub get_normalizer_for_file($) {
 		return _handler('png');
 	}
 	# zip
-	if (m/\.(zip|pk3|epub|whl|xpi|htb|zhfst|par)$/
+	if (m/\.(zip|pk3|epub|whl|xpi|htb|zhfst|par|codadef)$/
 		&& _get_file_type($_) =~ m/Zip archive data|EPUB document/) {
 		return _handler('zip');
 	}
