@@ -1,3 +1,9 @@
+strip-nondeterminism (1.2.0-2) UNRELEASED; urgency=medium
+
+  * WIP
+
+ -- Holger Levsen <holger@debian.org>  Sun, 07 Jul 2019 18:12:35 +0200
+
 strip-nondeterminism (1.2.0-1) unstable; urgency=medium
 
   * Upload to unstable now that buster has been released.
