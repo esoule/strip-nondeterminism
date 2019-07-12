@@ -1,0 +1,16 @@
+image: debian:unstable
+
+test:
+  stage: test
+  except:
+    - debian
+  before_script:
+    - apt-get -q update
+    - mount -o remount,rw /dev
+    - env DEBIAN_FRONTEND=noninteractive apt-get -q -y install --no-install-recommends aspcud apt-cudf git
+    - git checkout debian
+    - env DEBIAN_FRONTEND=noninteractive apt-get -q -y --solver aspcud -o APT::Solver::Strict-Pinning=0 -o Debug::pkgProblemResolver=yes build-dep .
+    - git checkout -
+  script:
+    - perl Makefile.PL
+    - make test TEST_VERBOSE=1
