@@ -24,7 +24,7 @@ use warnings;
 use File::Temp;
 use File::StripNondeterminism;
 use Archive::Zip qw/:CONSTANTS :ERROR_CODES/;
-use Monkey::Patch qw/patch_class/;
+use Sub::Override;
 
 # A magic number from Archive::Zip for the earliest timestamp that
 # can be represented by a Zip file.  From the Archive::Zip source:
@@ -231,21 +231,24 @@ sub normalize {
 	# stored value of localExtraField (!) and reload it again from the existing
 	# file handle in/around rewindData.
 	#
-	# We therefore monkey-patch the accessor methods of the Member class to
+	# We therefore override the accessor methods of the Member class to
 	# ensure that normalised values are used in this final save.
 	#
 	# <https://salsa.debian.org/reproducible-builds/strip-nondeterminism/issues/4>
-	my @patches = map {
-		patch_class('Archive::Zip::Member', $_, sub {
-			my $fn = shift;
-			my $result = $fn->(@_);
-			return defined($result) ?
-				normalize_extra_fields($canonical_time, $result) : $result;
-		});
+	my @overrides = map {
+		my $full_name = "Archive::Zip::Member::$_";
+		my $orig_sub = \&$full_name;
+		Sub::Override->new(
+			$full_name => sub {
+				my $result = $orig_sub->(@_);
+				return defined($result) ?
+					normalize_extra_fields($canonical_time, $result) : $result;
+			}
+		);
 	} qw(cdExtraField localExtraField);
 
 	return 0 unless $zip->overwrite() == AZ_OK;
-	undef @patches; # Remove our monkey patches
+	$_->restore for @overrides;
 	chmod($old_perms, $zip_filename);
 	return 1;
 }
