@@ -8,7 +8,7 @@ Build-Depends-Indep:
  libarchive-cpio-perl <!nocheck>,
  libarchive-zip-perl,
  libdevel-cover-perl,
- libmonkey-patch-perl,
+ libsub-override-perl,
  perl,
 Maintainer: Reproducible builds folks <reproducible-builds@lists.alioth.debian.org>
 Uploaders:
