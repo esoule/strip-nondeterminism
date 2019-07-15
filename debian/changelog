@@ -1,3 +1,14 @@
+strip-nondeterminism (1.2.2-1) unstable; urgency=medium
+
+  * Actually replace all instances of libmonkey-patch-perl with
+    libsub-override-perl (re. #931730)
+  * Update gitlab-ci.yml:
+    - No need to specify not building the "debian" branch; it has no
+      build configuration file.
+    - Don't build (release) tags.
+
+ -- Chris Lamb <lamby@debian.org>  Mon, 15 Jul 2019 10:41:41 -0300
+
 strip-nondeterminism (1.2.1-1) unstable; urgency=medium
 
   [ Niko Tyni ]
