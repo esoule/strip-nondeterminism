@@ -2,6 +2,8 @@ image: debian:unstable
 
 test:
   stage: test
+  except:
+    - tags
   before_script:
     - apt-get -q update
     - mount -o remount,rw /dev
