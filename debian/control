@@ -27,7 +27,7 @@ Section: perl
 Architecture: all
 Depends:
  libarchive-zip-perl,
- libmonkey-patch-perl,
+ libsub-override-perl,
  ${misc:Depends},
  ${perl:Depends},
 Recommends:
