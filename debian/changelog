@@ -1,3 +1,16 @@
+strip-nondeterminism (1.2.1-1) unstable; urgency=medium
+
+  [ Niko Tyni ]
+  * Use Sub::Override for Archive::Zip workarounds instead of Monkey::Patch
+    (see reproducible-builds/strip-nondeterminism#8 for more information).
+    (Closes: #931730)
+
+  [ Chris Lamb ]
+  * Add a ".gitlab-ci.yml" to automatically run the testsuite on
+    salsa.debian.org.
+
+ -- Chris Lamb <lamby@debian.org>  Mon, 15 Jul 2019 10:31:13 -0300
+
 strip-nondeterminism (1.2.0-2) unstable; urgency=medium
 
   * Bump standards version to 4.4.0, no changes needed.
