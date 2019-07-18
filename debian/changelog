@@ -1,3 +1,14 @@
+strip-nondeterminism (1.2.3-1) unstable; urgency=medium
+
+  * Don't just run the tests but build the Debian package instead using Salsa's
+    centralised scripts so that we get code coverage, Lintian, autopkgtests,
+    etc.
+  * Drop misleading MANIFEST and MANIFEST.SKIP files as they are not used by
+    our release processes.
+  * Update debian/gbp.conf after merge of 'debian' branch.
+
+ -- Chris Lamb <lamby@debian.org>  Thu, 18 Jul 2019 10:05:14 -0300
+
 strip-nondeterminism (1.2.2-1) unstable; urgency=medium
 
   * Actually replace all instances of libmonkey-patch-perl with
