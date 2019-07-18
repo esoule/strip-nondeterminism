@@ -2,6 +2,8 @@ image: registry.salsa.debian.org/salsa-ci-team/ci-image-git-buildpackage:latest
 
 pages:
   stage: deploy
+  except:
+    - tags
   artifacts:
     paths:
     - public
