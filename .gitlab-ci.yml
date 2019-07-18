@@ -1,17 +1,10 @@
-image: debian:unstable
+image: registry.salsa.debian.org/salsa-ci-team/ci-image-git-buildpackage:latest
 
-test:
-  stage: test
-  except:
-    - debian
-    - tags
-  before_script:
-    - apt-get -q update
-    - mount -o remount,rw /dev
-    - env DEBIAN_FRONTEND=noninteractive apt-get -q -y install --no-install-recommends aspcud apt-cudf git
-    - git checkout debian
-    - env DEBIAN_FRONTEND=noninteractive apt-get -q -y --solver aspcud -o APT::Solver::Strict-Pinning=0 -o Debug::pkgProblemResolver=yes build-dep .
-    - git checkout -
+pages:
+  stage: deploy
+  artifacts:
+    paths:
+    - public
   script:
-    - perl Makefile.PL
-    - make test TEST_VERBOSE=1
+   - gitlab-ci-git-buildpackage-all
+   - gitlab-ci-aptly
