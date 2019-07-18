@@ -1,0 +1,5 @@
+Tests: testsuite
+# Archive::Cpio is optionally used in File::StripNondetermism::handlers::cpio
+# but it's required when running the tests.
+Depends: @, libarchive-cpio-perl
+Restrictions: allow-stderr

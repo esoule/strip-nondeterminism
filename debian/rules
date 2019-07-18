@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+# Remove the auto-generated Makefile to prevent dh_auto_clean from failing
+# if the Makefile contains paths referring to an old version of Perl.
+override_dh_auto_clean:
+	rm -rf Makefile MYMETA.* cover_db/ blib/
+	dh_auto_clean
+
+override_dh_auto_test:
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	cover -test -ignore_re '^t/'
+endif

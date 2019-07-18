@@ -1,0 +1,91 @@
+Source: strip-nondeterminism
+Section: devel
+Priority: optional
+Build-Depends:
+ debhelper-compat (= 11),
+ dpkg-dev (>= 1.17.14),
+Build-Depends-Indep:
+ libarchive-cpio-perl <!nocheck>,
+ libarchive-zip-perl,
+ libdevel-cover-perl,
+ libsub-override-perl,
+ perl,
+Maintainer: Reproducible builds folks <reproducible-builds@lists.alioth.debian.org>
+Uploaders:
+ Andrew Ayer <agwa@andrewayer.name>,
+ Holger Levsen <holger@debian.org>,
+ Mattia Rizzolo <mattia@debian.org>,
+ Chris Lamb <lamby@debian.org>,
+Rules-Requires-Root: no
+Standards-Version: 4.4.0
+Homepage: https://reproducible-builds.org/
+Vcs-Git: https://salsa.debian.org/reproducible-builds/strip-nondeterminism.git
+Vcs-Browser: https://salsa.debian.org/reproducible-builds/strip-nondeterminism
+
+Package: libfile-stripnondeterminism-perl
+Section: perl
+Architecture: all
+Depends:
+ libarchive-zip-perl,
+ libsub-override-perl,
+ ${misc:Depends},
+ ${perl:Depends},
+Recommends:
+ libarchive-cpio-perl,
+Description: file non-deterministic information stripper — Perl module
+ StripNondeterminism is a library for stripping non-deterministic information
+ such as timestamps and filesystem ordering from various file and archive
+ formats.
+ .
+ This can be used as a post-processing step to improve the reproducibility of a
+ build product, when the build process itself cannot be made deterministic.
+ .
+ It is used as part of the Reproducible Builds project, although it should be
+ considered a temporary workaround which should not be needed in the long
+ term; upstream software should be reproducible even without using such a tool.
+ .
+ This package installs the Perl module ‘File::StripNondeterminism’.
+
+Package: strip-nondeterminism
+Architecture: all
+Depends:
+ libfile-stripnondeterminism-perl (= ${binary:Version}),
+ ${misc:Depends},
+ ${perl:Depends},
+Multi-Arch: foreign
+Description: file non-deterministic information stripper — stand-alone tool
+ StripNondeterminism is a library for stripping non-deterministic information
+ such as timestamps and filesystem ordering from various file and archive
+ formats.
+ .
+ This can be used as a post-processing step to improve the reproducibility of a
+ build product, when the build process itself cannot be made deterministic.
+ .
+ It is used as part of the Reproducible Builds project, although it should be
+ considered a temporary workaround which should not be needed in the long
+ term; upstream software should be reproducible even without using such a tool.
+ .
+ This package installs the stand-alone ‘strip-nondeterminism’ tool.
+
+Package: dh-strip-nondeterminism
+Architecture: all
+Depends:
+ debhelper (>= 9.20151004),
+ libfile-stripnondeterminism-perl (= ${binary:Version}),
+ ${misc:Depends},
+ ${perl:Depends},
+Multi-Arch: foreign
+Description: file non-deterministic information stripper — Debhelper add-on
+ StripNondeterminism is a library for stripping non-deterministic information
+ such as timestamps and filesystem ordering from various file and archive
+ formats.
+ .
+ This can be used as a post-processing step to improve the reproducibility of a
+ build product, when the build process itself cannot be made deterministic.
+ .
+ It is used as part of the Reproducible Builds project, although it should be
+ considered a temporary workaround which should not be needed in the long
+ term; upstream software should be reproducible even without using such a tool.
+ .
+ This package installs the ‘dh_strip_nondeterminism’ Debhelper command that
+ strips nondeterminism as part of a Debian package build process.
