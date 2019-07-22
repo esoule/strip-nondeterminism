@@ -1,3 +1,12 @@
+strip-nondeterminism (1.3.0-1) unstable; urgency=medium
+
+  * Pass --no-sandbox if necessary to bypass seccomp-enabled version of
+    file(1) which was causing a large number of regressions in our testing
+    framework, etfc. (re. #932006)
+  * Don't build release tags in GitLab CI.
+
+ -- Chris Lamb <lamby@debian.org>  Mon, 22 Jul 2019 11:50:15 -0300
+
 strip-nondeterminism (1.2.3-1) unstable; urgency=medium
 
   * Don't just run the tests but build the Debian package instead using Salsa's
