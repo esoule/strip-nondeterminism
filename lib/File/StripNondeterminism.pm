@@ -64,6 +64,16 @@ sub get_normalizer_for_file($) {
 		&& _get_file_type($_) =~ m/(Java|Zip) archive data/) {
 		return _handler('jar');
 	}
+	# jmod
+	if (m/\.jmod$/) {
+		# Loading the handler forces the load of the jmod package as well
+		my $handler = _handler('jmod');
+
+		# Only recent versions of file(1) can detect Jmod file so we
+		# perform a manual test.
+		return $handler
+		  if File::StripNondeterminism::handlers::jmod::is_jmod_file($_);
+	}
 	# javadoc
 	if (m/\.html$/) {
 		# Loading the handler forces the load of the javadoc package as well
@@ -105,6 +115,7 @@ our %KNOWN_HANDLERS = (
 	gzip	=> 1,
 	jar	=> 1,
 	javadoc	=> 1,
+	jmod	=> 1,
 	uimage	=> 1,
 	png	=> 1,
 	javaproperties => 1,
@@ -136,6 +147,7 @@ sub get_normalizer_by_name($) {
 
 # From Debian::Debhelper::Dh_Lib
 my $_disable_file_seccomp;
+
 sub _internal_optional_file_args {
 	if (not defined($_disable_file_seccomp)) {
 		my $consider_disabling_seccomp = 0;
