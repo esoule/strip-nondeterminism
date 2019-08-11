@@ -47,6 +47,10 @@ sub get_normalizer_for_file($) {
 
 	return undef if -d $_; # Skip directories
 
+	# ar
+	if (m/\.a$/ && _get_file_type($_) =~ m/ar archive/) {
+		return _handler('ar');
+	}
 	# cpio
 	if (m/\.cpio$/ && _get_file_type($_) =~ m/cpio archive/) {
 		return _handler('cpio');
@@ -109,6 +113,7 @@ sub get_normalizer_for_file($) {
 
 our %HANDLER_CACHE;
 our %KNOWN_HANDLERS = (
+	ar	=> 1,
 	bflt	=> 1,
 	cpio	=> 1,
 	gettext	=> 1,
