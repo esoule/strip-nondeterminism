@@ -68,6 +68,9 @@ if (defined $filetype) {
 }
 print "$cmd: Not using a canonical time\n"
   if not defined $timestamp and $verbose;
+print "$cmd: Using normalizers: "
+  . join(" ", File::StripNondeterminism::all_normalizers) . "\n"
+  if not defined $timestamp and $verbose;
 for my $filename (@ARGV) {
 	die "$filename: Does not exist\n" unless -e $filename;
 

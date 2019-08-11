@@ -122,6 +122,10 @@ our %KNOWN_HANDLERS = (
 	zip	=> 1,
 );
 
+sub all_normalizers () {
+	return sort keys %KNOWN_HANDLERS;
+}
+
 sub _handler {
 	my ($handler_name) = @_;
 	return $HANDLER_CACHE{$handler_name}
