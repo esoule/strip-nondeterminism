@@ -113,7 +113,7 @@ sub get_normalizer_for_file($) {
 
 our %HANDLER_CACHE;
 our %KNOWN_HANDLERS = (
-	ar	=> 1,
+	ar	=> 0,
 	bflt	=> 1,
 	cpio	=> 1,
 	gettext	=> 1,
