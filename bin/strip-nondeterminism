@@ -29,15 +29,16 @@ Getopt::Long::Configure(qw(no_ignore_case permute bundling));
 my $cmd = $0;
 $cmd =~ s/.*\///;
 my $usage
-  = "Usage: $cmd [-v|--verbose] [-t|--type FILETYPE] [-T|--timestamp SECONDS] [--clamp-timestamp] FILENAME\n";
+  = "Usage: $cmd [-v|--verbose] [-t|--type FILETYPE] [-T|--timestamp SECONDS] [--clamp-timestamp] [--normalizers <+NORMALIZER,-NORMALIZER,+all,-all,...>] FILENAME\n";
 
-my ($filetype, $timestamp, $clamp_timestamp, $want_help, $verbose, $want_version);
+my ($filetype, $timestamp, $clamp_timestamp, $normalizers, $want_help, $verbose, $want_version);
 my $getopt = Getopt::Long::Parser->new;
 $getopt->configure(qw(no_ignore_case permute bundling));
 $getopt->getoptions(
 	'type|t=s', \$filetype,
 	'timestamp|T=i', \$timestamp,
 	'clamp-timestamp!', \$clamp_timestamp,
+	'normalizers=s', \$normalizers,
 	'help|h', \$want_help,
 	'verbose|v', \$verbose,
 	'version|V', \$want_version
@@ -55,6 +56,32 @@ if ($want_version) {
 
 File::StripNondeterminism::init();
 
+for (split(/,/, $normalizers // '')) {
+	my ($fn, $action);
+
+	m/^([+-])(\w+)$/ or die "$0: invalid --normalizer spec: $_";
+
+	if ($1 eq '+') {
+		$fn = \&File::StripNondeterminism::enable_normalizer;
+		$action = 'Enabling';
+	} else {
+		$fn = \&File::StripNondeterminism::disable_normalizer;
+		$action = 'Disabling';
+	}
+	my $name = $2;
+
+	if ($name eq 'all') {
+		print "$0: $action all normalizers\n" if $verbose;
+		for (File::StripNondeterminism::all_normalizers) {
+			&$fn($_);
+		}
+		next;
+	}
+
+	print "$0: $action normalizer $name\n" if $verbose;
+	&$fn($name);
+}
+
 $File::StripNondeterminism::canonical_time = $timestamp;
 $File::StripNondeterminism::clamp_time = $clamp_timestamp;
 
@@ -69,7 +96,7 @@ if (defined $filetype) {
 print "$cmd: Not using a canonical time\n"
   if not defined $timestamp and $verbose;
 print "$cmd: Using normalizers: "
-  . join(" ", File::StripNondeterminism::all_normalizers) . "\n"
+  . join(" ", File::StripNondeterminism::enabled_normalizers) . "\n"
   if not defined $timestamp and $verbose;
 for my $filename (@ARGV) {
 	die "$filename: Does not exist\n" unless -e $filename;
@@ -77,7 +104,11 @@ for my $filename (@ARGV) {
 	if (!defined $filetype) {
 		$normalizer
 		  = File::StripNondeterminism::get_normalizer_for_file($filename);
-		next unless $normalizer;
+		next unless defined $normalizer;
+		if (!$normalizer) {
+			print "Not normalizing $filename (normalizer disabled)\n" if $verbose;
+			next;
+		}
 	}
 
 	print "Normalizing $filename\n" if $verbose;
@@ -123,6 +154,11 @@ Only replace timestamps if they are later than the time specified to
 B<--timestamp>.  You can use this option to ensure that only timestamps
 introduced as part of the build process are replaced.  NOT YET IMPLEMENTED
 FOR ALL FILE FORMATS.
+
+=item B<--normalizers> I<SPEC>
+
+Enable or disable specific normalizers separated by a comma (eg. B<+foo,-bar>.
+The magic values B<+all> and B<-all> will enable and disable all normalizers.
 
 =item B<-h>, B<--help>
 

@@ -126,12 +126,37 @@ sub all_normalizers () {
 	return sort keys %KNOWN_HANDLERS;
 }
 
+sub enabled_normalizers () {
+	my @normalizers;
+	foreach my $x (all_normalizers()) {
+		push @normalizers, $x if $KNOWN_HANDLERS{$x};
+	}
+	return @normalizers;
+}
+
+sub enable_normalizer ($) {
+	my ($name) = @_;
+	die("Unknown normalizer: ${name}")
+	  if not exists($KNOWN_HANDLERS{$name});
+	$KNOWN_HANDLERS{$name} = 1;
+}
+
+sub disable_normalizer ($) {
+	my ($name) = @_;
+	die("Unknown normalizer: ${name}")
+	  if not exists($KNOWN_HANDLERS{$name});
+	$KNOWN_HANDLERS{$name} = 0;
+}
+
 sub _handler {
+	# Returns the normalize routine for this handler or 0 (not undef)
+	# if the handler is not enabled.
 	my ($handler_name) = @_;
 	return $HANDLER_CACHE{$handler_name}
 	  if exists($HANDLER_CACHE{$handler_name});
 	die("Unknown handler: ${handler_name}\n")
 	  if not exists($KNOWN_HANDLERS{$handler_name});
+	return 0 if !$KNOWN_HANDLERS{$handler_name};
 	my $pkg = "File::StripNondeterminism::handlers::${handler_name}";
 	my $mod = "File/StripNondeterminism/handlers/${handler_name}.pm";
 	my $sub_name = "${pkg}::normalize";

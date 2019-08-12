@@ -48,10 +48,23 @@ my %STAT = (
 
 File::StripNondeterminism::init();
 
+# Enable all normalizers for tests
+for (File::StripNondeterminism::all_normalizers()) {
+	File::StripNondeterminism::enable_normalizer($_);
+}
+
 $File::StripNondeterminism::canonical_time = 1423159771;
 
 my @fixtures = glob('t/fixtures/*/*.in');
 plan tests => scalar @fixtures;
+
+sub handler_name {
+	eval {
+		my $obj = B::svref_2object(shift());
+		return $obj->GV->STASH->NAME;
+	} || "unknown handler";
+}
+
 
 foreach my $filename (@fixtures) {
 	# Use a temporary directory per fixture so we can check whether any
@@ -69,6 +82,7 @@ foreach my $filename (@fixtures) {
 		isnt(undef, $normalizer, "Normalizer found for $in");
 
 		my @stat_before = lstat $in;
+		warn handler_name($normalizer);
 		$normalizer->($in) if defined $normalizer;
 		my @stat_after = lstat $in;
 
