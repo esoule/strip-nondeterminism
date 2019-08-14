@@ -1,3 +1,13 @@
+strip-nondeterminism (1.5.0-1) unstable; urgency=medium
+
+  * Add support for enabling and disabling specific normalizers via the command
+    line. (Closes: reproducible-builds/strip-nondeterminism#10)
+  * In verbose mode, print the normalizers that are enabled.
+  * Re-introduce the .ar normalizer, but disable it by default so that it can
+    be specifically enabled with "--normalizers=+ar".
+
+ -- Chris Lamb <lamby@debian.org>  Wed, 14 Aug 2019 13:30:35 -0700
+
 strip-nondeterminism (1.4.0-1) unstable; urgency=medium
 
   * Support OpenJDK ".jmod" files. Thanks to Emmanuel Bourg for the bug report
