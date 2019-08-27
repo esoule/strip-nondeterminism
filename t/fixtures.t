@@ -82,7 +82,6 @@ foreach my $filename (@fixtures) {
 		isnt(undef, $normalizer, "Normalizer found for $in");
 
 		my @stat_before = lstat $in;
-		warn handler_name($normalizer);
 		$normalizer->($in) if defined $normalizer;
 		my @stat_after = lstat $in;
 
