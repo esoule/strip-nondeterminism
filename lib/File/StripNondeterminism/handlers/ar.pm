@@ -87,6 +87,11 @@ sub normalize {
 		# group
 		syswrite $fh, sprintf("%-6d", 0);
 		# file mode
+
+		# Don't touch the pseudo-"filemode" of the symbols table '/ '
+		if (substr($member_id, 0, 2) eq "/ ") {
+			goto NEXT_MEMBER;
+		}
 		syswrite $fh,
 		  sprintf("%-8o", ($file_mode & oct(100)) ? oct(755) : oct(644));
 
