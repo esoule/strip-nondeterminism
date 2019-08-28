@@ -65,6 +65,12 @@ sub normalize {
 		die "Incorrect file magic"
 		  if substr($buf, 58, length($FILE_MAGIC)) ne $FILE_MAGIC;
 
+		# $member_id is the member's filename if it's short
+		# enough to fit in 16 characters. Otherwise it's a
+		# "/number" index in the table of long member names '//'
+		# (SysV/GNU), or a #1/ prefixed length (BSD)
+		my $member_id = substr($buf, 0, 16);
+
 		my $file_mode = oct(substr($buf, 40, 8));
 		my $file_size = substr($buf, 48, 10);
 
@@ -84,7 +90,7 @@ sub normalize {
 		syswrite $fh,
 		  sprintf("%-8o", ($file_mode & oct(100)) ? oct(755) : oct(644));
 
-		# move to next member
+	NEXT_MEMBER:
 		my $padding = $file_size % 2;
 		seek $fh,
 		  $file_header_start + $FILE_HEADER_LENGTH + $file_size + $padding,
