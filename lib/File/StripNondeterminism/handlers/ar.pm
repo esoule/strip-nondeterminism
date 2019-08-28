@@ -77,6 +77,13 @@ sub normalize {
 		die "Incorrect file size"
 		  if $file_size < 1;
 
+		# Don't touch the System V/GNU table of long filenames
+		# '//', it's a different format and already
+		# deterministic.
+		if (substr($member_id, 0, 3) eq "// ") {
+			goto NEXT_MEMBER;
+		}
+
 		seek $fh, $file_header_start + 16, SEEK_SET;
 
 		# mtime
