@@ -53,6 +53,7 @@ for (File::StripNondeterminism::all_normalizers()) {
 	File::StripNondeterminism::enable_normalizer($_);
 }
 
+# = 2015-02-05 10:09:31
 $File::StripNondeterminism::canonical_time = 1423159771;
 
 my @fixtures = glob('t/fixtures/*/*.in');
