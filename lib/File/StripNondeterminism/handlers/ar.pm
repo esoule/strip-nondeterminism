@@ -87,6 +87,13 @@ sub normalize {
 		seek $fh, $file_header_start + 16, SEEK_SET;
 
 		# mtime
+		if ($File::StripNondeterminism::verbose
+		    && $File::StripNondeterminism::canonical_time
+		    && substr($member_id, 0, 2) eq "/ ") {
+		    print "Setting symbols table's mtime in $file to: "
+			. gmtime($File::StripNondeterminism::canonical_time)
+			. ". GNU ar cannot do this.\n";
+		}
 		syswrite $fh,
 		  sprintf("%-12d", $File::StripNondeterminism::canonical_time // 0);
 		# owner
