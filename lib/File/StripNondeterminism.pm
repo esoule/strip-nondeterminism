@@ -23,7 +23,7 @@ use warnings;
 
 use POSIX qw(tzset);
 
-our($VERSION, $canonical_time, $clamp_time);
+our($VERSION, $canonical_time, $clamp_time, $verbose);
 
 $VERSION = '1.5.0'; # <https://semver.org/>
 
