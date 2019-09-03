@@ -37,7 +37,12 @@ sub normalize {
 	# if we cannot load the Cpio module, we just leave the file alone
 	# to not have Archive::Cpio as a hard requirement
 	# for strip-nondeterminism
-	eval {require Archive::Cpio} or return 0;
+	if (not eval {require Archive::Cpio}) {
+		if ($File::StripNondeterminism::verbose) {
+			print STDERR "Archive::Cpio not found\n";
+		}
+		return 0;
+	}
 	my $cpio = Archive::Cpio->new;
 	eval {$cpio->read($file)};
 	return 0 if $@; # not a cpio archive if it throws an error
