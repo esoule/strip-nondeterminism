@@ -65,35 +65,15 @@ sub normalize {
 		die "Incorrect file magic"
 		  if substr($buf, 58, length($FILE_MAGIC)) ne $FILE_MAGIC;
 
-		# $member_id is the member's filename if it's short
-		# enough to fit in 16 characters. Otherwise it's a
-		# "/number" index in the table of long member names '//'
-		# (SysV/GNU), or a #1/ prefixed length (BSD)
-		my $member_id = substr($buf, 0, 16);
-
 		my $file_mode = oct(substr($buf, 40, 8));
 		my $file_size = substr($buf, 48, 10);
 
 		die "Incorrect file size"
 		  if $file_size < 1;
 
-		# Don't touch the System V/GNU table of long filenames
-		# '//', it's a different format and already
-		# deterministic.
-		if (substr($member_id, 0, 3) eq "// ") {
-			goto NEXT_MEMBER;
-		}
-
 		seek $fh, $file_header_start + 16, SEEK_SET;
 
 		# mtime
-		if ($File::StripNondeterminism::verbose
-		    && $File::StripNondeterminism::canonical_time
-		    && substr($member_id, 0, 2) eq "/ ") {
-		    print "Setting symbols table's mtime in $file to: "
-			. gmtime($File::StripNondeterminism::canonical_time)
-			. ". GNU ar cannot do this.\n";
-		}
 		syswrite $fh,
 		  sprintf("%-12d", $File::StripNondeterminism::canonical_time // 0);
 		# owner
@@ -101,15 +81,10 @@ sub normalize {
 		# group
 		syswrite $fh, sprintf("%-6d", 0);
 		# file mode
-
-		# Don't touch the pseudo-"filemode" of the symbols table '/ '
-		if (substr($member_id, 0, 2) eq "/ ") {
-			goto NEXT_MEMBER;
-		}
 		syswrite $fh,
 		  sprintf("%-8o", ($file_mode & oct(100)) ? oct(755) : oct(644));
 
-	NEXT_MEMBER:
+		# move to next member
 		my $padding = $file_size % 2;
 		seek $fh,
 		  $file_header_start + $FILE_HEADER_LENGTH + $file_size + $padding,

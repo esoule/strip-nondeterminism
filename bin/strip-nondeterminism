@@ -84,7 +84,6 @@ for (split(/,/, $normalizers // '')) {
 
 $File::StripNondeterminism::canonical_time = $timestamp;
 $File::StripNondeterminism::clamp_time = $clamp_timestamp;
-$File::StripNondeterminism::verbose = $verbose;
 
 die $usage if @ARGV == 0;
 
