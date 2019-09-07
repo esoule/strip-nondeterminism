@@ -1,3 +1,18 @@
+strip-nondeterminism (1.6.0-1) unstable; urgency=medium
+
+  [ Marc Herbert ]
+  * GNU ar handler (ar.pm):
+    - Don't corrupt the pseudo-filemode of the symbols table '/'.
+    - Add test files for symtab ('/') and long names ('//').
+    - Stop corrupting the SystemV/GNU table of long filenames.
+  * Add new $File::StripNondeterminism::verbose global and, if enabled, tell
+    the user that GNU ar could not set the symbol table's mtime.
+
+  [ Chris Lamb ]
+  * Drop warning emitted on every fixture-based test.
+
+ -- Chris Lamb <lamby@debian.org>  Sat, 07 Sep 2019 11:06:39 +0100
+
 strip-nondeterminism (1.5.0-1) unstable; urgency=medium
 
   * Add support for enabling and disabling specific normalizers via the command
