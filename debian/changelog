@@ -1,3 +1,13 @@
+strip-nondeterminism (1.6.1-1) unstable; urgency=medium
+
+  * Drop the t/fixtures/zip/bug_803503.zip test fixtures as they are no longer
+    compatible with Archive::Zip >= 1.66. Thanks to gregor herrmann for liasing
+    on this issue with upstream. (Closes: #940973)
+  * Bump debhelper compat level to 12.
+  * Bump Standards-Version to 4.4.1.
+
+ -- Chris Lamb <lamby@debian.org>  Tue, 15 Oct 2019 12:56:45 -0700
+
 strip-nondeterminism (1.6.0-1) unstable; urgency=medium
 
   [ Marc Herbert ]
