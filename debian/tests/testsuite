@@ -2,7 +2,7 @@
 
 set -eu
 
-tmp="${AUTOPKGTEST_TMP:-"${ADTTMP:-"$(mktemp -d)"}"}"
+tmp="${AUTOPKGTEST_TMP:-$(mktemp -d)}"
 
 mkdir -p "$tmp"
 cp -rv t/ bin/ "$tmp"
