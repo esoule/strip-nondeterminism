@@ -1,3 +1,14 @@
+strip-nondeterminism (1.6.2-1) unstable; urgency=medium
+
+  [ Sven Joachim ]
+  * Prefer libdebhelper-perl over debhelper to break the circular dependency
+    between debhelper and dh-strip-nondeterminism. (Closes: #939720)
+
+  [ Chris Lamb ]
+  * Move away from deprecated ADTTMP variable.
+
+ -- Chris Lamb <lamby@debian.org>  Fri, 01 Nov 2019 10:55:52 -0700
+
 strip-nondeterminism (1.6.1-1) unstable; urgency=medium
 
   * Drop the t/fixtures/zip/bug_803503.zip test fixtures as they are no longer
