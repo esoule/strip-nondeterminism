@@ -26,6 +26,7 @@ Package: libfile-stripnondeterminism-perl
 Section: perl
 Architecture: all
 Depends:
+ file,
  libarchive-zip-perl,
  libsub-override-perl,
  ${misc:Depends},
