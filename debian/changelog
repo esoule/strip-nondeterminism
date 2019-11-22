@@ -1,3 +1,10 @@
+strip-nondeterminism (1.6.3-1) unstable; urgency=medium
+
+  * Add "file" as a dependency for libfile-stripnondeterminism-perl.
+    (Closes: #945212)
+
+ -- Chris Lamb <lamby@debian.org>  Fri, 22 Nov 2019 11:46:57 -0500
+
 strip-nondeterminism (1.6.2-1) unstable; urgency=medium
 
   [ Sven Joachim ]
