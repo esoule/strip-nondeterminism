@@ -1,2 +1,4 @@
 Repository: https://salsa.debian.org/reproducible-builds/strip-nondeterminism.git
 Repository-Browse: https://salsa.debian.org/reproducible-builds/strip-nondeterminism
+Bug-Database: https://salsa.debian.org/reproducible-builds/strip-nondeterminism/issues
+Bug-Submit: https://salsa.debian.org/reproducible-builds/strip-nondeterminism/issues/new
