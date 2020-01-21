@@ -1,7 +1,11 @@
 strip-nondeterminism (1.6.3-2) UNRELEASED; urgency=medium
 
+  [ Debian Janitor ]
   * Set upstream metadata fields: Repository, Repository-Browse.
   * Set upstream metadata fields: Bug-Database, Bug-Submit.
+
+  [ Holger Levsen ]
+  * Bump Standards-Version to 4.5.0.
 
  -- Debian Janitor <janitor@jelmer.uk>  Sun, 22 Dec 2019 10:25:12 +0000
 
