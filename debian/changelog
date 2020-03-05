@@ -1,3 +1,10 @@
+strip-nondeterminism (1.6.3-3) UNRELEASED; urgency=medium
+
+  * Wrap long lines in changelog entries: 0.025-1, 0.023-1, thanks
+    lintian-brush.
+
+ -- Holger Levsen <holger@debian.org>  Thu, 05 Mar 2020 13:12:42 +0000
+
 strip-nondeterminism (1.6.3-2) unstable; urgency=medium
 
   [ Debian Janitor ]
@@ -483,7 +490,8 @@ strip-nondeterminism (0.026-1) unstable; urgency=medium
 
 strip-nondeterminism (0.025-1) unstable; urgency=medium
 
-  * Drop all calls to unlink_on_destroy now that we copy the file. (Closes: #836670)
+  * Drop all calls to unlink_on_destroy now that we copy the file.
+    (Closes: #836670)
     - Extend testsuite to ensure no extra files are leftover again.
 
  -- Chris Lamb <lamby@debian.org>  Sun, 04 Sep 2016 17:43:00 +0100
@@ -515,7 +523,8 @@ strip-nondeterminism (0.023-1) unstable; urgency=medium
   * Support Android .apk files with the JAR normalizer.
   * handlers/png.pm: Drop unused Archive::Zip import
   * Remove hyphen from non-determinism and non-deterministic.
-  * javaproperties.pm: Match more styles of .properties and loosen filename matching.
+  * javaproperties.pm: Match more styles of .properties and loosen filename
+    matching.
   * Improve tests:
     - Make fixture runner generic to all normalizer types.
     - Replace (single) pearregistry test with a fixture.
@@ -523,7 +532,8 @@ strip-nondeterminism (0.023-1) unstable; urgency=medium
     - Add gzip testcase fixture.
     - Replace t/javadoc.t with fixture
     - Replace t/ar.t with a fixture.
-    - t/javaproperties: move pom.properties and version.properties tests to fixtures
+    - t/javaproperties: move pom.properties and version.properties tests to
+      fixtures
     - t/fixtures.t: move to using subtests
     - t/fixtures.t: Explicitly test that we can find a normalizer
     - t/fixtures.t: Don't run normalizer if we didn't find one.
