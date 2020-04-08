@@ -64,7 +64,7 @@ sub get_normalizer_for_file($) {
 		return _handler('gzip');
 	}
 	# jar
-	if (m/\.(jar|war|hpi|apk)$/
+	if (m/\.(jar|war|hpi|apk|sym)$/
 		&& _get_file_type($_) =~ m/(Java|Zip) archive data/) {
 		return _handler('jar');
 	}
