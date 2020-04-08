@@ -1,3 +1,13 @@
+strip-nondeterminism (1.7.0-1) unstable; urgency=medium
+
+  [ Chris Lamb ]
+  * Normalise *.sym files as Java archives. (Closes: #956160)
+
+  [ Holger Levsen ]
+  * Wrap long lines in changelog entries: 0.025-1, 0.023-1.
+
+ -- Chris Lamb <lamby@debian.org>  Thu, 09 Apr 2020 00:10:34 +0100
+
 strip-nondeterminism (1.6.3-2) unstable; urgency=medium
 
   [ Debian Janitor ]
