@@ -1,5 +1,6 @@
 #
 # Copyright 2016 Reiner Herrmann <reiner@reiner-h.de>
+# Copyright 2016 Chris Lamb <lamby@debian.org>
 #
 # This file is part of strip-nondeterminism.
 #

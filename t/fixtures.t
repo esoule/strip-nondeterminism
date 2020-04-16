@@ -1,7 +1,7 @@
 #!perl
 
 #
-# Copyright 2016 Chris Lamb <lamby@debian.org>
+# Copyright 2016-2017, 2019 Chris Lamb <lamby@debian.org>
 #
 # This file is part of strip-nondeterminism.
 #
