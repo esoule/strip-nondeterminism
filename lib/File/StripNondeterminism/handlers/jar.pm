@@ -1,6 +1,6 @@
 #
 # Copyright 2014 Andrew Ayer
-# Copyright 2016-2018 Chris Lamb <lamby@debian.org>
+# Copyright 2016-2018, 2020 Chris Lamb <lamby@debian.org>
 #
 # This file is part of strip-nondeterminism.
 #
@@ -40,6 +40,28 @@ sub _jar_filename_cmp($$) {
 		return  1 if $b eq $_;
 	}
 	return $a cmp $b;
+}
+
+sub _jar_filename_filter($) {
+	my @filenames = @_;
+
+	return grep {
+		# When a Maven project is built with the fork mode enabled for
+		# the maven-compiler.plugin, two extra files containing non
+		# reproducible elements are generated in the output directory
+		# and subsequently packaged in the jar.
+		#
+		# Remove executable script that could be run to recompile the
+		# project. It captures the build path.
+		$_ = undef if $_ eq "javac.sh";
+
+		# Contains the compiler arguments. The file name uses a random
+		# value.
+		$_ = undef if $_ =~ m/^org\.codehaus\.plexus\.compiler\.javac\.JavacCompiler\d+arguments$/;
+
+		# Allow all other files
+		$_;
+	} @filenames;
 }
 
 sub _jar_normalize_manifest($) {
@@ -127,6 +149,7 @@ sub normalize {
 		$jar_filename,
 		archive_filter => \&_jar_archive_filter,
 		filename_cmp => \&_jar_filename_cmp,
+		filename_filter => \&_jar_filename_filter,
 		member_normalizer => \&_jar_normalize_member
 	);
 }

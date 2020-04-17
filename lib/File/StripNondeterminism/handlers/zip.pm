@@ -1,6 +1,6 @@
 #
 # Copyright 2014 Andrew Ayer
-# Copyright 2016-2019 Chris Lamb <lamby@debian.org>
+# Copyright 2016-2020 Chris Lamb <lamby@debian.org>
 #
 # This file is part of strip-nondeterminism.
 #
@@ -201,6 +201,16 @@ sub normalize {
 	$canonical_time = SAFE_EPOCH
 	  if not defined $canonical_time or $canonical_time < SAFE_EPOCH;
 	my @filenames = sort $filename_cmp $zip->memberNames();
+	if (exists($options{filename_filter})) {
+		@filenames = $options{filename_filter}->(@filenames);
+		# Remove any members deleted by the custom filter
+		my %seen = map { $_ => 1 } @filenames;
+		for my $filename ($zip->memberNames()) {
+			next if $seen{$filename};
+			print STDERR "Removing $filename from $zip_filename\n";
+			$zip->removeMember($filename);
+		}
+	}
 	for my $filename (@filenames) {
 		my $member = $zip->removeMember($filename);
 		if ($member->isEncrypted()) {
