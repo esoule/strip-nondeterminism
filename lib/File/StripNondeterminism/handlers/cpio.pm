@@ -21,6 +21,17 @@ use warnings;
 
 use File::StripNondeterminism;
 
+=head1 DEPRECATION PLAN
+
+This was added in mid-2017. As-of 2020-04-30, Debian ships a total of 8 .cpio
+files in binary packages and none of these appear to be integral to the working
+of those package.
+
+After consulting with the original (Bernhard, ie. OpenSuse) this handler is a
+good candidate to commence deprecation via initially making it optional.
+
+=cut
+
 sub normalize {
 	my ($file) = @_;
 	# if we cannot load the Cpio module, we just leave the file alone

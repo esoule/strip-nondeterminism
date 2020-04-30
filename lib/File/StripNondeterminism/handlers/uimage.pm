@@ -25,6 +25,17 @@ use Archive::Zip ();
 use File::StripNondeterminism;
 use Fcntl q/SEEK_SET/;
 
+=head1 DEPRECATION PLAN
+
+As of 2020-04-30 there are zero .uimage files being shipped in Debian packages
+so this handler is a good candidate to commence deprecation via first making it
+optional, etc., perhaps surveying whether any embedded distributions could be
+relying on this.
+
+Also see the uimage handler.
+
+=cut
+
 # /*
 #  * Legacy format image header,
 #  * all data in network byte order (aka natural aka bigendian).

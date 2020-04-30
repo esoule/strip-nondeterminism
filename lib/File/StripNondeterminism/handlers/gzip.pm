@@ -35,6 +35,14 @@ use constant {
 	FCOMMENT => 1 << 4,
 };
 
+=head1 DEPRECATION PLAN
+
+Given that so many libraries and utilities generate gzip archives themselves
+(rather than delegating to one or two central libraries) it is infeasible to
+get this upstreamed everywhere.
+
+=cut
+
 sub normalize {
 	my ($filename) = @_;
 

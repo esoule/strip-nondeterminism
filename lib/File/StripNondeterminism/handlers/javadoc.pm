@@ -28,6 +28,12 @@ use File::Temp;
 use File::Basename;
 use POSIX qw(strftime);
 
+=head1 DEPRECATION PLAN
+
+This could almost-certainly be changed in OpenJDK itself and then removed here.
+
+=cut
+
 sub is_javadoc_file($) {
 	my ($filename) = @_;
 

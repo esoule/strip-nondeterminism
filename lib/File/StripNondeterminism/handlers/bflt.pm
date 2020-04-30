@@ -33,6 +33,17 @@ use constant MAX_STACK_SIZE => 0xFFFFFF;
 use constant MAX_COUNT => 0xFFFFFF;
 use constant RESERVED_FLAGS => 0xFFFFFFC0;
 
+=head1 DEPRECATION PLAN
+
+bFLT format is used in uClibc/uCLinux systems. As of 2020-04-30 there are zero
+.bflt files being shipped in Debian packages so this handler is a good
+candidate to commence deprecation via first making it optional, etc., perhaps
+surveying whether any embedded distributions could be relying on this.
+
+Also see the uimage handler.
+
+=cut
+
 # From elf2flt flat.h
 # /*
 #  * To make everything easier to port and manage cross platform

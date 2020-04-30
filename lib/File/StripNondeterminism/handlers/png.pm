@@ -31,6 +31,13 @@ use POSIX qw/strftime/;
 use List::Util qw/min/;
 use Time::Local qw/timegm/;
 
+=head1 DEPRECATION PLAN
+
+Situtation is not promising as so many libraries can generate or convert .png
+files.
+
+=cut
+
 sub crc($) {
 	my ($data) = @_;
 	return Archive::Zip::computeCRC32($data);

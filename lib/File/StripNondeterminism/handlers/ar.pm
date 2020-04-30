@@ -28,6 +28,15 @@ use Fcntl q/SEEK_SET/;
 
 use File::StripNondeterminism;
 
+=head1 DEPRECATION PLAN
+
+This handler was originally removed in late 2018 as binutils was deemed to be
+reproducible (781262, #843811, etc.)  However, it was re-introduced in late
+2019 via issue #3 as an optional handler in order to support "not just 'older'
+toolchains, it's also about 'other' toolchains".
+
+=cut
+
 sub normalize {
 	my ($file) = @_;
 

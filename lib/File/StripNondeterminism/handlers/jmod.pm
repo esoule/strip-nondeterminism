@@ -26,6 +26,13 @@ use File::StripNondeterminism::handlers::jar;
 use File::Temp;
 use File::Basename;
 
+=head1 DEPRECATION PLAN
+
+This could likely be changed in OpenJDK itself and then removed here; it does
+not appear that many other utilities generate (or even ship) .jmod files.
+
+=cut
+
 sub is_jmod_file($) {
 	# Only recent versions of file(1) can detect Jmod file so we perform a
 	# manual test.

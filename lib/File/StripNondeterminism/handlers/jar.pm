@@ -30,6 +30,15 @@ use File::StripNondeterminism::handlers::zip;
 use File::StripNondeterminism::handlers::javadoc;
 use File::Temp;
 
+=head1 DEPRECATION PLAN
+
+Given that so many libraries and utilities generate .jar archives themselves
+(although there is some centralisation) it is infeasible to get this upstreamed
+everywhere. However, getting a change into OpenJDK would help a lot in Debian
+andwould be the next step here.
+
+=cut
+
 sub _jar_filename_cmp($$) {
 	my ($a, $b) = @_;
 	# META-INF/ and META-INF/MANIFEST.MF are expected to be the first

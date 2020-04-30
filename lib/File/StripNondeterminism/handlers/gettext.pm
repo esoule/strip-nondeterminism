@@ -27,6 +27,13 @@ use warnings;
 
 use File::StripNondeterminism;
 
+=head1 DEPRECATION PLAN
+
+Situation unclear. Whilst #792687 is closed, many Gettext related files are
+being normalised based on anecdotal viewings of build logs.
+
+=cut
+
 sub read_file($) {
 	my $filename = shift;
 

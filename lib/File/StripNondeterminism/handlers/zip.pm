@@ -27,6 +27,15 @@ use File::StripNondeterminism;
 use Archive::Zip qw/:CONSTANTS :ERROR_CODES/;
 use Sub::Override;
 
+=head1 DEPRECATION PLANS
+
+Given that so many libraries and utilities generate ZIP archives themselves
+(rather than delegating to one or two central libraries) it is infeasible to
+get this upstreamed everywhere. There are also countless formats that generate
+ZIP files under different names (notably Jar archives and its many variants).
+
+=cut
+
 # A magic number from Archive::Zip for the earliest timestamp that
 # can be represented by a Zip file.  From the Archive::Zip source:
 # "Note, this isn't exactly UTC 1980, it's 1980 + 12 hours and 1
