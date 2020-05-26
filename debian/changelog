@@ -1,3 +1,15 @@
+strip-nondeterminism (1.8.1-1) unstable; urgency=medium
+
+  [ Bernhard M. Wiedemann ]
+  * Fix an off-by-one error when parsing PNG modification times.
+    (Closes: reproducible-builds/strip-nondeterminism#16)
+
+  [ Chris Lamb ]
+  * Add deprecation plans to all handlers documenting how/if they could be
+    disabled/removed, etc. (Re: reproducible-builds/strip-nondeterminism#3)
+
+ -- Chris Lamb <lamby@debian.org>  Tue, 26 May 2020 11:34:46 +0100
+
 strip-nondeterminism (1.8.0-1) unstable; urgency=medium
 
   * Add support for custom .zip filename filtering and exclude two patterns of
