@@ -58,7 +58,7 @@ sub time_chunk($) {
 sub parse_time_chunk($) {
 	my ($data) = @_;
 	my ($year, $mon, $mday, $hour, $min, $sec) = unpack('nCCCCC', $data);
-	return timegm($sec, $min, $hour, $mday, $mon, $year);
+	return timegm($sec, $min, $hour, $mday, $mon - 1, $year);
 }
 
 sub text_chunk($$) {
