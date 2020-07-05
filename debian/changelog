@@ -1,8 +1,18 @@
-strip-nondeterminism (1.8.1-2) UNRELEASED; urgency=medium
+strip-nondeterminism (1.8.1-2) unstable; urgency=medium
 
-  * WIP
+  [ Mattia Rizzolo ]
+  * d/control:
+    - depend only on libdebhelper-perl, to avoid any chance of a circular
+      dependency.
+    - bump debhelper compat level to 13.
 
- -- Holger Levsen <holger@debian.org>  Sun, 05 Jul 2020 10:38:24 +0200
+  [ Holger Levsen ]
+  * Install the manpages for all different handlers into the
+    libfile-stripnondeterminism-perl package.
+  * Drop build-depends on dpkg-dev. dpkg-dev is part of build-essential and
+    the version requirement is met in jessie.
+
+ -- Holger Levsen <holger@debian.org>  Sun, 05 Jul 2020 12:00:09 +0200
 
 strip-nondeterminism (1.8.1-1) unstable; urgency=medium
 
