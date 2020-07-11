@@ -1,8 +1,15 @@
-strip-nondeterminism (1.8.1-3) UNRELEASED; urgency=medium
+strip-nondeterminism (1.9.0-1) unstable; urgency=medium
 
-  * WIP (generated upon release)
+  [ Marc Herbert ]
+  * Add a warning message under --verbose statement when the Archive::Cpio
+    package is missing. (MR: reproducible-builds/strip-nondeterminism!6)
 
- -- Holger Levsen <holger@debian.org>  Sun, 05 Jul 2020 12:06:04 +0200
+  [ Chris Lamb ]
+  * Don't install the internal handler documentation generated from pod
+    documents.
+  * Correct a "situation" typo.
+
+ -- Chris Lamb <lamby@debian.org>  Sat, 11 Jul 2020 11:38:49 +0100
 
 strip-nondeterminism (1.8.1-2) unstable; urgency=medium
 
