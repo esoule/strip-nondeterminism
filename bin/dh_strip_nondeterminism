@@ -65,6 +65,11 @@ sub testfile {
 	my $normalizer = File::StripNondeterminism::get_normalizer_for_file($_);
 	return unless $normalizer;
 
+	unless (-w $_) {
+		warning("Ignoring unwritable file: $_");
+		return;
+	}
+
 	push @nondeterministic_files, [$fn, $normalizer];
 }
 
