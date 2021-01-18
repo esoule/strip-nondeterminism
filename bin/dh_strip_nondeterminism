@@ -63,9 +63,9 @@ sub testfile {
 	$seen{"$inode.$dev"} = 1;
 
 	my $normalizer = File::StripNondeterminism::get_normalizer_for_file($_);
-	if ($normalizer) {
-		push @nondeterministic_files, [$fn, $normalizer];
-	}
+	return unless $normalizer;
+
+	push @nondeterministic_files, [$fn, $normalizer];
 }
 
 sub handler_name {
