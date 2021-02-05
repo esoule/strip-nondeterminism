@@ -1,3 +1,11 @@
+strip-nondeterminism (1.11.0-1) unstable; urgency=medium
+
+  [ Helmut Grohne ]
+  * Also normalise PO-Revision-Date in addition to POT-Creation-Date.
+    (Closes: #981895)
+
+ -- Chris Lamb <lamby@debian.org>  Fri, 05 Feb 2021 12:04:06 +0000
+
 strip-nondeterminism (1.10.0-1) unstable; urgency=medium
 
   [ Chris Lamb ]
