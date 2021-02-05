@@ -82,17 +82,18 @@ sub normalize {
 		my $trans_len = unpack($fmt, substr($buf, $trans_to + $i*8));
 		my $trans_offset = unpack($fmt, substr($buf, $trans_to + $i*8 + 4));
 		my $trans_msg = substr($buf, $trans_offset, $trans_len);
-		next unless $trans_msg =~ m/^POT-Creation-Date: (.*)/m;
+		next unless $trans_msg =~ m/^(POT-Creation-Date|PO-Revision-Date): (.*)/m;
 
-		my $pot_date = $1;
+		my $date_key = $1;
+		my $date_value = $2;
 		my $time;
-		eval {$time = Time::Piece->strptime($pot_date, "%Y-%m-%d %H:%M%z");};
+		eval {$time = Time::Piece->strptime($date_value, "%Y-%m-%d %H:%M%z");};
 		next if $@;
 		next if $time <= $norm_time;
 
 		my $new_time = strftime("%Y-%m-%d %H:%M%z", gmtime($norm_time));
 		$trans_msg
-		  =~ s/\QPOT-Creation-Date: $pot_date\E/POT-Creation-Date: $new_time/;
+		  =~ s/\Q$date_key: $date_value\E/$date_key: $new_time/;
 		next if length($trans_msg) != $trans_len;
 
 		$buf
