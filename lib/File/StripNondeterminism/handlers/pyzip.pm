@@ -63,7 +63,6 @@ sub normalize {
 	my ($filename) = @_;
 
 	my $buf;
-	my $bytes_read;
 
 	# Create a .zip file without the shebang
 	my $stripped = File::Temp->new(DIR => dirname($filename));
@@ -73,10 +72,9 @@ sub normalize {
 	my $shebang = <$fh>; 
 
 	# Copy through the rest of the file
-	while ($bytes_read = read($fh, $buf, 4096)) {
+	while (read($fh, $buf, 4096) // die "$filename: read failed: $!") {
 		print $stripped $buf;
 	}
-	defined($bytes_read) or die "$filename: read failed: $!";
 	$stripped->close;
 	close $fh;
 
@@ -92,7 +90,7 @@ sub normalize {
 	my $pyzip = File::Temp->new(DIR => dirname($filename));
 	print $pyzip $shebang;
 	open $fh, '<', $stripped->filename;
-	while ($bytes_read = read($fh, $buf, 4096)) {
+	while (read($fh, $buf, 4096)) {
 		print $pyzip $buf;
 	}
 	close $fh;
