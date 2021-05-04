@@ -109,6 +109,14 @@ sub get_normalizer_for_file($) {
 		&& _get_file_type($_) =~ m/Zip archive data|EPUB document/) {
 		return _handler('zip');
 	}
+
+	# pyzip - check last due to call to file(1)
+	if (_get_file_type($_) =~ m/python3 script executable \(binary data\)/) {
+		my $handler = _handler('pyzip');
+		return $handler
+		  if File::StripNondeterminism::handlers::pyzip::is_pyzip_file($_);
+	}
+
 	return undef;
 }
 
@@ -124,6 +132,7 @@ our %KNOWN_HANDLERS = (
 	jmod	=> 1,
 	uimage	=> 1,
 	png	=> 1,
+	pyzip	=> 1,
 	javaproperties => 1,
 	zip	=> 1,
 );
