@@ -1,3 +1,13 @@
+strip-nondeterminism (1.12.0-2) unstable; urgency=medium
+
+  [ Chris Lamb ]
+  * Bump Standards-Version to 4.6.0.1.
+
+  [ Holger Levsen ]
+  * Fix too long line in d/changelog 1.12.0-1.
+
+ -- Holger Levsen <holger@debian.org>  Thu, 21 Oct 2021 09:29:05 +0200
+
 strip-nondeterminism (1.12.0-1) unstable; urgency=medium
 
   [ Chris Lamb ]
