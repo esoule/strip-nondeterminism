@@ -26,7 +26,7 @@ use POSIX qw(tzset);
 
 our($VERSION, $canonical_time, $clamp_time, $verbose);
 
-$VERSION = '1.12.0'; # <https://semver.org/>
+$VERSION = '1.12.1'; # <https://semver.org/>
 
 sub init() {
 	$ENV{'TZ'} = 'UTC';
