@@ -1,3 +1,11 @@
+strip-nondeterminism (1.12.1-1) unstable; urgency=medium
+
+  [ Jonas Witschel ]
+  * Do not fail on JAR archives containing invalid members with a .jar
+    extension. (Closes: reproducible-builds/strip-nondeterminism!13)
+
+ -- Chris Lamb <lamby@debian.org>  Mon, 22 Nov 2021 10:56:48 -0800
+
 strip-nondeterminism (1.12.0-2) unstable; urgency=medium
 
   [ Chris Lamb ]
