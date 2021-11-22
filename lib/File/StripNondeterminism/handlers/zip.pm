@@ -22,6 +22,7 @@ package File::StripNondeterminism::handlers::zip;
 use strict;
 use warnings;
 
+use File::Basename qw(basename);
 use File::Temp;
 use File::StripNondeterminism;
 use Archive::Zip qw/:CONSTANTS :ERROR_CODES/;
@@ -65,12 +66,18 @@ sub normalize_member($$) {
 
 	# Extract the member to a temporary file.
 	my $tempdir = File::Temp->newdir();
-	my $filename = "$tempdir/member";
+	my $filename = "$tempdir/" . basename($member->fileName());
 	my $original_size = $member->compressedSize();
 	$member->extractToFileNamed($filename);
 	chmod(0600, $filename);
 	$member->{'compressedSize'} = $original_size
 	  ; # Work around https://github.com/redhotpenguin/perl-Archive-Zip/issues/11
+
+	$normalizer = File::StripNondeterminism::get_normalizer_for_file($filename) unless defined $normalizer;
+	if (not defined $normalizer) {
+		warn "strip-nondeterminism: unknown file type of " . $member->fileName();
+		return;
+	}
 
 	# Normalize the temporary file.
 	if ($normalizer->($filename)) {

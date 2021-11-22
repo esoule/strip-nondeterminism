@@ -123,7 +123,7 @@ sub _jar_normalize_member($$) {
 		$timestamp--;
 	} elsif ($member->fileName() =~ /\.jar$/) {
 		File::StripNondeterminism::handlers::zip::normalize_member($member,
-			\&normalize);
+			undef);
 	}
 
 	return $timestamp;
