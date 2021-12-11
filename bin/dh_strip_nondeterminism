@@ -91,7 +91,16 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 	find(\&testfile,$tmp);
 	next unless @nondeterministic_files;
 
-	$File::StripNondeterminism::canonical_time = get_source_date_epoch();
+	# This has been introduced in debhelper/13.5.3 specifically for
+	# strip-nondeterminism.  See https://bugs.debian.org/999665 for the
+	# background of get_non_binnmu_date_epoch().
+	if (eval "get_non_binnmu_date_epoch()") {
+		$File::StripNondeterminism::canonical_time
+		  = get_non_binnmu_date_epoch();
+		$ENV{SOURCE_DATE_EPOCH} = get_non_binnmu_date_epoch()
+	} else {
+		$File::StripNondeterminism::canonical_time = get_source_date_epoch();
+	}
 
 	verbose_print("Using $File::StripNondeterminism::canonical_time as canonical time");
 
