@@ -1,0 +1,3 @@
+# these test files are knowingly broken
+unpack-message-for-orig * ar failed for strip-nondeterminism-*/t/failures/ar/857975.a
+unpack-message-for-source ar failed for t/failures/ar/857975.a
