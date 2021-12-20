@@ -1,3 +1,12 @@
+strip-nondeterminism (1.13.0-1) unstable; urgency=medium
+
+  [ Mattia Rizzolo ]
+  * dh_strip_nondeterminism: use get_non_binnmu_date_epoch() when available.
+    Closes: #999665
+  * Add a lintian overrides for some false positive tags.
+
+ -- Holger Levsen <holger@debian.org>  Mon, 20 Dec 2021 18:12:02 +0100
+
 strip-nondeterminism (1.12.1-1) unstable; urgency=medium
 
   [ Jonas Witschel ]
