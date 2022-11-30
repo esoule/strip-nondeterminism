@@ -24,6 +24,7 @@ Vcs-Browser: https://salsa.debian.org/reproducible-builds/strip-nondeterminism
 Package: libfile-stripnondeterminism-perl
 Section: perl
 Architecture: all
+Multi-Arch: foreign
 Depends:
  file,
  libarchive-zip-perl,
