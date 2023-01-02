@@ -1,6 +1,6 @@
-strip-nondeterminism (1.13.0-3) UNRELEASED; urgency=medium
+strip-nondeterminism (1.13.1-1) UNRELEASED; urgency=medium
 
-  * Start 1.13.0-3 development. d/changelog entries will be written on
+  * Start 1.13.1-1 development. d/changelog entries will be written on
     release using the git commit messages.
 
  -- Holger Levsen <holger@debian.org>  Sat, 17 Dec 2022 21:47:55 +0100
