@@ -1,9 +1,12 @@
-strip-nondeterminism (1.13.1-1) UNRELEASED; urgency=medium
+strip-nondeterminism (1.13.1-1) unstable; urgency=medium
 
-  * Start 1.13.1-1 development. d/changelog entries will be written on
-    release using the git commit messages.
+  [ FC Stegerman ]
+  * Update pyzip regex for latest file(1). Closes: #1028892.
 
- -- Holger Levsen <holger@debian.org>  Sat, 17 Dec 2022 21:47:55 +0100
+  [ Holger Levsen ]
+  * Bump standards version to 4.6.2, no changes needed.
+
+ -- Holger Levsen <holger@debian.org>  Sun, 15 Jan 2023 20:53:45 +0100
 
 strip-nondeterminism (1.13.0-2) unstable; urgency=medium
 
