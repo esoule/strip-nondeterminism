@@ -26,7 +26,6 @@ use File::Basename qw(basename);
 use File::Temp;
 use File::StripNondeterminism;
 use Archive::Zip qw/:CONSTANTS :ERROR_CODES/;
-use Sub::Override;
 
 =head1 DEPRECATION PLANS
 
@@ -265,17 +264,20 @@ sub normalize {
 	my @overrides = map {
 		my $full_name = "Archive::Zip::Member::$_";
 		my $orig_sub = \&$full_name;
-		Sub::Override->new(
-			$full_name => sub {
-				my $result = $orig_sub->(@_);
-				return defined($result) ?
-					normalize_extra_fields($canonical_time, $result) : $result;
-			}
-		);
+
+		no warnings qw(redefine);
+		no strict qw(refs);
+		*{"Archive\::Zip\::Member\::$_"} = sub {
+			my $result = $orig_sub->(@_);
+			return defined($result) ?
+				normalize_extra_fields($canonical_time, $result) : $result;
+		};
+
+		sub { *{"Archive\::Zip\::Member\::$_"} = $orig_sub };
 	} qw(cdExtraField localExtraField);
 
 	return 0 unless $zip->overwrite() == AZ_OK;
-	$_->restore for @overrides;
+	$_->() for @overrides;
 	chmod($old_perms, $zip_filename);
 	return 1;
 }
