@@ -7,7 +7,6 @@ Build-Depends-Indep:
  libarchive-cpio-perl <!nocheck>,
  libarchive-zip-perl,
  libdevel-cover-perl,
- libsub-override-perl,
  perl,
 Maintainer: Reproducible builds folks <reproducible-builds@lists.alioth.debian.org>
 Uploaders:
@@ -28,7 +27,6 @@ Multi-Arch: foreign
 Depends:
  file,
  libarchive-zip-perl,
- libsub-override-perl,
  ${misc:Depends},
  ${perl:Depends},
 Recommends:
