@@ -267,13 +267,13 @@ sub normalize {
 
 		no warnings qw(redefine);
 		no strict qw(refs);
-		*{"Archive\::Zip\::Member\::$_"} = sub {
+		*$full_name = sub {
 			my $result = $orig_sub->(@_);
 			return defined($result) ?
 				normalize_extra_fields($canonical_time, $result) : $result;
 		};
 
-		sub { *{"Archive\::Zip\::Member\::$_"} = $orig_sub };
+		sub { *$full_name = $orig_sub };
 	} qw(cdExtraField localExtraField);
 
 	return 0 unless $zip->overwrite() == AZ_OK;
