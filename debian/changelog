@@ -1,3 +1,14 @@
+strip-nondeterminism (1.14.0-1) unstable; urgency=medium
+
+  [ Alex Muntada ]
+  * Avoid Sub::Override and break circular dependencies in debhelper.
+
+  [ Chris Lamb ]
+  * Drop Depends, Build-Depends and Makefile.PL PREREQ_PM entry for
+    libsub-override-perl.
+
+ -- Chris Lamb <lamby@debian.org>  Fri, 24 May 2024 08:55:32 +0100
+
 strip-nondeterminism (1.13.1-1) unstable; urgency=medium
 
   [ FC Stegerman ]
