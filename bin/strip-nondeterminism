@@ -113,8 +113,8 @@ for my $filename (@ARGV) {
 		}
 	}
 
-	print "Normalizing $filename\n" if $verbose;
-	eval { $normalizer->($filename); 1 }
+	print "Calling normalizer for $filename\n" if $verbose;
+	eval { print "Normalized $filename\n" if $normalizer->($filename); 1 }
 	  or die "strip-nondeterminism: $filename: $@";
 }
 
