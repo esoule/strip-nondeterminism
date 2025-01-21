@@ -1,3 +1,15 @@
+strip-nondeterminism (1.14.1-1) unstable; urgency=medium
+
+  [ Chris Lamb ]
+  * Clarify the --verbose and non-verbose output of the
+    strip-nondeterminism entry point so we don't imply we are normalizing files
+    when we are not. Thanks, Niels Thykier. (Closes: #1093513)
+
+  [ Ed J ]
+  * Use and define a $full_name variable to improve code legibility.
+
+ -- Chris Lamb <lamby@debian.org>  Tue, 21 Jan 2025 11:23:24 +0000
+
 strip-nondeterminism (1.14.0-1) unstable; urgency=medium
 
   [ Alex Muntada ]
